@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Random;
 
-import de.blinkt.utils.UserDefaults;
-
 public class SSLHelper {
 
 	private static TcpSSLThread server;
@@ -25,13 +23,13 @@ public class SSLHelper {
 	}
 
 	public static void runHelper(Context c){
-		UserDefaults defaults = new UserDefaults(c);
+/*		UserDefaults defaults = new UserDefaults(c);
 		defaults.setLocalPort(nextFreePort());
 		defaults.save();
 		server = new TcpSSLThread("openvpn", defaults.getLocalPort(),  defaults.getHttpServer(),
 				Integer.parseInt(defaults.getHttpPort()), defaults.getSni(), null, null, null);
 		server.start();
-		isRunning = true;
+		isRunning = true;*/
 	}
 
 	public static void stopSSL(Context c){

@@ -1,5 +1,5 @@
 package com.faddy.tunnelkitlib.utils
 
 enum class VPNType {
-    OPENVPN, OPENCONNECT, WIREGUARD, IPSEC, IKEV2, SINGBOX
+    NONE, OPENVPN, OPENCONNECT, WIREGUARD, IPSECIKEV2, SINGBOX
 }

@@ -23,7 +23,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 import com.rbuild.mushroom.injector.phcyber.ssl.SocketProtect;
 
@@ -35,25 +34,22 @@ import java.lang.reflect.Method;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
 
-import de.blinkt.openconnect.R;
 import de.blinkt.activity.GrantPermissionsActivity;
+import de.blinkt.openconnect.R;
+import de.blinkt.openconnect.VpnProfile;
 import de.blinkt.openconnect.core.DeviceStateReceiver;
 import de.blinkt.openconnect.core.KeepAlive;
-import de.blinkt.openconnect.core.VPNLog;
-import de.blinkt.model.SplitTunnelPackage;
 import de.blinkt.openconnect.core.OpenConnectManagementThread;
 import de.blinkt.openconnect.core.OpenVPNManagement;
 import de.blinkt.openconnect.core.ProfileManager;
 import de.blinkt.openconnect.core.UserDialog;
 import de.blinkt.openconnect.core.VPNConnector;
+import de.blinkt.openconnect.core.VPNLog;
 import de.blinkt.utils.CommonUtility;
-import de.blinkt.utils.UserDefaults;
-import de.blinkt.openconnect.VpnProfile;
 
 public class OpenConnectService extends VpnService implements SocketProtect.IProtectSocket{
 
@@ -370,7 +366,7 @@ public class OpenConnectService extends VpnService implements SocketProtect.IPro
 
 	private Builder checkBlockedPackages(Builder b){
 		try{
-			UserDefaults defaults = new UserDefaults(getApplicationContext());
+			/*UserDefaults defaults = new UserDefaults(getApplicationContext());
 			// Add Blocked Packages From Firebase
 			String packages = defaults.getBlockPackage();
 			String serverNote = defaults.getSelectedServerNote();
@@ -385,10 +381,10 @@ public class OpenConnectService extends VpnService implements SocketProtect.IPro
 						}
 					}
 				}
-			}
+			}*/
 
 			// Add DisAllowed Packages By User
-			ArrayList<SplitTunnelPackage> disAllowedList = defaults.getDisAllowedPackageList();
+			/*ArrayList<SplitTunnelPackage> disAllowedList = defaults.getDisAllowedPackageList();
 			for(int i = 0; i < disAllowedList.size(); i ++){
 				SplitTunnelPackage app = disAllowedList.get(i);
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -398,7 +394,7 @@ public class OpenConnectService extends VpnService implements SocketProtect.IPro
 						e.printStackTrace();
 					}
 				}
-			}
+			}*/
 		}catch (Exception e){
 			e.printStackTrace();
 		}
