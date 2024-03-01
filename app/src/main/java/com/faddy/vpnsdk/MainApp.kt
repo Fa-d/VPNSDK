@@ -1,6 +1,7 @@
 package com.faddy.vpnsdk
 
 import android.app.Application
+import com.faddy.motherlib.MotherVPN
 import dagger.hilt.android.HiltAndroidApp
 import go.Seq
 
@@ -11,19 +12,26 @@ class MainApp : Application() {
         super.onCreate()
 
         Seq.setContext(this)
-/*        val usedServices = UsedServices(this)
-        DefaultNetworkMonitor.init(usedServices)
-        DefaultNetworkListener.init(usedServices)
-        BoxService.Companion.init(usedServices)
-        BoxService.init(usedServices)
-        ProfileManager.init(usedServices)
-        Settings.init(usedServices, Room.databaseBuilder(
-            this,
-            KeyValueDatabase::class.java,
-            Path.SETTINGS_DATABASE_PATH,
-        ).allowMainThreadQueries().fallbackToDestructiveMigration()
-            .enableMultiInstanceInvalidation().setQueryExecutor { GlobalScope.launch { it.run() } }
-            .build().keyValuePairDao())*/
+        MotherVPN.init(this).also { vpnSdk = it }
+
+        /*      val usedServices = UsedServices(this)
+                DefaultNetworkMonitor.init(usedServices)
+                DefaultNetworkListener.init(usedServices)
+                BoxService.Companion.init(usedServices)
+                BoxService.init(usedServices)
+                ProfileManager.init(usedServices)
+                Settings.init(usedServices, Room.databaseBuilder(
+                    this,
+                    KeyValueDatabase::class.java,
+                    Path.SETTINGS_DATABASE_PATH,
+                ).allowMainThreadQueries().fallbackToDestructiveMigration()
+                    .enableMultiInstanceInvalidation().setQueryExecutor { GlobalScope.launch { it.run() } }
+                    .build().keyValuePairDao())
+          */
+    }
+
+    companion object {
+        var vpnSdk: MotherVPN? = null
     }
 }
 

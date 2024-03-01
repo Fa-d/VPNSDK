@@ -55,7 +55,6 @@ dependencies {
 
     implementation(project(":motherLib"))
     implementation(fileTree("libs"))
-    //implementation(project(":SingBox"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core)
     implementation(libs.androidx.appcompat)

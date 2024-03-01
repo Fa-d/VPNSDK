@@ -56,7 +56,6 @@ import java.util.regex.Pattern;
 import de.blinkt.openconnect.R;
 import de.blinkt.openconnect.VpnProfile;
 import de.blinkt.service.OpenConnectService;
-import de.blinkt.utils.UserDefaults;
 
 public class OpenConnectManagementThread implements Runnable, OpenVPNManagement {
 
@@ -317,18 +316,19 @@ public class OpenConnectManagementThread implements Runnable, OpenVPNManagement 
     }
 
 	private void saveAndStore(LibOpenConnect.AuthForm mForm) {
-        UserDefaults userDefaults = new UserDefaults(mContext);
+		SharedPreferences preferences = mContext.getSharedPreferences("userinfo", Context.MODE_PRIVATE);
+		//	UserDefaults userDefaults = new UserDefaults(mContext);
 		for (LibOpenConnect.FormOpt opt : mForm.opts) {
 			if ((opt.flags & LibOpenConnect.OC_FORM_OPT_IGNORE) != 0) {
 				continue;
 			}
 			switch (opt.type) {
 				case LibOpenConnect.OC_FORM_OPT_TEXT: {
-					opt.value = "tajik";//userDefaults.getUserName().trim(); // TODO fix hardcode
+					opt.value = preferences.getString("username", ""); //"tajik";//userDefaults.getUserName().trim(); // TODO fix hardcode
 					break;
 				}
 				case LibOpenConnect.OC_FORM_OPT_PASSWORD: {
-					opt.value = "123456";//userDefaults.getPassword().trim(); // TODO fix hardcode
+					opt.value = preferences.getString("pass", "");//"123456";//userDefaults.getPassword().trim(); // TODO fix hardcode
 					break;
 				}
 
@@ -535,9 +535,9 @@ public class OpenConnectManagementThread implements Runnable, OpenVPNManagement 
 			log("Error writing temporary file");
 			return false;
 		}
-        UserDefaults userDefaults = new UserDefaults(mContext);
+    /*    UserDefaults userDefaults = new UserDefaults(mContext);
         mServerAddr = userDefaults.getAnyConnectServer();
-		Log.d(TAG, "setPreferences: mServerAddr: " + mServerAddr);
+		Log.d(TAG, "setPreferences: mServerAddr: " + mServerAddr);*/
 
 		//mServerAddr = getStringPref("server_address");
 		mOC.setXMLPost(!getBoolPref("disable_xml_post"));

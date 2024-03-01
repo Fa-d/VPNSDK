@@ -104,6 +104,10 @@ class MainActivity : AppCompatActivity()/*, ServiceConnection.Callback */ {
 
     private fun initData() {
         // Use mmkv here
+        MainApp.vpnSdk?.getConnectedTime()
+        MainApp.vpnSdk?.getVpnConnectedStatus()?.observe(this) { status ->
+            status
+        }
 
     }
 
