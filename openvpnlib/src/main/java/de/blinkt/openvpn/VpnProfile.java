@@ -17,7 +17,6 @@ import android.security.KeyChain;
 import android.security.KeyChainException;
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -58,7 +57,7 @@ import de.blinkt.openvpn.core.OrbotHelper;
 import de.blinkt.openvpn.core.PasswordCache;
 import de.blinkt.openvpn.core.Preferences;
 import de.blinkt.openvpn.core.VPNLaunchHelper;
-import de.blinkt.openvpn.core.VpnStatusOV;
+import de.blinkt.openvpn.core.VpnStatus;
 import de.blinkt.openvpn.core.X509Utils;
 import de.blinkt.util.io.pem.PemObject;
 import de.blinkt.util.io.pem.PemWriter;
@@ -97,7 +96,7 @@ public class VpnProfile implements Serializable, Cloneable {
     private static final long serialVersionUID = 7085688938959334563L;
     private static final int AUTH_RETRY_NONE_KEEP = 1;
     private static final int AUTH_RETRY_INTERACT = 3;
-    public static String DEFAULT_DNS1 = "94.140.14.14";
+    public static String DEFAULT_DNS1 = "8.8.8.8";
     public static String DEFAULT_DNS2 = "8.8.4.4";
     // variable named wrong and should haven beeen transient
     // but needs to keep wrong name to guarante loading of old
@@ -115,8 +114,8 @@ public class VpnProfile implements Serializable, Cloneable {
     public String mPKCS12Filename;
     public String mPKCS12Password;
     public boolean mUseTLSAuth = false;
-    public String mDNS1 = "94.140.14.14";
-    public String mDNS2 = "94.140.15.15";
+    public String mDNS1 = DEFAULT_DNS1;
+    public String mDNS2 = DEFAULT_DNS2;
     public String mIPv4Address;
     public String mIPv6Address;
     public boolean mOverrideDNS = false;
@@ -168,7 +167,7 @@ public class VpnProfile implements Serializable, Cloneable {
     public long mLastUsed;
     public String importedProfileHash;
     /* Options no longer used in new profiles */
-    public String mServerName = "openvpn.codelio.com";
+    public String mServerName = "openvpn.example.com";
     public String mServerPort = "1194";
     public boolean mUseUdp = true;
     public boolean mTemporaryProfile = false;
@@ -254,7 +253,7 @@ public class VpnProfile implements Serializable, Cloneable {
             PackageInfo packageinfo = c.getPackageManager().getPackageInfo(c.getPackageName(), 0);
             version = packageinfo.versionName;
         } catch (PackageManager.NameNotFoundException e) {
-            VpnStatusOV.logException(e);
+            VpnStatus.logException(e);
         }
         return String.format(Locale.US, "%s %s", c.getPackageName(), version);
 
@@ -581,16 +580,15 @@ public class VpnProfile implements Serializable, Cloneable {
         if (mOverrideDNS || !mUsePull) {
             if (!TextUtils.isEmpty(mDNS1)) {
                 cfg.append("dhcp-option DNS ").append(mDNS1).append("\n");
-                Log.e("sdlmDNS1", "mDNS1");
             }
             if (!TextUtils.isEmpty(mDNS2)) {
-                Log.e("sdlmDNS2", "mDNS2");
                 cfg.append("dhcp-option DNS ").append(mDNS2).append("\n");
             }
             if (!TextUtils.isEmpty(mSearchDomain))
                 cfg.append("dhcp-option DOMAIN ").append(mSearchDomain).append("\n");
 
         }
+
         if (mMssFix != 0) {
             if (mMssFix != 1450) {
                 if (configForOvpn3)
@@ -880,7 +878,7 @@ public class VpnProfile implements Serializable, Cloneable {
                 throw new NoCertReturnedException("No certificate returned from Keystore");
 
             if (caChain.length <= 1 && TextUtils.isEmpty(mCaFilename)) {
-                VpnStatusOV.logMessage(VpnStatusOV.LogLevel.ERROR, "", context.getString(R.string.keychain_nocacert));
+                VpnStatus.logMessage(VpnStatus.LogLevel.ERROR, "", context.getString(R.string.keychain_nocacert));
             } else {
                 StringWriter ksStringWriter = new StringWriter();
 
@@ -907,7 +905,7 @@ public class VpnProfile implements Serializable, Cloneable {
                     caout = caoutWriter.toString();
 
                 } catch (Exception e) {
-                    VpnStatusOV.logError("Could not read CA certificate" + e.getLocalizedMessage());
+                    VpnStatus.logError("Could not read CA certificate" + e.getLocalizedMessage());
                 }
             }
 
@@ -940,12 +938,12 @@ public class VpnProfile implements Serializable, Cloneable {
                  IllegalArgumentException
                  | CertificateException e) {
             e.printStackTrace();
-            VpnStatusOV.logError(R.string.keyChainAccessError, e.getLocalizedMessage());
+            VpnStatus.logError(R.string.keyChainAccessError, e.getLocalizedMessage());
 
-            VpnStatusOV.logError(R.string.keychain_access);
+            VpnStatus.logError(R.string.keychain_access);
             if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN) {
                 if (!mAlias.matches("^[a-zA-Z0-9]$")) {
-                    VpnStatusOV.logError(R.string.jelly_keystore_alphanumeric_bug);
+                    VpnStatus.logError(R.string.jelly_keystore_alphanumeric_bug);
                 }
             }
             return null;
@@ -953,11 +951,11 @@ public class VpnProfile implements Serializable, Cloneable {
         } catch (AssertionError e) {
             if (tries == 0)
                 return null;
-            VpnStatusOV.logError(String.format("Failure getting Keystore Keys (%s), retrying", e.getLocalizedMessage()));
+            VpnStatus.logError(String.format("Failure getting Keystore Keys (%s), retrying", e.getLocalizedMessage()));
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e1) {
-                VpnStatusOV.logException(e1);
+                VpnStatus.logException(e1);
             }
             return getExternalCertificates(context, tries - 1);
         }
@@ -1178,7 +1176,7 @@ public class VpnProfile implements Serializable, Cloneable {
         try {
             return ExtAuthHelper.signData(c, mExternalAuthenticator, mAlias, data);
         } catch (KeyChainException | InterruptedException e) {
-            VpnStatusOV.logError(R.string.error_extapp_sign, mExternalAuthenticator, e.getClass().toString(), e.getLocalizedMessage());
+            VpnStatus.logError(R.string.error_extapp_sign, mExternalAuthenticator, e.getClass().toString(), e.getLocalizedMessage());
             return null;
         }
     }
@@ -1223,7 +1221,7 @@ public class VpnProfile implements Serializable, Cloneable {
             return signed_bytes;
         } catch (NoSuchAlgorithmException | InvalidKeyException | IllegalBlockSizeException
                  | BadPaddingException | NoSuchPaddingException | SignatureException e) {
-            VpnStatusOV.logError(R.string.error_rsa_sign, e.getClass().toString(), e.getLocalizedMessage());
+            VpnStatus.logError(R.string.error_rsa_sign, e.getClass().toString(), e.getLocalizedMessage());
             return null;
         }
     }
@@ -1250,7 +1248,7 @@ public class VpnProfile implements Serializable, Cloneable {
 
         } catch (NoSuchMethodException | InvalidKeyException | InvocationTargetException |
                  IllegalAccessException | IllegalArgumentException e) {
-            VpnStatusOV.logError(R.string.error_rsa_sign, e.getClass().toString(), e.getLocalizedMessage());
+            VpnStatus.logError(R.string.error_rsa_sign, e.getClass().toString(), e.getLocalizedMessage());
             return null;
         }
     }

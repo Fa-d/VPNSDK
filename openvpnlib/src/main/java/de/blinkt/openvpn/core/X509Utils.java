@@ -90,7 +90,7 @@ public class X509Utils {
                 return friendlycn;
 
             } catch (Exception e) {
-                VpnStatusOV.logError("Could not read certificate" + e.getLocalizedMessage());
+                VpnStatus.logError("Could not read certificate" + e.getLocalizedMessage());
             }
         }
         return c.getString(R.string.cannotparsecert);
@@ -164,7 +164,7 @@ public class X509Utils {
             exp = e;
         }
         if (exp != null)
-            VpnStatusOV.logException("Getting X509 Name from certificate", exp);
+            VpnStatus.logException("Getting X509 Name from certificate", exp);
 
         /* Fallback if the reflection method did not work */
         if (friendlyName == null)

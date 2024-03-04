@@ -75,7 +75,7 @@
     <string name="ip_add_error">Could not configure IP Address \"%1$s\", rejected by the system: %2$s</string>
     <string name="using_proxy">Using proxy %1$s %2$d</string>
     <string name="minidump_generated">OpenVPN crashed unexpectedly. Please consider using the send Minidump option in the main menu</string>
-    <string name="notifcation_title">Symlex Layer</string>
+    <string name="notifcation_title">Start VPN</string>
     <string name="session_ipv4string">%1$s - %2$s</string>
     <string name="session_ipv6string">%1$s - %3$s, %2$s</string>
     <string name="state_connecting">Connecting</string>
@@ -286,8 +286,4 @@
     <string name="subscription_note"><![CDATA[Subscription to StartVPN will be charged to Google Pay Account at confirmation of purchase. Subscription automatically renews unless auto-renew is turned off at least 24-hours before the end of the current period.]]></string>
     <string name="resend_mail">you already registered. To activate your account please verify account from verification link send to your email.</string>
     <string name="terms_cons"><font fgcolor="black">I agree to the </font><font color="#2E6FAA">Terms and Conditions </font></string>
-
-
-
-
 </resources>

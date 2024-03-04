@@ -24,7 +24,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.blinkt.openvpn.core.VpnStatusOV;
+import de.blinkt.openvpn.core.VpnStatus;
 
 /**
  * A very simple content provider that can serve arbitrary asset files from
@@ -58,7 +58,7 @@ public class FileProvider extends ContentProvider
             c.addRow(row);
             return c;
         } catch (FileNotFoundException e) {
-            VpnStatusOV.logException(e);
+            VpnStatus.logException(e);
             return null;
         }
 

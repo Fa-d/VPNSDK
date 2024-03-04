@@ -26,7 +26,7 @@ import java.lang.ref.WeakReference;
  * Created by arne on 08.11.16.
  */
 
-public class OpenVPNStatusService extends Service implements VpnStatusOV.LogListener, VpnStatusOV.ByteCountListener, VpnStatusOV.StateListener {
+public class OpenVPNStatusService extends Service implements VpnStatus.LogListener, VpnStatus.ByteCountListener, VpnStatus.StateListener {
     static final RemoteCallbackList<IStatusCallbacks> mCallbacks =
             new RemoteCallbackList<>();
     private static final OpenVPNStatusHandler mHandler = new OpenVPNStatusHandler();
@@ -39,7 +39,7 @@ public class OpenVPNStatusService extends Service implements VpnStatusOV.LogList
 
         @Override
         public ParcelFileDescriptor registerStatusCallback(IStatusCallbacks cb) throws RemoteException {
-            final LogItem[] logbuffer = VpnStatusOV.getlogbuffer();
+            final LogItem[] logbuffer = VpnStatus.getlogbuffer();
             if (mLastUpdateMessage != null)
                 sendUpdate(cb, mLastUpdateMessage);
 
@@ -51,13 +51,13 @@ public class OpenVPNStatusService extends Service implements VpnStatusOV.LogList
                     public void run() {
                         DataOutputStream fd = new DataOutputStream(new ParcelFileDescriptor.AutoCloseOutputStream(pipe[1]));
                         try {
-                            synchronized (VpnStatusOV.readFileLock) {
-                                if (!VpnStatusOV.readFileLog) {
-                                    VpnStatusOV.readFileLock.wait();
+                            synchronized (VpnStatus.readFileLock) {
+                                if (!VpnStatus.readFileLog) {
+                                    VpnStatus.readFileLock.wait();
                                 }
                             }
                         } catch (InterruptedException e) {
-                            VpnStatusOV.logException(e);
+                            VpnStatus.logException(e);
                         }
                         try {
 
@@ -92,7 +92,7 @@ public class OpenVPNStatusService extends Service implements VpnStatusOV.LogList
 
         @Override
         public String getLastConnectedVPN() throws RemoteException {
-            return VpnStatusOV.getLastConnectedVPNProfile();
+            return VpnStatus.getLastConnectedVPNProfile();
         }
 
         @Override
@@ -102,7 +102,7 @@ public class OpenVPNStatusService extends Service implements VpnStatusOV.LogList
 
         @Override
         public TrafficHistory getTrafficHistory() throws RemoteException {
-            return VpnStatusOV.trafficHistory;
+            return VpnStatus.trafficHistory;
         }
 
     };
@@ -121,9 +121,9 @@ public class OpenVPNStatusService extends Service implements VpnStatusOV.LogList
     @Override
     public void onCreate() {
         super.onCreate();
-        VpnStatusOV.addLogListener(this);
-        VpnStatusOV.addByteCountListener(this);
-        VpnStatusOV.addStateListener(this);
+        VpnStatus.addLogListener(this);
+        VpnStatus.addByteCountListener(this);
+        VpnStatus.addStateListener(this);
         mHandler.setService(this);
 
     }
@@ -132,9 +132,9 @@ public class OpenVPNStatusService extends Service implements VpnStatusOV.LogList
     public void onDestroy() {
         super.onDestroy();
 
-        VpnStatusOV.removeLogListener(this);
-        VpnStatusOV.removeByteCountListener(this);
-        VpnStatusOV.removeStateListener(this);
+        VpnStatus.removeLogListener(this);
+        VpnStatus.removeByteCountListener(this);
+        VpnStatus.removeStateListener(this);
         mCallbacks.kill();
 
     }

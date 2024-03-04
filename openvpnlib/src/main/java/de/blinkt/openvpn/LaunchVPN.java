@@ -40,7 +40,7 @@ import de.blinkt.openvpn.core.PasswordCache;
 import de.blinkt.openvpn.core.Preferences;
 import de.blinkt.openvpn.core.ProfileManager;
 import de.blinkt.openvpn.core.VPNLaunchHelper;
-import de.blinkt.openvpn.core.VpnStatusOV;
+import de.blinkt.openvpn.core.VpnStatus;
 
 /**
  * This Activity actually handles two stages of a launcher shortcut's life cycle.
@@ -104,7 +104,7 @@ public class LaunchVPN extends Activity {
         if (Intent.ACTION_MAIN.equals(action)) {
             // Check if we need to clear the log
             if (Preferences.getDefaultSharedPreferences(this).getBoolean(CLEARLOG, true))
-                VpnStatusOV.clearLog();
+                VpnStatus.clearLog();
 
             // we got called to be the starting point, most likely a shortcut
             String shortcutUUID = intent.getStringExtra(EXTRA_KEY);
@@ -122,7 +122,7 @@ public class LaunchVPN extends Activity {
 
 
             if (profileToConnect == null) {
-                VpnStatusOV.logError(R.string.shortcut_profile_notfound);
+                VpnStatus.logError(R.string.shortcut_profile_notfound);
                 // show Log window to display error
                 //showLogWindow();
                 finish();
@@ -218,7 +218,7 @@ public class LaunchVPN extends Activity {
                 new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        VpnStatusOV.updateStateString("USER_VPN_PASSWORD_CANCELLED", "", R.string.cancel_connection,
+                        VpnStatus.updateStateString("USER_VPN_PASSWORD_CANCELLED", "", R.string.cancel_connection,
                                 ConnectionStatus.LEVEL_NOTCONNECTED);
                         finish();
                     }
@@ -236,7 +236,7 @@ public class LaunchVPN extends Activity {
             if (resultCode == Activity.RESULT_OK) {
                 int needpw = mSelectedProfile.needUserPWInput(mTransientCertOrPCKS12PW, mTransientAuthPW);
                 if (needpw != 0) {
-                    VpnStatusOV.updateStateString("USER_VPN_PASSWORD", "", R.string.state_user_vpn_password,
+                    VpnStatus.updateStateString("USER_VPN_PASSWORD", "", R.string.state_user_vpn_password,
                             ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT);
                     askForPW(needpw);
                 } else {
@@ -251,11 +251,11 @@ public class LaunchVPN extends Activity {
                 }
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // User does not want us to start, so we just vanish
-                VpnStatusOV.updateStateString("USER_VPN_PERMISSION_CANCELLED", "", R.string.state_user_vpn_permission_cancelled,
+                VpnStatus.updateStateString("USER_VPN_PERMISSION_CANCELLED", "", R.string.state_user_vpn_permission_cancelled,
                         ConnectionStatus.LEVEL_NOTCONNECTED);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                    VpnStatusOV.logError(R.string.nought_alwayson_warning);
+                    VpnStatus.logError(R.string.nought_alwayson_warning);
 
                 finish();
             }
@@ -325,7 +325,7 @@ public class LaunchVPN extends Activity {
         }
 
         if (intent != null) {
-            VpnStatusOV.updateStateString("USER_VPN_PERMISSION", "", R.string.state_user_vpn_permission,
+            VpnStatus.updateStateString("USER_VPN_PERMISSION", "", R.string.state_user_vpn_permission,
                     ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT);
             // Start the query
             try {
@@ -333,7 +333,7 @@ public class LaunchVPN extends Activity {
             } catch (ActivityNotFoundException ane) {
                 // Shame on you Sony! At least one user reported that
                 // an official Sony Xperia Arc S image triggers this exception
-                VpnStatusOV.logError(R.string.no_vpn_support_image);
+                VpnStatus.logError(R.string.no_vpn_support_image);
                 //showLogWindow();
             }
         } else {
@@ -350,7 +350,7 @@ public class LaunchVPN extends Activity {
             if (ret == 0)
                 mCmfixed = true;
         } catch (InterruptedException | IOException e) {
-            VpnStatusOV.logException("SU command", e);
+            VpnStatus.logException("SU command", e);
         }
     }
 

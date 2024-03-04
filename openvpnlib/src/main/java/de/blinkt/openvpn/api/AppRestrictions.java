@@ -29,7 +29,7 @@ import java.util.Vector;
 import de.blinkt.openvpn.VpnProfile;
 import de.blinkt.openvpn.core.ConfigParser;
 import de.blinkt.openvpn.core.ProfileManager;
-import de.blinkt.openvpn.core.VpnStatusOV;
+import de.blinkt.openvpn.core.VpnStatus;
 
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -96,12 +96,12 @@ public class AppRestrictions {
             if ("(not set)".equals(configVersion))
                 // Ignore error if no version present
                 return;
-            VpnStatusOV.logError(String.format(Locale.US, "App restriction version %s does not match expected version %d", configVersion, CONFIG_VERSION));
+            VpnStatus.logError(String.format(Locale.US, "App restriction version %s does not match expected version %d", configVersion, CONFIG_VERSION));
             return;
         }
         Parcelable[] profileList = restrictions.getParcelableArray(("vpn_configuration_list"));
         if (profileList == null) {
-            VpnStatusOV.logError("App restriction does not contain a profile list (vpn_configuration_list)");
+            VpnStatus.logError("App restriction does not contain a profile list (vpn_configuration_list)");
             return;
         }
 
@@ -110,7 +110,7 @@ public class AppRestrictions {
         ProfileManager pm = ProfileManager.getInstance(c);
         for (Parcelable profile : profileList) {
             if (!(profile instanceof Bundle)) {
-                VpnStatusOV.logError("App restriction profile has wrong type");
+                VpnStatus.logError("App restriction profile has wrong type");
                 continue;
             }
             Bundle p = (Bundle) profile;
@@ -120,7 +120,7 @@ public class AppRestrictions {
             String name = p.getString("name");
 
             if (uuid == null || ovpn == null || name == null) {
-                VpnStatusOV.logError("App restriction profile misses uuid, ovpn or name key");
+                VpnStatus.logError("App restriction profile misses uuid, ovpn or name key");
                 continue;
             }
 
@@ -150,7 +150,7 @@ public class AppRestrictions {
             }
         }
         for (VpnProfile vp : profilesToRemove) {
-            VpnStatusOV.logInfo("Remove with uuid: %s and name: %s since it is no longer in the list of managed profiles");
+            VpnStatus.logInfo("Remove with uuid: %s and name: %s since it is no longer in the list of managed profiles");
             pm.removeProfile(c, vp);
         }
 
@@ -200,7 +200,7 @@ public class AppRestrictions {
             pm.saveProfileList(c);
 
         } catch (ConfigParser.ConfigParseError | IOException | IllegalArgumentException e) {
-            VpnStatusOV.logException("Error during import of managed profile", e);
+            VpnStatus.logException("Error during import of managed profile", e);
         }
     }
 

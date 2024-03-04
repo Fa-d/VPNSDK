@@ -40,7 +40,7 @@ public class VPNLaunchHelper {
             abis = new String[]{Build.CPU_ABI, Build.CPU_ABI2};
 
         if (!nativeAPI.equals(abis[0])) {
-            VpnStatusOV.logWarning(R.string.abi_mismatch, Arrays.toString(abis), nativeAPI);
+            VpnStatus.logWarning(R.string.abi_mismatch, Arrays.toString(abis), nativeAPI);
             abis = new String[]{nativeAPI};
         }
 
@@ -81,7 +81,7 @@ public class VPNLaunchHelper {
         // Add fixed paramenters
         //args.add("/data/data/de.blinkt.openvpn/lib/openvpn");
         if (binaryName == null) {
-            VpnStatusOV.logError("Error writing minivpn binary");
+            VpnStatus.logError("Error writing minivpn binary");
             return null;
         }
 
@@ -100,7 +100,7 @@ public class VPNLaunchHelper {
             try {
                 mvpn = context.getAssets().open(getMiniVPNExecutableName() + "." + abi);
             } catch (IOException errabi) {
-                VpnStatusOV.logInfo("Failed getting assets for archicture " + abi);
+                VpnStatus.logInfo("Failed getting assets for archicture " + abi);
                 return false;
             }
 
@@ -117,14 +117,14 @@ public class VPNLaunchHelper {
             fout.close();
 
             if (!mvpnout.setExecutable(true)) {
-                VpnStatusOV.logError("Failed to make OpenVPN executable");
+                VpnStatus.logError("Failed to make OpenVPN executable");
                 return false;
             }
 
 
             return true;
         } catch (IOException e) {
-            VpnStatusOV.logException(e);
+            VpnStatus.logException(e);
             return false;
         }
 

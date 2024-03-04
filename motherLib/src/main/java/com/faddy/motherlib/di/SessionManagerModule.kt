@@ -2,7 +2,7 @@ package com.faddy.motherlib.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.faddy.motherlib.utils.SessionManager
+import com.faddy.motherlib.model.SessionManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

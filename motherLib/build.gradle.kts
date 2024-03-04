@@ -36,9 +36,9 @@ android {
 
 dependencies {
     implementation(project(":openvpnlib"))
-    implementation(project(":openconnectlib"))
-    implementation(project(":wgtunlib"))
-    implementation(project(":strongswan"))
+    //implementation(project(":openconnectlib"))
+    //implementation(project(":wgtunlib"))
+    //implementation(project(":strongswan"))
     //implementation(project(":SingBox"))
 
     implementation("androidx.core:core-ktx:1.12.0")
