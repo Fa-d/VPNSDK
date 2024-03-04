@@ -45,7 +45,7 @@ public class LogItem implements Parcelable {
         }
     };
     // Default log priority
-    VpnStatusOV.LogLevel mLevel = VpnStatusOV.LogLevel.INFO;
+    VpnStatus.LogLevel mLevel = VpnStatus.LogLevel.INFO;
     private Object[] mArgs = null;
     private String mMessage = null;
     private int mRessourceId;
@@ -57,7 +57,7 @@ public class LogItem implements Parcelable {
         mArgs = args;
     }
 
-    public LogItem(VpnStatusOV.LogLevel level, int verblevel, String message) {
+    public LogItem(VpnStatus.LogLevel level, int verblevel, String message) {
         mMessage = message;
         mLevel = level;
         mVerbosityLevel = verblevel;
@@ -69,7 +69,7 @@ public class LogItem implements Parcelable {
         bb.get(); // ignore version
         logtime = bb.getLong();
         mVerbosityLevel = bb.getInt();
-        mLevel = VpnStatusOV.LogLevel.getEnumByValue(bb.getInt());
+        mLevel = VpnStatus.LogLevel.getEnumByValue(bb.getInt());
         mRessourceId = bb.getInt();
         int len = bb.getInt();
         if (len == 0) {
@@ -123,23 +123,23 @@ public class LogItem implements Parcelable {
         mArgs = in.readArray(Object.class.getClassLoader());
         mMessage = in.readString();
         mRessourceId = in.readInt();
-        mLevel = VpnStatusOV.LogLevel.getEnumByValue(in.readInt());
+        mLevel = VpnStatus.LogLevel.getEnumByValue(in.readInt());
         mVerbosityLevel = in.readInt();
         logtime = in.readLong();
     }
 
-    public LogItem(VpnStatusOV.LogLevel loglevel, int ressourceId, Object... args) {
+    public LogItem(VpnStatus.LogLevel loglevel, int ressourceId, Object... args) {
         mRessourceId = ressourceId;
         mArgs = args;
         mLevel = loglevel;
     }
 
-    public LogItem(VpnStatusOV.LogLevel loglevel, String msg) {
+    public LogItem(VpnStatus.LogLevel loglevel, String msg) {
         mLevel = loglevel;
         mMessage = msg;
     }
 
-    public LogItem(VpnStatusOV.LogLevel loglevel, int ressourceId) {
+    public LogItem(VpnStatus.LogLevel loglevel, int ressourceId) {
         mRessourceId = ressourceId;
         mLevel = loglevel;
     }
@@ -230,7 +230,7 @@ public class LogItem implements Parcelable {
                 } else if (o == null) {
                     bb.putChar('0');
                 } else {
-                    VpnStatusOV.logDebug("Unknown object for LogItem marschaling " + o);
+                    VpnStatus.logDebug("Unknown object for LogItem marschaling " + o);
                     bb.putChar('s');
                     marschalString(o.toString(), bb);
                 }
@@ -291,7 +291,7 @@ public class LogItem implements Parcelable {
 
     }
 
-    public VpnStatusOV.LogLevel getLogLevel() {
+    public VpnStatus.LogLevel getLogLevel() {
         return mLevel;
     }
 
@@ -318,13 +318,13 @@ public class LogItem implements Parcelable {
             md.update(der);
             byte[] digest = md.digest();
 
-            if (Arrays.equals(digest, VpnStatusOV.officalkey))
+            if (Arrays.equals(digest, VpnStatus.officalkey))
                 apksign = c.getString(R.string.official_build);
-            else if (Arrays.equals(digest, VpnStatusOV.officaldebugkey))
+            else if (Arrays.equals(digest, VpnStatus.officaldebugkey))
                 apksign = c.getString(R.string.debug_build);
-            else if (Arrays.equals(digest, VpnStatusOV.amazonkey))
+            else if (Arrays.equals(digest, VpnStatus.amazonkey))
                 apksign = "amazon version";
-            else if (Arrays.equals(digest, VpnStatusOV.fdroidkey))
+            else if (Arrays.equals(digest, VpnStatus.fdroidkey))
                 apksign = "F-Droid built and signed version";
             else
                 apksign = c.getString(R.string.built_by, cert.getSubjectX500Principal().getName());

@@ -33,9 +33,9 @@ public class ProxyDetection {
             }
 
         } catch (MalformedURLException e) {
-            VpnStatusOV.logError(R.string.getproxy_error, e.getLocalizedMessage());
+            VpnStatus.logError(R.string.getproxy_error, e.getLocalizedMessage());
         } catch (URISyntaxException e) {
-            VpnStatusOV.logError(R.string.getproxy_error, e.getLocalizedMessage());
+            VpnStatus.logError(R.string.getproxy_error, e.getLocalizedMessage());
         }
         return null;
     }

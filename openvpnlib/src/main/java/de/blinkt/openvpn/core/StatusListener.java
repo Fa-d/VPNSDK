@@ -25,29 +25,29 @@ import java.io.IOException;
  * Created by arne on 09.11.16.
  */
 
-public class StatusListener implements VpnStatusOV.LogListener {
+public class StatusListener implements VpnStatus.LogListener {
     private File mCacheDir;
     private Context mContext;
     private IStatusCallbacks mCallback = new IStatusCallbacks.Stub() {
         @Override
         public void newLogItem(LogItem item) throws RemoteException {
-            VpnStatusOV.newLogItem(item);
+            VpnStatus.newLogItem(item);
         }
 
         @Override
         public void updateStateString(String state, String msg, int resid, ConnectionStatus
                 level, Intent intent) throws RemoteException {
-            VpnStatusOV.updateStateString(state, msg, resid, level, intent);
+            VpnStatus.updateStateString(state, msg, resid, level, intent);
         }
 
         @Override
         public void updateByteCount(long inBytes, long outBytes) throws RemoteException {
-            VpnStatusOV.updateByteCount(inBytes, outBytes);
+            VpnStatus.updateByteCount(inBytes, outBytes);
         }
 
         @Override
         public void connectedVPN(String uuid) throws RemoteException {
-            VpnStatusOV.setConnectedVPNProfile(uuid);
+            VpnStatus.setConnectedVPNProfile(uuid);
         }
     };
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -62,8 +62,8 @@ public class StatusListener implements VpnStatusOV.LogListener {
                 /* Check if this a local service ... */
                 if (service.queryLocalInterface("de.blinkt.openvpn.core.IServiceStatus") == null) {
                     // Not a local service
-                    VpnStatusOV.setConnectedVPNProfile(serviceStatus.getLastConnectedVPN());
-                    VpnStatusOV.setTrafficHistory(serviceStatus.getTrafficHistory());
+                    VpnStatus.setConnectedVPNProfile(serviceStatus.getLastConnectedVPN());
+                    VpnStatus.setTrafficHistory(serviceStatus.getTrafficHistory());
                     ParcelFileDescriptor pfd = serviceStatus.registerStatusCallback(mCallback);
                     DataInputStream fd = new DataInputStream(new ParcelFileDescriptor.AutoCloseInputStream(pfd));
 
@@ -72,18 +72,18 @@ public class StatusListener implements VpnStatusOV.LogListener {
                     while (len != 0x7fff) {
                         fd.readFully(buf, 0, len);
                         LogItem logitem = new LogItem(buf, len);
-                        VpnStatusOV.newLogItem(logitem, false);
+                        VpnStatus.newLogItem(logitem, false);
                         len = fd.readShort();
                     }
                     fd.close();
 
 
                 } else {
-                    VpnStatusOV.initLogCache(mCacheDir);
+                    VpnStatus.initLogCache(mCacheDir);
                     /* Set up logging to Logcat with a context) */
 
                     if (BuildConfig.DEBUG) {
-                        VpnStatusOV.addLogListener(StatusListener.this);
+                        VpnStatus.addLogListener(StatusListener.this);
                     }
 
 
@@ -91,13 +91,13 @@ public class StatusListener implements VpnStatusOV.LogListener {
 
             } catch (RemoteException | IOException e) {
                 e.printStackTrace();
-                VpnStatusOV.logException(e);
+                VpnStatus.logException(e);
             }
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            VpnStatusOV.removeLogListener(StatusListener.this);
+            VpnStatus.removeLogListener(StatusListener.this);
         }
 
     };

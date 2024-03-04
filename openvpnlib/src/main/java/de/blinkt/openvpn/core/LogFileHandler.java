@@ -68,7 +68,7 @@ class LogFileHandler extends Handler {
                 writeLogItemToDisk((LogItem) msg.obj);
             } else if (msg.what == TRIM_LOG_FILE) {
                 trimLogFile();
-                for (LogItem li : VpnStatusOV.getlogbuffer())
+                for (LogItem li : VpnStatus.getlogbuffer())
                     writeLogItemToDisk(li);
             } else if (msg.what == FLUSH_TO_DISK) {
                 flushToDisk();
@@ -76,8 +76,8 @@ class LogFileHandler extends Handler {
 
         } catch (IOException | BufferOverflowException e) {
             e.printStackTrace();
-            VpnStatusOV.logError("Error during log cache: " + msg.what);
-            VpnStatusOV.logException(e);
+            VpnStatus.logError("Error during log cache: " + msg.what);
+            VpnStatus.logException(e);
         }
 
     }
@@ -149,14 +149,14 @@ class LogFileHandler extends Handler {
             log.close();
 
         } catch (IOException | RuntimeException e) {
-            VpnStatusOV.logError("Reading cached logfile failed");
-            VpnStatusOV.logException(e);
+            VpnStatus.logError("Reading cached logfile failed");
+            VpnStatus.logException(e);
             e.printStackTrace();
             // ignore reading file error
         } finally {
-            synchronized (VpnStatusOV.readFileLock) {
-                VpnStatusOV.readFileLog = true;
-                VpnStatusOV.readFileLock.notifyAll();
+            synchronized (VpnStatus.readFileLock) {
+                VpnStatus.readFileLog = true;
+                VpnStatus.readFileLock.notifyAll();
             }
         }
     }
@@ -175,12 +175,12 @@ class LogFileHandler extends Handler {
             while (buf[skipped] != MAGIC_BYTE) {
                 skipped++;
                 if (!(logFile.read(buf, skipped + 4, 1) == 1) || skipped + 10 > buf.length) {
-                    VpnStatusOV.logDebug(String.format(Locale.US, "Skipped %d bytes and no a magic byte found", skipped));
+                    VpnStatus.logDebug(String.format(Locale.US, "Skipped %d bytes and no a magic byte found", skipped));
                     break readloop;
                 }
             }
             if (skipped > 0)
-                VpnStatusOV.logDebug(String.format(Locale.US, "Skipped %d bytes before finding a magic byte", skipped));
+                VpnStatus.logDebug(String.format(Locale.US, "Skipped %d bytes before finding a magic byte", skipped));
 
             int len = ByteBuffer.wrap(buf, skipped + 1, 4).asIntBuffer().get();
 
@@ -191,7 +191,7 @@ class LogFileHandler extends Handler {
             while (pos < len) {
                 byte b = (byte) logFile.read();
                 if (b == MAGIC_BYTE) {
-                    VpnStatusOV.logDebug(String.format(Locale.US, "Unexpected magic byte found at pos %d, abort current log item", pos));
+                    VpnStatus.logDebug(String.format(Locale.US, "Unexpected magic byte found at pos %d, abort current log item", pos));
                     read = logFile.read(buf, 1, 4) + 1;
                     continue readloop;
                 } else if (b == MAGIC_BYTE + 1) {
@@ -201,7 +201,7 @@ class LogFileHandler extends Handler {
                     else if (b == 1)
                         b = MAGIC_BYTE + 1;
                     else {
-                        VpnStatusOV.logDebug(String.format(Locale.US, "Escaped byte not 0 or 1: %d", b));
+                        VpnStatus.logDebug(String.format(Locale.US, "Escaped byte not 0 or 1: %d", b));
                         read = logFile.read(buf, 1, 4) + 1;
                         continue readloop;
                     }
@@ -214,22 +214,22 @@ class LogFileHandler extends Handler {
             //Next item
             read = logFile.read(buf, 0, 5);
             itemsRead++;
-            if (itemsRead > 2 * VpnStatusOV.MAXLOGENTRIES) {
-                VpnStatusOV.logError("Too many logentries read from cache, aborting.");
+            if (itemsRead > 2 * VpnStatus.MAXLOGENTRIES) {
+                VpnStatus.logError("Too many logentries read from cache, aborting.");
                 read = 0;
             }
 
         }
-        VpnStatusOV.logDebug(R.string.reread_log, itemsRead);
+        VpnStatus.logDebug(R.string.reread_log, itemsRead);
     }
 
     protected void restoreLogItem(byte[] buf, int len) throws UnsupportedEncodingException {
 
         LogItem li = new LogItem(buf, len);
         if (li.verify()) {
-            VpnStatusOV.newLogItem(li, true);
+            VpnStatus.newLogItem(li, true);
         } else {
-            VpnStatusOV.logError(String.format(Locale.getDefault(),
+            VpnStatus.logError(String.format(Locale.getDefault(),
                     "Could not read log item from file: %d: %s",
                     len, bytesToHex(buf, Math.max(len, 80))));
         }

@@ -66,7 +66,7 @@ public class NetworkUtils {
                     continue;
 
                 if (ipAddr == null || netMask == null) {
-                    VpnStatusOV.logError("Local routes are broken?! (Report to author) " + TextUtils.join("|", localRoutes));
+                    VpnStatus.logError("Local routes are broken?! (Report to author) " + TextUtils.join("|", localRoutes));
                     continue;
                 }
                 nets.add(ipAddr + "/" + CIDRIP.calculateLenFromMask(netMask));

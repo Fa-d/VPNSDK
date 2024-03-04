@@ -28,7 +28,7 @@ public class LollipopDeviceStateListener extends ConnectivityManager.NetworkCall
 
         if (!network.toString().equals(mLastConnectedStatus)) {
             mLastConnectedStatus = network.toString();
-            VpnStatusOV.logDebug("Connected to " + mLastConnectedStatus);
+            VpnStatus.logDebug("Connected to " + mLastConnectedStatus);
         }
     }
 
@@ -38,7 +38,7 @@ public class LollipopDeviceStateListener extends ConnectivityManager.NetworkCall
 
         if (!linkProperties.toString().equals(mLastLinkProperties)) {
             mLastLinkProperties = linkProperties.toString();
-            VpnStatusOV.logDebug(String.format("Linkproperties of %s: %s", network, linkProperties));
+            VpnStatus.logDebug(String.format("Linkproperties of %s: %s", network, linkProperties));
         }
     }
 
@@ -47,7 +47,7 @@ public class LollipopDeviceStateListener extends ConnectivityManager.NetworkCall
         super.onCapabilitiesChanged(network, networkCapabilities);
         if (!networkCapabilities.toString().equals(mLastNetworkCapabilities)) {
             mLastNetworkCapabilities = networkCapabilities.toString();
-            VpnStatusOV.logDebug(String.format("Network capabilities of %s: %s", network, networkCapabilities));
+            VpnStatus.logDebug(String.format("Network capabilities of %s: %s", network, networkCapabilities));
         }
     }
 }

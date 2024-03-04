@@ -2,97 +2,36 @@ package com.faddy.tunnelkitlib
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
 import android.net.VpnService
-import android.os.IBinder
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.faddy.tunnelkitlib.interfaces.ICoreVpn
 import com.faddy.tunnelkitlib.interfaces.IVpnLifecycle
-import com.faddy.tunnelkitlib.interfaces.IVpnSpeedIP
 import com.faddy.tunnelkitlib.interfaces.IVpnStatus
+import com.faddy.tunnelkitlib.model.VPNStatus
+import com.faddy.tunnelkitlib.model.VPNType
 import com.faddy.tunnelkitlib.model.VpnProfile
-import com.faddy.tunnelkitlib.utils.VPNStatus
-import com.faddy.tunnelkitlib.utils.VPNType
-import de.blinkt.openconnect.core.OpenConnectManagementThread
-import de.blinkt.openconnect.core.VPNConnector
-import de.blinkt.openconnect.core.VpnStatusOC
-import de.blinkt.openvpn.core.ConnectionStatus
-import de.blinkt.openvpn.core.IOpenVPNServiceInternal
-import de.blinkt.openvpn.core.OpenVPNService
-import de.blinkt.openvpn.core.VpnStatusOV
-import de.blinkt.service.OpenConnectService
+import com.faddy.tunnelkitlib.vpnCores.VpnSwitchFactory
 
 @SuppressLint("StaticFieldLeak")
-object TunnelKit : VpnStatusOV.StateListener, VpnStatusOC.ByteCountListener, ICoreVpn,
-    IVpnLifecycle, IVpnSpeedIP, IVpnStatus {
+object TunnelKit : ICoreVpn, IVpnStatus, IVpnLifecycle {
     private lateinit var motherContext: Context
     private val connectedStatus = MutableLiveData(VPNStatus.DISCONNECTED)
     private val currentSelectedVpnType = MutableLiveData(VPNType.NONE)
     private val connectedVpnTime = MutableLiveData("")
-    private val currentUploadSpeed = MutableLiveData(0L)
-    private val totalUploadSpeed = MutableLiveData(0L)
-    private val currentDownloadSpeed = MutableLiveData(0L)
-    private val totalDownloadSpeed = MutableLiveData(0L)
-    private val currentIp = MutableLiveData("")
-    private var mConn: VPNConnector? = null
-    private var mServiceOV: IOpenVPNServiceInternal? = null
-    private val mConnectionOV: ServiceConnection = object : ServiceConnection {
-        override fun onServiceConnected(className: ComponentName, service: IBinder) {
-            mServiceOV = IOpenVPNServiceInternal.Stub.asInterface(service)
-        }
-
-        override fun onServiceDisconnected(arg0: ComponentName) {
-            mServiceOV = null
-        }
-    }
-    private var mServiceOC: IOpenVPNServiceInternal? = null
-    private val mConnectionOC: ServiceConnection = object : ServiceConnection {
-        override fun onServiceConnected(className: ComponentName, service: IBinder) {
-            mServiceOC = IOpenVPNServiceInternal.Stub.asInterface(service)
-        }
-
-        override fun onServiceDisconnected(arg0: ComponentName) {
-            mServiceOC = null
-        }
-    }
-
+    private val vpnSwitchFactory = VpnSwitchFactory()
     fun init(passedContext: Context): TunnelKit {
         motherContext = passedContext
         return this
     }
 
-    override fun startConnect(type: VPNType, vpnProfile: VpnProfile): LiveData<VPNStatus> {
+    override fun startConnect(
+        passedActivity: Activity, vpnProfile: VpnProfile
+    ): LiveData<VPNStatus> {
+        setVpnType(vpnProfile.vpnType)
         if (!isVpnConnected()) {
-            when (type) {
-                VPNType.NONE -> {
-
-                }
-
-                VPNType.OPENVPN -> {
-
-                }
-
-                VPNType.OPENCONNECT -> {
-
-                }
-
-                VPNType.WIREGUARD -> {
-
-                }
-
-                VPNType.IPSECIKEV2 -> {
-
-                }
-
-                VPNType.SINGBOX -> {
-
-                }
-            }
+            vpnSwitchFactory.startVpn(vpnProfile, motherContext, passedActivity)
         } else {
             disconnect()
         }
@@ -100,19 +39,8 @@ object TunnelKit : VpnStatusOV.StateListener, VpnStatusOC.ByteCountListener, ICo
     }
 
     override fun disconnect(): LiveData<VPNStatus> {
+        vpnSwitchFactory.stopVpn()
         return connectedStatus
-    }
-
-    override fun getUploadSpeed(): LiveData<Long> {
-        return currentUploadSpeed
-    }
-
-    override fun getDownloadSpeed(): LiveData<Long> {
-        return currentDownloadSpeed
-    }
-
-    override fun getCurrentIp(): LiveData<String> {
-        return currentIp
     }
 
     override fun getVpnConnectedStatus(): LiveData<VPNStatus> {
@@ -121,6 +49,16 @@ object TunnelKit : VpnStatusOV.StateListener, VpnStatusOC.ByteCountListener, ICo
 
     override fun getVpnType(): LiveData<VPNType> {
         return currentSelectedVpnType
+    }
+
+    override fun setVpnType(vpnType: VPNType) {
+        currentSelectedVpnType.postValue(vpnType)
+    }
+
+    override fun setVpnListeners() {
+        if (currentSelectedVpnType.value == VPNType.OPENVPN) {
+            //   OpenVpnCore(motherContext)
+        }
     }
 
     override fun getConnectedTime(): LiveData<String> {
@@ -139,51 +77,27 @@ object TunnelKit : VpnStatusOV.StateListener, VpnStatusOC.ByteCountListener, ICo
         return VpnService.prepare(motherContext) == null
     }
 
-    override fun prepareVPNService(passedActivity: Activity) {
-        val vpnIntent = VpnService.prepare(passedActivity)
+    override fun prepareVPNService(context: Activity) {
+        val vpnIntent = VpnService.prepare(context)
+        //  vpnIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         if (vpnIntent != null) {
-            passedActivity.startActivityForResult(vpnIntent, 1000)
+            context.startActivityForResult(vpnIntent, 1000)
         }
     }
 
     override fun onVPNStart() {
-
+        vpnSwitchFactory.onVPNStart(currentSelectedVpnType.value ?: VPNType.NONE)
     }
 
     override fun onVPNResume() {
-        val intent = Intent(motherContext, OpenVPNService::class.java)
-        intent.action = OpenVPNService.START_SERVICE
-        motherContext.bindService(intent, mConnectionOV, AppCompatActivity.BIND_AUTO_CREATE)
-        VpnStatusOV.addStateListener(this)
-        VpnStatusOC.addByteCountListener(this)
-        mConn = object : VPNConnector(motherContext, true) {
-            override fun onUpdate(service: OpenConnectService?) {
-                if (mConn!!.service.connectionState == OpenConnectManagementThread.STATE_CONNECTED) {
-                    setVpnStatus(VPNStatus.CONNECTED)
-                }
-            }
-        }
+        vpnSwitchFactory.onVPNResume(currentSelectedVpnType.value ?: VPNType.NONE)
     }
 
-    override fun onVPNDestroy() {}
-
-    override fun onVPNPause() {}
-
-    override fun updateByteCount(totalIn: Long, totalOut: Long, diffIn: Long, diffOut: Long) {
-        totalUploadSpeed.postValue(totalIn)
-        totalDownloadSpeed.postValue(totalOut)
-        currentUploadSpeed.postValue(diffIn)
-        currentDownloadSpeed.postValue(diffOut)
+    override fun onVPNDestroy() {
+        vpnSwitchFactory.onVPNDestroy(currentSelectedVpnType.value ?: VPNType.NONE)
     }
 
-    override fun updateState(
-        state: String?,
-        logmessage: String?,
-        localizedResId: Int,
-        level: ConnectionStatus?,
-        Intent: Intent?
-    ) {
+    override fun onVPNPause() {
+        vpnSwitchFactory.onVPNPause(currentSelectedVpnType.value ?: VPNType.NONE)
     }
-
-    override fun setConnectedVPN(uuid: String?) {}
 }

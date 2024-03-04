@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace 'org.strongswan.android'
-    compileSdk 34
+    compileSdk 33
 
     defaultConfig {
         multiDexEnabled true

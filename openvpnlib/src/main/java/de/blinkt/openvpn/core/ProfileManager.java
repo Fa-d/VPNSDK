@@ -119,7 +119,7 @@ public class ProfileManager {
             vpnFile.flush();
             vpnFile.close();
         } catch (IOException e) {
-            VpnStatusOV.logException("saving VPN profile", e);
+            VpnStatus.logException("saving VPN profile", e);
             throw new RuntimeException(e);
         }
     }
@@ -144,7 +144,7 @@ public class ProfileManager {
 
         if (tried > 5) {
             int ver = profile == null ? -1 : profile.mVersion;
-            VpnStatusOV.logError(String.format(Locale.US, "Used x %d tries to get current version (%d/%d) of the profile", tried, ver, version));
+            VpnStatus.logError(String.format(Locale.US, "Used x %d tries to get current version (%d/%d) of the profile", tried, ver, version));
         }
         return profile;
     }
@@ -235,7 +235,7 @@ public class ProfileManager {
 
             } catch (IOException | ClassNotFoundException e) {
                 if (!vpnentry.equals(TEMPORARY_PROFILE_FILENAME))
-                    VpnStatusOV.logException("Loading VPN List", e);
+                    VpnStatus.logException("Loading VPN List", e);
             } finally {
                 if (vpnfile != null) {
                     try {

@@ -67,7 +67,7 @@ public class OpenVPNThread implements Runnable {
             startOpenVPNThreadArgs(mArgv);
             Log.i(TAG, "OpenVPN process exited");
         } catch (Exception e) {
-            VpnStatusOV.logException("Starting OpenVPN Thread", e);
+            VpnStatus.logException("Starting OpenVPN Thread", e);
             Log.e(TAG, "OpenVPNThread Got " + e.toString());
         } finally {
             int exitvalue = 0;
@@ -75,12 +75,12 @@ public class OpenVPNThread implements Runnable {
                 if (mProcess != null)
                     exitvalue = mProcess.waitFor();
             } catch (IllegalThreadStateException ite) {
-                VpnStatusOV.logError("Illegal Thread state: " + ite.getLocalizedMessage());
+                VpnStatus.logError("Illegal Thread state: " + ite.getLocalizedMessage());
             } catch (InterruptedException ie) {
-                VpnStatusOV.logError("InterruptedException: " + ie.getLocalizedMessage());
+                VpnStatus.logError("InterruptedException: " + ie.getLocalizedMessage());
             }
             if (exitvalue != 0) {
-                VpnStatusOV.logError("Process exited with exit value " + exitvalue);
+                VpnStatus.logError("Process exited with exit value " + exitvalue);
                 if (mBrokenPie) {
                     /* This will probably fail since the NoPIE binary is probably not written */
                     String[] noPieArgv = VPNLaunchHelper.replacePieWithNoPie(mArgv);
@@ -88,7 +88,7 @@ public class OpenVPNThread implements Runnable {
                     // We are already noPIE, nothing to gain
                     if (!noPieArgv.equals(mArgv)) {
                         mArgv = noPieArgv;
-                        VpnStatusOV.logInfo("PIE Version could not be executed. Trying no PIE version");
+                        VpnStatus.logInfo("PIE Version could not be executed. Trying no PIE version");
                         run();
                     }
 
@@ -97,20 +97,20 @@ public class OpenVPNThread implements Runnable {
             }
 
             if (!mNoProcessExitStatus)
-                VpnStatusOV.updateStateString("NOPROCESS", "No process running.", R.string.state_noprocess, ConnectionStatus.LEVEL_NOTCONNECTED);
+                VpnStatus.updateStateString("NOPROCESS", "No process running.", R.string.state_noprocess, ConnectionStatus.LEVEL_NOTCONNECTED);
 
             if (mDumpPath != null) {
                 try {
                     BufferedWriter logout = new BufferedWriter(new FileWriter(mDumpPath + ".log"));
                     SimpleDateFormat timeformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.GERMAN);
-                    for (LogItem li : VpnStatusOV.getlogbuffer()) {
+                    for (LogItem li : VpnStatus.getlogbuffer()) {
                         String time = timeformat.format(new Date(li.getLogtime()));
                         logout.write(time + " " + li.getString(mService) + "\n");
                     }
                     logout.close();
-                    VpnStatusOV.logError(R.string.minidump_generated);
+                    VpnStatus.logError(R.string.minidump_generated);
                 } catch (IOException e) {
-                    VpnStatusOV.logError("Writing minidump log: " + e.getLocalizedMessage());
+                    VpnStatus.logError("Writing minidump log: " + e.getLocalizedMessage());
                 }
             }
 
@@ -159,16 +159,16 @@ public class OpenVPNThread implements Runnable {
                     String msg = m.group(4);
                     int logLevel = flags & 0x0F;
 
-                    VpnStatusOV.LogLevel logStatus = VpnStatusOV.LogLevel.INFO;
+                    VpnStatus.LogLevel logStatus = VpnStatus.LogLevel.INFO;
 
                     if ((flags & M_FATAL) != 0)
-                        logStatus = VpnStatusOV.LogLevel.ERROR;
+                        logStatus = VpnStatus.LogLevel.ERROR;
                     else if ((flags & M_NONFATAL) != 0)
-                        logStatus = VpnStatusOV.LogLevel.WARNING;
+                        logStatus = VpnStatus.LogLevel.WARNING;
                     else if ((flags & M_WARN) != 0)
-                        logStatus = VpnStatusOV.LogLevel.WARNING;
+                        logStatus = VpnStatus.LogLevel.WARNING;
                     else if ((flags & M_DEBUG) != 0)
-                        logStatus = VpnStatusOV.LogLevel.VERBOSE;
+                        logStatus = VpnStatus.LogLevel.VERBOSE;
 
                     if (msg.startsWith("MANAGEMENT: CMD"))
                         logLevel = Math.max(4, logLevel);
@@ -176,12 +176,12 @@ public class OpenVPNThread implements Runnable {
                     if ((msg.endsWith("md too weak") && msg.startsWith("OpenSSL: error")) || msg.contains("error:140AB18E"))
                         logerror = 1;
 
-                    VpnStatusOV.logMessageOpenVPN(logStatus, logLevel, msg);
+                    VpnStatus.logMessageOpenVPN(logStatus, logLevel, msg);
                     if (logerror == 1)
-                        VpnStatusOV.logError("OpenSSL reported a certificate with a weak hash, please the in app FAQ about weak hashes");
+                        VpnStatus.logError("OpenSSL reported a certificate with a weak hash, please the in app FAQ about weak hashes");
 
                 } else {
-                    VpnStatusOV.logInfo("P:" + logline);
+                    VpnStatus.logInfo("P:" + logline);
                 }
 
                 if (Thread.interrupted()) {
@@ -189,7 +189,7 @@ public class OpenVPNThread implements Runnable {
                 }
             }
         } catch (InterruptedException | IOException e) {
-            VpnStatusOV.logException("Error reading from output of OpenVPN process", e);
+            VpnStatus.logException("Error reading from output of OpenVPN process", e);
             stopProcess();
         }
 

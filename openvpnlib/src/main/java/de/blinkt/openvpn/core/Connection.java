@@ -13,7 +13,7 @@ import java.util.Locale;
 public class Connection implements Serializable, Cloneable {
     public static final int CONNECTION_DEFAULT_TIMEOUT = 120;
     private static final long serialVersionUID = 92031902903829089L;
-    public String mServerName = "openvpn.codelio.com";
+    public String mServerName = "openvpn.example.com";
     public String mServerPort = "1194";
     public boolean mUseUdp = true;
     public String mCustomConfiguration = "";
@@ -21,7 +21,7 @@ public class Connection implements Serializable, Cloneable {
     public boolean mEnabled = true;
     public int mConnectTimeout = 0;
     public ProxyType mProxyType = ProxyType.NONE;
-    public String mProxyName = "proxy.codelio.com";
+    public String mProxyName = "proxy.example.com";
     public String mProxyPort = "8080";
     public boolean mUseProxyAuth;
     public String mProxyAuthUser = null;
