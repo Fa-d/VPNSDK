@@ -1,4 +1,4 @@
-package com.faddy.tunnelkitlib.model;
+package com.faddy.tunnelkitlib.utils;
 
 import android.content.SharedPreferences;
 

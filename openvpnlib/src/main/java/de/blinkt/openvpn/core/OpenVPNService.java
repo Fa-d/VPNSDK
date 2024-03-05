@@ -5,6 +5,7 @@
 
 package de.blinkt.openvpn.core;
 
+import static android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE;
 import static de.blinkt.openvpn.core.ConnectionStatus.LEVEL_CONNECTED;
 import static de.blinkt.openvpn.core.ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT;
 import static de.blinkt.openvpn.core.NetworkSpace.IpAddress;
@@ -13,6 +14,7 @@ import android.Manifest.permission;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.UiModeManager;
@@ -20,10 +22,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.ServiceInfo;
 import android.content.pm.ShortcutManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.net.VpnService;
@@ -106,7 +108,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
     private boolean mDisplayBytecount = false;
     private boolean mStarting = false;
     private OpenVPNManagement mManagement;
-    private final IBinder mBinder = new IOpenVPNServiceInternal.Stub() {
+    private final IBinder mBinder = new Stub() {
 
         @Override
         public boolean protect(int fd) throws RemoteException {
@@ -279,9 +281,47 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
             }
         }
     }
+    @TargetApi(Build.VERSION_CODES.O)
+    private void createNotificationChannels() {
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
+        // Background message
+        CharSequence name = getString(R.string.channel_name_background);
+        NotificationChannel mChannel = new NotificationChannel(OpenVPNService.NOTIFICATION_CHANNEL_BG_ID,
+                name, NotificationManager.IMPORTANCE_MIN);
+
+        mChannel.setDescription(getString(R.string.channel_description_background));
+        mChannel.enableLights(false);
+
+        mChannel.setLightColor(Color.DKGRAY);
+        mNotificationManager.createNotificationChannel(mChannel);
+
+        // Connection status change messages
+
+        name = getString(R.string.channel_name_status);
+        mChannel = new NotificationChannel(OpenVPNService.NOTIFICATION_CHANNEL_NEWSTATUS_ID,
+                name, NotificationManager.IMPORTANCE_LOW);
+
+        mChannel.setDescription(getString(R.string.channel_description_status));
+        mChannel.enableLights(true);
+
+        mChannel.setLightColor(Color.BLUE);
+        mNotificationManager.createNotificationChannel(mChannel);
+
+
+        // Urgent requests, e.g. two factor auth
+        name = getString(R.string.channel_name_userreq);
+        mChannel = new NotificationChannel(OpenVPNService.NOTIFICATION_CHANNEL_USERREQ_ID,
+                name, NotificationManager.IMPORTANCE_HIGH);
+        mChannel.setDescription(getString(R.string.channel_description_userreq));
+        mChannel.enableVibration(true);
+        mChannel.setLightColor(Color.CYAN);
+        mNotificationManager.createNotificationChannel(mChannel);
+    }
     private void showNotification(final String msg, String tickerText, @NonNull String channel,
                                   long when, ConnectionStatus status, Intent intent) {
+       createNotificationChannels();
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         int icon = getIconByConnectionStatus(status);
 
@@ -332,6 +372,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //noinspection NewApi
+
             nbuilder.setChannelId(channel);
             if (mProfile != null)
                 //noinspection NewApi
@@ -353,7 +394,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
             startForeground(notificationId, notification);
         } else {
-            startForeground(notificationId, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
+            startForeground(notificationId, notification, FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
         }
 
 
@@ -479,7 +520,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
 
         Intent intent = new Intent();
-        intent.setComponent(new ComponentName(this, "com.kolpolok.startvpn.MainActivity"));
+        intent.setComponent(new ComponentName(this, "com.faddy.vpnsdk.MainActivity"));
 
         intent.putExtra("PAGE", "graph");
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);

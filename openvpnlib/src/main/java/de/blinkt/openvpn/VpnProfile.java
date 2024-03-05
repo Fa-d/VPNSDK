@@ -17,6 +17,7 @@ import android.security.KeyChain;
 import android.security.KeyChainException;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -167,7 +168,7 @@ public class VpnProfile implements Serializable, Cloneable {
     public long mLastUsed;
     public String importedProfileHash;
     /* Options no longer used in new profiles */
-    public String mServerName = "openvpn.example.com";
+    public String mServerName = "openvpn.codelio.com";
     public String mServerPort = "1194";
     public boolean mUseUdp = true;
     public boolean mTemporaryProfile = false;
@@ -588,7 +589,6 @@ public class VpnProfile implements Serializable, Cloneable {
                 cfg.append("dhcp-option DOMAIN ").append(mSearchDomain).append("\n");
 
         }
-
         if (mMssFix != 0) {
             if (mMssFix != 1450) {
                 if (configForOvpn3)

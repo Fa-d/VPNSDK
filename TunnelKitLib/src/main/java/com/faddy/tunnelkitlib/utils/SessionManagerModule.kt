@@ -1,8 +1,7 @@
-package com.faddy.tunnelkitlib.di
+package com.faddy.tunnelkitlib.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.faddy.tunnelkitlib.model.SessionManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
