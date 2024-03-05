@@ -51,7 +51,7 @@ class OpenVpnCore(val motherContext: Context, val passedActivity: Activity) :
         level: ConnectionStatus?,
         Intent: Intent?
     ) {
-        Log.e("dfgfhgj", logmessage.toString())
+        Log.e("updateState", logmessage.toString())
 
     }
 

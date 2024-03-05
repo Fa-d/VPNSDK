@@ -1,4 +1,4 @@
-package com.faddy.motherlib.model;
+package com.faddy.motherlib.utils;
 
 import android.content.SharedPreferences;
 
