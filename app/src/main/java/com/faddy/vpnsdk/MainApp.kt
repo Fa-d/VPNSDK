@@ -12,7 +12,7 @@ class MainApp : Application() {
         super.onCreate()
 
         Seq.setContext(this)
-        MotherVPN.init(this).also { vpnSdk = it }
+        vpnSdk = MotherVPN.init(applicationContext)
 
         /*      val usedServices = UsedServices(this)
                 DefaultNetworkMonitor.init(usedServices)
