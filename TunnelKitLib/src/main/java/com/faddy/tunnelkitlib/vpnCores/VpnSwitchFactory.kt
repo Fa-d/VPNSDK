@@ -2,29 +2,40 @@ package com.faddy.tunnelkitlib.vpnCores
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.liveData
+import com.faddy.tunnelkitlib.interfaces.IStartStop
 import com.faddy.tunnelkitlib.interfaces.IVpnLifecycleTyped
+import com.faddy.tunnelkitlib.interfaces.IVpnSpeedIPTyped
+import com.faddy.tunnelkitlib.model.VPNStatus
 import com.faddy.tunnelkitlib.model.VPNType
 import com.faddy.tunnelkitlib.model.VpnProfile
 
-class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop {
+class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
 
-    lateinit var openVpnCoreConcrete: OpenVpnCore
-    fun startVpn(vpnProfile: VpnProfile, context: Context, passedActivity: Activity) {
-        when (vpnProfile.vpnType) {
-            VPNType.NONE -> {}
+    val openVpnCoreConcrete = OpenVpnCore()
+    lateinit var wireGuardCoreConcrete: WireGuardCore
+    override fun setVpnStateListeners(vpnType: VPNType): LiveData<VPNStatus> {
+        Log.e("setVpnStateListeners", vpnType.toString())
+        return when (vpnType) {
+            VPNType.NONE -> liveData { "None" }
             VPNType.OPENVPN -> {
-                openVpnCoreConcrete = OpenVpnCore(context, passedActivity)
-                openVpnCoreConcrete.startVpn(vpnProfile)
+                openVpnCoreConcrete.currentVpnState
+
             }
 
-            VPNType.OPENCONNECT -> {}
-            VPNType.WIREGUARD -> {}
-            VPNType.IPSECIKEV2 -> {}
-            VPNType.SINGBOX -> {}
+            VPNType.OPENCONNECT -> liveData { "OPENCONNECT" }
+            VPNType.WIREGUARD -> liveData { "WIREGUARD" }
+            VPNType.IPSECIKEV2 -> {
+                liveData { "IPSECIKEV2" }
+            }
+
+            VPNType.SINGBOX -> {
+                liveData { "SINGBOX" }
+            }
         }
     }
-
-
     override fun onVPNStart(vpnType: VPNType) {
         when (vpnType) {
             VPNType.NONE -> {}
@@ -39,11 +50,11 @@ class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop {
         }
     }
 
-    override fun onVPNResume(vpnType: VPNType) {
+    override fun onVPNResume(vpnType: VPNType, passedContext: Context) {
         when (vpnType) {
             VPNType.NONE -> {}
             VPNType.OPENVPN -> {
-                openVpnCoreConcrete.onVPNResume()
+                openVpnCoreConcrete.onVPNResume(passedContext)
             }
 
             VPNType.OPENCONNECT -> {}
@@ -82,12 +93,117 @@ class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop {
         }
     }
 
-    override fun startVpn(vpnProfile: VpnProfile) {
+    override fun startVpn(vpnProfile: VpnProfile, passedActivity: Activity) {
+        when (vpnProfile.vpnType) {
+            VPNType.NONE -> {}
+            VPNType.OPENVPN -> {
+                openVpnCoreConcrete.startVpn(vpnProfile, passedActivity)
+            }
 
+            VPNType.OPENCONNECT -> {}
+            VPNType.WIREGUARD -> {}
+            VPNType.IPSECIKEV2 -> {}
+            VPNType.SINGBOX -> {}
+        }
     }
 
-    override fun stopVpn() {
-        openVpnCoreConcrete.stopVpn()
+    override fun stopVpn(vpnType: VPNType, passedContext: Context) {
+        when (vpnType) {
+            VPNType.NONE -> {}
+            VPNType.OPENVPN -> {
+                openVpnCoreConcrete.stopVpn(vpnType, passedContext)
+            }
+
+            VPNType.OPENCONNECT -> {}
+            VPNType.WIREGUARD -> {}
+            VPNType.IPSECIKEV2 -> {}
+            VPNType.SINGBOX -> {}
+        }
     }
 
+    override fun getUploadSpeed(vpnType: VPNType): LiveData<Long> {
+        when (vpnType) {
+            VPNType.NONE -> {
+                return liveData { 0L }
+            }
+
+            VPNType.OPENVPN -> {
+                return openVpnCoreConcrete.currentUploadSpeed
+            }
+
+            VPNType.OPENCONNECT -> {
+                return liveData { 0L }
+            }
+
+            VPNType.WIREGUARD -> {
+                return liveData { 0L }
+            }
+
+            VPNType.IPSECIKEV2 -> {
+                return liveData { 0L }
+            }
+
+            VPNType.SINGBOX -> {
+                return liveData { 0L }
+            }
+        }
+    }
+
+    override fun getDownloadSpeed(vpnType: VPNType): LiveData<Long> {
+        when (vpnType) {
+            VPNType.NONE -> {
+                return liveData { 0L }
+            }
+
+            VPNType.OPENVPN -> {
+                return openVpnCoreConcrete.currentDownloadSpeed
+            }
+
+            VPNType.OPENCONNECT -> {
+                return liveData { 0L }
+            }
+
+            VPNType.WIREGUARD -> {
+                return liveData { 0L }
+            }
+
+            VPNType.IPSECIKEV2 -> {
+                return liveData { 0L }
+            }
+
+            VPNType.SINGBOX -> {
+                return liveData { 0L }
+            }
+        }
+    }
+
+    override fun getCurrentIp(vpnType: VPNType): LiveData<String> {
+
+        when (vpnType) {
+
+            VPNType.NONE -> {
+                return liveData { 0L }
+            }
+
+            VPNType.OPENVPN -> {
+                return liveData { "" }
+            }
+
+            VPNType.OPENCONNECT -> {
+                return liveData { 0L }
+            }
+
+            VPNType.WIREGUARD -> {
+                return liveData { 0L }
+            }
+
+            VPNType.IPSECIKEV2 -> {
+                return liveData { 0L }
+            }
+
+            VPNType.SINGBOX -> {
+                return liveData { 0L }
+            }
+        }
+    }
 }

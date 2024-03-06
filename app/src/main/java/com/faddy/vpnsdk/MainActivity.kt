@@ -12,8 +12,6 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.faddy.tunnelkitlib.model.VPNType
-import com.faddy.tunnelkitlib.model.VpnProfile
 import com.faddy.vpnsdk.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -30,21 +28,51 @@ class MainActivity : AppCompatActivity()/*, ServiceConnection.Callback */ {
     private lateinit var binding: ActivityMainBinding
     private val coreSdk = MainApp.vpnSdk!!
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(ActivityMainBinding.inflate(layoutInflater).also { binding = it }.root)
         initData()
         initView()
         initClickListener()
-    }/*       TileService.requestListeningState(
-                       applicationContext,
-                       ComponentName(applicationContext, TunnelControlTile::class.java)
-                       )*/
+        initObserver()
+    }
+
+    private fun initObserver() {
+        /*    coreSdk.setVpnStateListeners().observe(this) { state ->
+                Log.e("setVpnStateListeners", state.toString())
+                when (state) {
+                    VPNStatus.DISCONNECTING -> {
+                        binding.connectionStatus.text = "DISCONNECTING"
+                    }
+
+                    VPNStatus.CONNECTED -> {
+                        binding.connectionStatus.text = "CONNECTED"
+                    }
+
+                    VPNStatus.CONNECTING -> {
+                        binding.connectionStatus.text = "CONNECTING"
+                    }
+
+                    VPNStatus.DISCONNECTED -> {
+                        binding.connectionStatus.text = "DISCONNECTED"
+                    }
+                }
+            }*/
+    }
 
     private fun initView() {/*      serviceStatus.observe(this) { status ->
                   binding.connectionStatus.text = status.name
               }*/
+
+        coreSdk.getCurrentIp().observe(this) { text ->
+            binding.ipText.text = text
+        }
+        coreSdk.getUploadSpeed().observe(this) { text ->
+            binding.uploadText.text = text.toString()
+        }
+        coreSdk.getDownloadSpeed().observe(this) { text ->
+            binding.downloadText.text = text.toString()
+        }
     }
 
     override fun onPause() {
@@ -54,31 +82,31 @@ class MainActivity : AppCompatActivity()/*, ServiceConnection.Callback */ {
 
     override fun onResume() {
         super.onResume()
-        coreSdk.onVPNResume()
+        coreSdk.onVPNResume(this@MainActivity)
     }
 
     private fun initClickListener() {
         binding.button1.setOnClickListener {
-            if (coreSdk.isVpnServicePrepared()) {
-                if (coreSdk.isVpnConnected()) {
-                    coreSdk.disconnect()
-                } else {
-                    coreSdk.startConnect(
-                        this@MainActivity, VpnProfile(
-                            VPNType.OPENVPN,
-                            "ss",
-                            "123456",
-                            vpnConfig = openVpnConf,
-                            serverIP = openVpnIP
-                        )
-                    )
-                }
-            } else {
-                coreSdk.prepareVPNService(this@MainActivity)
-            }
+            /*      if (coreSdk.isVpnServicePrepared()) {
+                      if (coreSdk.isVpnConnected()) {
+                          coreSdk.disconnect()
+                      } else {
+                          coreSdk.startConnect(
+                              this@MainActivity, VpnProfile(
+                                  VPNType.OPENVPN,
+                                  "ss",
+                                  "123456",
+                                  vpnConfig = VpnConfigs.openVpnConf,
+                                  serverIP = VpnConfigs.openVpnIP
+                              )
+                          )
+                      }
+                  } else {
+                      coreSdk.prepareVPNService(this@MainActivity)
+                  }
+      */
 
-
-                // VPNController().startV2Ray(applicationContext)
+            // VPNController().startV2Ray(applicationContext)
                 /*when (serviceStatus.value) {
                     Status.Stopped -> {
                         startService()
@@ -133,9 +161,6 @@ class MainActivity : AppCompatActivity()/*, ServiceConnection.Callback */ {
     private fun initData() {
         // Use mmkv here
         coreSdk.getConnectedTime()
-        coreSdk.getVpnConnectedStatus().observe(this) { status ->
-            status
-        }
 
     }
 
@@ -226,9 +251,6 @@ class MainActivity : AppCompatActivity()/*, ServiceConnection.Callback */ {
     }
 }
 
-val openVpnConf =
-    "Y2xpZW50CnByb3RvIHVkcApleHBsaWNpdC1leGl0LW5vdGlmeQpyZW1vdGUgMTAuMC4wLjEgMTE5NApkZXYgdHVuCnJlc29sdi1yZXRyeSBpbmZpbml0ZQpub2JpbmQKcGVyc2lzdC1rZXkKcGVyc2lzdC10dW4KcmVtb3RlLWNlcnQtdGxzIHNlcnZlcgp2ZXJpZnkteDUwOS1uYW1lIHNlcnZlcl9FWEFNUExFX1ZFUklGWV9OQU1FIG5hbWUKYXV0aCBTSEEyNTYKYXV0aC1ub2NhY2hlCmF1dGgtdXNlci1wYXNzCmRoY3Atb3B0aW9uIEROUyA4LjguOC44CmRoY3Atb3B0aW9uIERPTUFJTiBnb29nbGUuY29tCmNpcGhlciAgQUVTLTEyOC1HQ00KdGxzLWNsaWVudAp0bHMtdmVyc2lvbi1taW4gMS4yCnRscy1jaXBoZXIgVExTLUVDREhFLUVDRFNBLVdJVEgtQUVTLTEyOC1HQ00tU0hBMjU2Cmlnbm9yZS11bmtub3duLW9wdGlvbiBibG9jay1vdXRzaWRlLWRucwpzZXRlbnYgb3B0IGJsb2NrLW91dHNpZGUtZG5zICMgUHJldmVudCBXaW5kb3dzIDEwIEROUyBsZWFrCnNldGVudiBDTElFTlRfQ0VSVCAwCnZlcmIgMwo8Y2E+Ci0tLS0tQkVHSU4gQ0VSVElGSUNBVEUtLS0tLQpZT1VSX0NBX0NFUlRJRklDQVRFX0hFUkUKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo8L2NhPgo8dGxzLWNyeXB0PgojCiMgMjA0OCBiaXQgT3BlblZQTiBzdGF0aWMga2V5CiMKLS0tLS1CRUdJTiBPcGVuVlBOIFN0YXRpYyBrZXkgVjEtLS0tLQpZT1VSX09QRU5WUE5fU1RBVElDX0tFWV9IRVJFCi0tLS0tRU5EIE9wZW5WUE4gU3RhdGljIGtleSBWMS0tLS0tCjwvdGxzLWNyeXB0Pgo="
-val openVpnIP = "10.0.0.1:1194"
 
 val topConfig = """{
   "log": {
@@ -388,8 +410,10 @@ val topConfig = """{
 """
 
 
-
-
+/*       TileService.requestListeningState(
+                       applicationContext,
+                       ComponentName(applicationContext, TunnelControlTile::class.java)
+                       )*/
 
 
 

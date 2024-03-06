@@ -11,5 +11,4 @@ interface ICoreVpn {
     fun disconnect(): LiveData<VPNStatus>
     fun getVpnType(): LiveData<VPNType>
     fun setVpnType(vpnType: VPNType)
-    fun setVpnListeners()
 }
