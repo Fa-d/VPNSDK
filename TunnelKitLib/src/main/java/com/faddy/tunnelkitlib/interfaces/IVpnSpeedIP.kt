@@ -6,7 +6,6 @@ import com.faddy.tunnelkitlib.model.VPNType
 interface IVpnSpeedIP {
     fun getUploadSpeed(): LiveData<Long>
     fun getDownloadSpeed(): LiveData<Long>
-    fun getCurrentIp(): LiveData<String>
 }
 
 interface IVpnSpeedIPTyped {

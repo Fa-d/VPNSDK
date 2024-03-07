@@ -13,7 +13,6 @@ interface IVpnLifecycle {
 }
 
 interface IVpnLifecycleTyped {
-    fun setVpnStateListeners(vpnType: VPNType): LiveData<VPNStatus>
     fun onVPNStart(vpnType: VPNType)
     fun onVPNResume(vpnType: VPNType, passedContext: Context)
     fun onVPNDestroy(vpnType: VPNType)

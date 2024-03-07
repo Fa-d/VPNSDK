@@ -36,23 +36,23 @@ class MainActivityPro : AppCompatActivity() {
     }
 
     private fun initObserver() {
-        coreSdk.getCurrentIp().observe(this) { text ->
+        coreSdk.myCurrentIp?.observe(this) { text ->
             binding.ipText.text = text
         }
 
-        coreSdk.getUploadSpeed().observe(this) { text ->
+        coreSdk.currentUploadSpeed?.observe(this) { text ->
             binding.uploadText.text = text.toString()
         }
 
-        coreSdk.getDownloadSpeed().observe(this) { text ->
+        coreSdk.currentDownloadSpeed?.observe(this) { text ->
             binding.downloadText.text = text.toString()
         }
 
-        coreSdk.getConnectedTime().observe(this) { text ->
+        coreSdk.connectedVpnTime.observe(this) { text ->
             binding.timerText.text = text.toString()
         }
 
-        coreSdk.connectedStatus.observe(this) { status ->
+        coreSdk.connectedStatus?.observe(this) { status ->
             Log.e("getVpnConnectedStatus", status.name)
             when (status) {
                 VPNStatus.DISCONNECTING -> {
@@ -82,9 +82,7 @@ class MainActivityPro : AppCompatActivity() {
                 } else {
                     coreSdk.startConnect(
                         this@MainActivityPro, VpnProfile(
-                            VPNType.OPENVPN,
-                            "ss",
-                            "123456",
+                            vpnType = VPNType.OPENVPN, userName = "ss", password = "123456",
                             vpnConfig = VpnConfigs.openVpnConf,
                             serverIP = VpnConfigs.openVpnIP
                         )

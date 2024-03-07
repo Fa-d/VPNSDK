@@ -64,15 +64,6 @@ class MainActivity : AppCompatActivity()/*, ServiceConnection.Callback */ {
                   binding.connectionStatus.text = status.name
               }*/
 
-        coreSdk.getCurrentIp().observe(this) { text ->
-            binding.ipText.text = text
-        }
-        coreSdk.getUploadSpeed().observe(this) { text ->
-            binding.uploadText.text = text.toString()
-        }
-        coreSdk.getDownloadSpeed().observe(this) { text ->
-            binding.downloadText.text = text.toString()
-        }
     }
 
     override fun onPause() {
