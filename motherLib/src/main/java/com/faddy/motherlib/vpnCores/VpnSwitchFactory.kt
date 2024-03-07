@@ -2,7 +2,6 @@ package com.faddy.motherlib.vpnCores
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.faddy.motherlib.interfaces.IStartStop
@@ -16,24 +15,14 @@ class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
 
     val openVpnCoreConcrete = OpenVpnCore()
     lateinit var wireGuardCoreConcrete: WireGuardCore
-    override fun setVpnStateListeners(vpnType: VPNType): LiveData<VPNStatus> {
-        Log.e("setVpnStateListeners", vpnType.toString())
+    fun setVpnStateListeners(vpnType: VPNType): LiveData<VPNStatus> {
         return when (vpnType) {
-            VPNType.NONE -> liveData { "None" }
-            VPNType.OPENVPN -> {
-                openVpnCoreConcrete.currentVpnState
-
-            }
-
-            VPNType.OPENCONNECT -> liveData { "OPENCONNECT" }
-            VPNType.WIREGUARD -> liveData { "WIREGUARD" }
-            VPNType.IPSECIKEV2 -> {
-                liveData { "IPSECIKEV2" }
-            }
-
-            VPNType.SINGBOX -> {
-                liveData { "SINGBOX" }
-            }
+            VPNType.NONE -> liveData {  }
+            VPNType.OPENVPN -> openVpnCoreConcrete.currentVpnState
+            VPNType.OPENCONNECT -> openVpnCoreConcrete.currentVpnState
+            VPNType.WIREGUARD -> openVpnCoreConcrete.currentVpnState
+            VPNType.IPSECIKEV2 -> openVpnCoreConcrete.currentVpnState
+            VPNType.SINGBOX -> openVpnCoreConcrete.currentVpnState
         }
     }
     override fun onVPNStart(vpnType: VPNType) {

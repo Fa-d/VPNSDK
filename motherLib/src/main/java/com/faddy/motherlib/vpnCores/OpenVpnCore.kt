@@ -87,7 +87,7 @@ class OpenVpnCore(/* motherContext: Context,  passedActivity: Activity*/) :
         currentDownloadSpeed.postValue(diffOut)
     }
 
-    override fun getCurrentIp(): LiveData<String> {
+     fun getCurrentIp(): LiveData<String> {
         return currentIp
     }
 
@@ -163,7 +163,10 @@ class OpenVpnCore(/* motherContext: Context,  passedActivity: Activity*/) :
             ProfileManager.setConntectedVpnProfileDisconnected(passedContext)
             if (mServiceOV != null) {
                 try {
-                    mServiceOV!!.stopVPN(false)
+                    mServiceOV?.stopVPN(false)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        currentVpnState.value = VPNStatus.DISCONNECTED
+                    }
                 } catch (e: RemoteException) {
                     VpnStatus.logException(e)
                 }

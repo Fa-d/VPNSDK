@@ -9,6 +9,5 @@ import com.faddy.motherlib.model.VPNType
 interface ICoreVpn {
     fun startConnect(passedActivity: Activity, vpnProfile: VpnProfile): LiveData<VPNStatus>
     fun disconnect(): LiveData<VPNStatus>
-    fun getVpnType(): LiveData<VPNType>
     fun setVpnType(vpnType: VPNType)
 }

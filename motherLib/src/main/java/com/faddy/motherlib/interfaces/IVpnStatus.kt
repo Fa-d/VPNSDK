@@ -2,9 +2,10 @@ package com.faddy.motherlib.interfaces
 
 import android.app.Activity
 import androidx.lifecycle.LiveData
+import com.faddy.motherlib.model.VPNStatus
 
 interface IVpnStatus {
-    fun getVpnConnectedStatus()
+    fun getVpnConnectedStatus(): LiveData<VPNStatus>
     fun getConnectedTime(): LiveData<String>
     fun isVpnConnected(): Boolean
     fun isVpnServicePrepared(): Boolean
