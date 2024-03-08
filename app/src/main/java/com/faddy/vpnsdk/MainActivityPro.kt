@@ -53,6 +53,10 @@ class MainActivityPro : AppCompatActivity() {
                 binding.timerText.text = text.toString()
             }
 
+            coreSdk.currentPing.observe(this) { text ->
+                binding.pingTv.text = "$text ms"
+            }
+
             coreSdk.connectedStatus?.observe(this) { status ->
                 Log.e("getVpnConnectedStatus", status.name)
                 when (status) {

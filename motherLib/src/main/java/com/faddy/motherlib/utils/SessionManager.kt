@@ -21,4 +21,14 @@ class SessionManager @Inject constructor(private val preferences: SharedPreferen
     fun setLastConnVpnType(value: String) =
         preferences.edit().putString("lastConnVpnType", value).apply()
 
+    fun getLastConnStartTime() = preferences.getLong("lastConnStartTime", 0L)
+    fun setLastConnStartTime(value: Long) {
+        preferences.edit().putLong("lastConnStartTime", value).apply()
+    }
+
+    fun getLastConnServerIP() = preferences.getString("lastConnServerIP", "0.0.0.0")
+    fun setLastConnServerIP(value: String) {
+        preferences.edit().putString("lastConnServerIP", value).apply()
+    }
+
 }
