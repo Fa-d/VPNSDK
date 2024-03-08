@@ -1,11 +1,11 @@
-package com.faddy.motherlib.service
+package com.faddy.phoenixlib.service
 
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.os.SystemClock
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.faddy.motherlib.utils.SessionManager
+import com.faddy.phoenixlib.utils.SessionManager
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
 import java.util.Timer

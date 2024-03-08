@@ -1,7 +1,7 @@
 package com.faddy.vpnsdk
 
 import android.app.Application
-import com.faddy.motherlib.MotherVPN
+import com.faddy.phoenixlib.PhoenixVPN
 import dagger.hilt.android.HiltAndroidApp
 import go.Seq
 
@@ -12,7 +12,7 @@ class MainApp : Application() {
         super.onCreate()
 
         Seq.setContext(this)
-        vpnSdk = MotherVPN.init(applicationContext)
+        vpnSdk = PhoenixVPN.init(applicationContext)
 
         /*      val usedServices = UsedServices(this)
                 DefaultNetworkMonitor.init(usedServices)
@@ -31,7 +31,7 @@ class MainApp : Application() {
     }
 
     companion object {
-        var vpnSdk: MotherVPN? = null
+        var vpnSdk: PhoenixVPN? = null
     }
 }
 

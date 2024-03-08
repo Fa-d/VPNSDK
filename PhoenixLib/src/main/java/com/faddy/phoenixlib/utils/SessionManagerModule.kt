@@ -1,4 +1,4 @@
-package com.faddy.motherlib.utils
+package com.faddy.phoenixlib.utils
 
 import android.content.Context
 import android.content.SharedPreferences

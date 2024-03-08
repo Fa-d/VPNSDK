@@ -1,9 +1,9 @@
-package com.faddy.motherlib.interfaces
+package com.faddy.phoenixlib.interfaces
 
 import android.app.Activity
 import androidx.lifecycle.LiveData
-import com.faddy.motherlib.model.VPNStatus
-import com.faddy.motherlib.model.VpnProfile
+import com.faddy.phoenixlib.model.VPNStatus
+import com.faddy.phoenixlib.model.VpnProfile
 
 interface ICoreVpn {
     fun startConnect(passedActivity: Activity, vpnProfile: VpnProfile): LiveData<VPNStatus>

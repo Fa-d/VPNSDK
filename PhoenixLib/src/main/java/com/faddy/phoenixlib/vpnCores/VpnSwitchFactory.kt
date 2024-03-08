@@ -1,20 +1,20 @@
-package com.faddy.motherlib.vpnCores
+package com.faddy.phoenixlib.vpnCores
 
 import android.app.Activity
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
-import com.faddy.motherlib.interfaces.IStartStop
-import com.faddy.motherlib.interfaces.IVpnLifecycleTyped
-import com.faddy.motherlib.interfaces.IVpnSpeedIPTyped
-import com.faddy.motherlib.model.VPNStatus
-import com.faddy.motherlib.model.VPNType
-import com.faddy.motherlib.model.VpnProfile
+import com.faddy.phoenixlib.interfaces.IStartStop
+import com.faddy.phoenixlib.interfaces.IVpnLifecycleTyped
+import com.faddy.phoenixlib.interfaces.IVpnSpeedIPTyped
+import com.faddy.phoenixlib.model.VPNStatus
+import com.faddy.phoenixlib.model.VPNType
+import com.faddy.phoenixlib.model.VpnProfile
 
 class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
 
     val openVpnCoreConcrete = OpenVpnCore()
-    lateinit var wireGuardCoreConcrete: WireGuardCore
+    val wireGuardCoreConcrete = WireGuardCore()
     fun setVpnStateListeners(vpnType: VPNType): LiveData<VPNStatus> {
         return when (vpnType) {
             VPNType.NONE -> liveData {  }
@@ -47,7 +47,9 @@ class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
             }
 
             VPNType.OPENCONNECT -> {}
-            VPNType.WIREGUARD -> {}
+            VPNType.WIREGUARD -> {
+                wireGuardCoreConcrete.requestListeningState(passedContext)
+            }
             VPNType.IPSECIKEV2 -> {}
             VPNType.SINGBOX -> {}
         }
@@ -90,7 +92,9 @@ class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
             }
 
             VPNType.OPENCONNECT -> {}
-            VPNType.WIREGUARD -> {}
+            VPNType.WIREGUARD -> {
+                wireGuardCoreConcrete.startVpnService(passedActivity)
+            }
             VPNType.IPSECIKEV2 -> {}
             VPNType.SINGBOX -> {}
         }
@@ -104,7 +108,9 @@ class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
             }
 
             VPNType.OPENCONNECT -> {}
-            VPNType.WIREGUARD -> {}
+            VPNType.WIREGUARD -> {
+                wireGuardCoreConcrete.stopVpnService(passedContext)
+            }
             VPNType.IPSECIKEV2 -> {}
             VPNType.SINGBOX -> {}
         }

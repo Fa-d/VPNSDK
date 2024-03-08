@@ -1,9 +1,9 @@
-package com.faddy.motherlib.interfaces
+package com.faddy.phoenixlib.interfaces
 
 import android.app.Activity
 import android.content.Context
-import com.faddy.motherlib.model.VPNType
-import com.faddy.motherlib.model.VpnProfile
+import com.faddy.phoenixlib.model.VPNType
+import com.faddy.phoenixlib.model.VpnProfile
 
 interface IStartStop {
     fun startVpn(vpnProfile: VpnProfile, passedContext: Activity)

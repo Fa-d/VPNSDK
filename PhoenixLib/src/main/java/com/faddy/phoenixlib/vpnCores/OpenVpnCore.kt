@@ -1,4 +1,4 @@
-package com.faddy.motherlib.vpnCores
+package com.faddy.phoenixlib.vpnCores
 
 import android.app.Activity
 import android.content.ComponentName
@@ -13,12 +13,12 @@ import android.util.Base64
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.faddy.motherlib.interfaces.IStartStop
-import com.faddy.motherlib.interfaces.IVpnLifecycle
-import com.faddy.motherlib.interfaces.IVpnSpeedIP
-import com.faddy.motherlib.model.VPNStatus
-import com.faddy.motherlib.model.VPNType
-import com.faddy.motherlib.model.VpnProfile
+import com.faddy.phoenixlib.interfaces.IStartStop
+import com.faddy.phoenixlib.interfaces.IVpnLifecycle
+import com.faddy.phoenixlib.interfaces.IVpnSpeedIP
+import com.faddy.phoenixlib.model.VPNStatus
+import com.faddy.phoenixlib.model.VPNType
+import com.faddy.phoenixlib.model.VpnProfile
 import de.blinkt.openvpn.LaunchVPN
 import de.blinkt.openvpn.core.ConfigParser
 import de.blinkt.openvpn.core.ConnectionStatus

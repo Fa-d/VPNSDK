@@ -1,9 +1,7 @@
-package com.faddy.motherlib.interfaces
+package com.faddy.phoenixlib.interfaces
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import com.faddy.motherlib.model.VPNStatus
-import com.faddy.motherlib.model.VPNType
+import com.faddy.phoenixlib.model.VPNType
 
 interface IVpnLifecycle {
     fun onVPNStart()

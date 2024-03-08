@@ -1,8 +1,8 @@
-package com.faddy.motherlib.interfaces
+package com.faddy.phoenixlib.interfaces
 
 import android.app.Activity
 import androidx.lifecycle.LiveData
-import com.faddy.motherlib.model.VPNStatus
+import com.faddy.phoenixlib.model.VPNStatus
 
 interface IVpnStatus {
     fun getVpnConnectedStatus(): LiveData<VPNStatus>

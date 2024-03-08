@@ -1,4 +1,4 @@
-package com.faddy.motherlib.model
+package com.faddy.phoenixlib.model
 
 data class VpnProfile(
     val vpnType: VPNType,

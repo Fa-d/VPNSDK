@@ -1,4 +1,4 @@
-package com.faddy.motherlib
+package com.faddy.phoenixlib
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -10,18 +10,18 @@ import android.net.VpnService
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.faddy.motherlib.interfaces.ICoreVpn
-import com.faddy.motherlib.interfaces.IVpnLifecycle
-import com.faddy.motherlib.interfaces.IVpnSpeedIP
-import com.faddy.motherlib.interfaces.IVpnStatus
-import com.faddy.motherlib.model.VPNStatus
-import com.faddy.motherlib.model.VPNType
-import com.faddy.motherlib.model.VpnProfile
-import com.faddy.motherlib.service.CountdownTimerService
-import com.faddy.motherlib.utils.SessionManager
-import com.faddy.motherlib.utils.ping
-import com.faddy.motherlib.utils.toMutableLiveData
-import com.faddy.motherlib.vpnCores.VpnSwitchFactory
+import com.faddy.phoenixlib.interfaces.ICoreVpn
+import com.faddy.phoenixlib.interfaces.IVpnLifecycle
+import com.faddy.phoenixlib.interfaces.IVpnSpeedIP
+import com.faddy.phoenixlib.interfaces.IVpnStatus
+import com.faddy.phoenixlib.model.VPNStatus
+import com.faddy.phoenixlib.model.VPNType
+import com.faddy.phoenixlib.model.VpnProfile
+import com.faddy.phoenixlib.service.CountdownTimerService
+import com.faddy.phoenixlib.utils.SessionManager
+import com.faddy.phoenixlib.utils.ping
+import com.faddy.phoenixlib.utils.toMutableLiveData
+import com.faddy.phoenixlib.vpnCores.VpnSwitchFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,8 +32,8 @@ import java.util.Locale
 
 
 @SuppressLint("StaticFieldLeak")
-object MotherVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
-    private lateinit var motherContext: Context
+object PhoenixVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
+    private lateinit var phoenixContext: Context
     private val vpnSwitchFactory = VpnSwitchFactory()
 
     var connectedVpnTime = MutableLiveData("00:00:00")
@@ -46,8 +46,8 @@ object MotherVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
     var myCurrentIp: MutableLiveData<String>? = null
     var funInvoker: (() -> Unit)? = null
 
-    fun init(passedContext: Context): MotherVPN {
-        motherContext = passedContext
+    fun init(passedContext: Context): PhoenixVPN {
+        phoenixContext = passedContext
         return this
     }
 
@@ -79,8 +79,8 @@ object MotherVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
     }
 
     override fun disconnect(): LiveData<VPNStatus> {
-        vpnSwitchFactory.stopVpn(getLastSelectedVpn(), motherContext)
-        stopTimerService(motherContext)
+        vpnSwitchFactory.stopVpn(getLastSelectedVpn(), phoenixContext)
+        stopTimerService(phoenixContext)
         currentUploadSpeed?.postValue(0L)
         currentDownloadSpeed?.postValue(0L)
         connectedStatus?.postValue(VPNStatus.DISCONNECTED)
@@ -97,10 +97,10 @@ object MotherVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
 
     override fun setVpnType(vpnProfile: VpnProfile) {
         SessionManager(
-            motherContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
+            phoenixContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
         ).setLastConnVpnType(vpnProfile.vpnType.name)
         SessionManager(
-            motherContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
+            phoenixContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
         ).setLastConnServerIP(vpnProfile.serverIP.split(":")[0])
 
     }
@@ -113,7 +113,7 @@ object MotherVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
     }
 
     override fun isVpnServicePrepared(): Boolean {
-        return VpnService.prepare(motherContext) == null
+        return VpnService.prepare(phoenixContext) == null
     }
 
     override fun prepareVPNService(context: Activity) {
@@ -130,7 +130,7 @@ object MotherVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
     override fun onVPNResume(passedContext: Context) {
         vpnSwitchFactory.onVPNResume(getLastSelectedVpn(), passedContext)
         resetVpnListeners()
-        LocalBroadcastManager.getInstance(motherContext)
+        LocalBroadcastManager.getInstance(phoenixContext)
             .registerReceiver(receiver, IntentFilter(CountdownTimerService.TIME_INFO));
         funInvoker?.invoke()
     }
@@ -141,7 +141,7 @@ object MotherVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
 
     override fun onVPNPause() {
         vpnSwitchFactory.onVPNPause(getLastSelectedVpn())
-        LocalBroadcastManager.getInstance(motherContext).unregisterReceiver(receiver);
+        LocalBroadcastManager.getInstance(phoenixContext).unregisterReceiver(receiver);
     }
 
     override fun getUploadSpeed(): LiveData<Long> {
@@ -158,7 +158,7 @@ object MotherVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
 
     private fun getLastSelectedVpn(): VPNType {
         val vpnState = SessionManager(
-            motherContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
+            phoenixContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
         ).getLastConnVpnType() ?: ""
         val currentType = when (vpnState) {
             "OPENVPN" -> VPNType.OPENVPN
@@ -192,7 +192,7 @@ object MotherVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
                         getPingCurrentServer()
                         myCurrentIp?.postValue(
                             SessionManager(
-                                motherContext.getSharedPreferences(
+                                phoenixContext.getSharedPreferences(
                                     "user_info_mother_lib", Context.MODE_PRIVATE
                                 )
                             ).getLastConnServerIP()

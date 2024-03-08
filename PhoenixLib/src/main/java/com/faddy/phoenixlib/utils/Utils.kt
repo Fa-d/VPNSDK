@@ -1,4 +1,4 @@
-package com.faddy.motherlib.utils
+package com.faddy.phoenixlib.utils
 
 import android.text.TextUtils
 import androidx.lifecycle.LiveData

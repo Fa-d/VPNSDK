@@ -1,7 +1,7 @@
-package com.faddy.motherlib.interfaces
+package com.faddy.phoenixlib.interfaces
 
 import androidx.lifecycle.LiveData
-import com.faddy.motherlib.model.VPNType
+import com.faddy.phoenixlib.model.VPNType
 
 interface IVpnSpeedIP {
     fun getUploadSpeed(): LiveData<Long>

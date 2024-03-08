@@ -54,7 +54,7 @@ android {
 
 dependencies {
 
-    implementation(project(":motherLib"))
+    implementation(project(":PhoenixLib"))
     implementation(fileTree("libs"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core)
