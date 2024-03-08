@@ -37,7 +37,7 @@ android {
 dependencies {
     implementation(project(":openvpnlib"))
     //implementation(project(":openconnectlib"))
-    //implementation(project(":wgtunlib"))
+    implementation(project(":wgtunlib"))
     //implementation(project(":strongswan"))
     //implementation(project(":SingBox"))
 

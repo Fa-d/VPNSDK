@@ -29,8 +29,6 @@ class MainActivityPro : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(ActivityMainBinding.inflate(layoutInflater).also { binding = it }.root)
-        initData()
-        initView()
         initClickListener()
         initObserver()
     }
@@ -88,7 +86,7 @@ class MainActivityPro : AppCompatActivity() {
                 } else {
                     coreSdk.startConnect(
                         this@MainActivityPro, VpnProfile(
-                            vpnType = VPNType.OPENVPN, userName = "ss", password = "123456",
+                            vpnType = VPNType.WIREGUARD, userName = "ss", password = "123456",
                             vpnConfig = VpnConfigs.openVpnConf,
                             serverIP = VpnConfigs.openVpnIP
                         )
@@ -99,14 +97,5 @@ class MainActivityPro : AppCompatActivity() {
             }
         }
     }
-
-    private fun initData() {
-
-    }
-
-    private fun initView() {
-
-    }
-
 
 }

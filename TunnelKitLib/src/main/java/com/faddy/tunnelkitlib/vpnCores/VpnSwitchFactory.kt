@@ -14,7 +14,7 @@ import com.faddy.tunnelkitlib.model.VpnProfile
 class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
 
     val openVpnCoreConcrete = OpenVpnCore()
-    lateinit var wireGuardCoreConcrete: WireGuardCore
+    val wireGuardCoreConcrete = WireGuardCore()
     fun setVpnStateListeners(vpnType: VPNType): LiveData<VPNStatus> {
         return when (vpnType) {
             VPNType.NONE -> liveData {  }
@@ -47,7 +47,9 @@ class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
             }
 
             VPNType.OPENCONNECT -> {}
-            VPNType.WIREGUARD -> {}
+            VPNType.WIREGUARD -> {
+                wireGuardCoreConcrete.requestListeningState(passedContext)
+            }
             VPNType.IPSECIKEV2 -> {}
             VPNType.SINGBOX -> {}
         }
@@ -90,7 +92,9 @@ class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
             }
 
             VPNType.OPENCONNECT -> {}
-            VPNType.WIREGUARD -> {}
+            VPNType.WIREGUARD -> {
+                wireGuardCoreConcrete.startVpnService(passedActivity)
+            }
             VPNType.IPSECIKEV2 -> {}
             VPNType.SINGBOX -> {}
         }
@@ -104,7 +108,9 @@ class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
             }
 
             VPNType.OPENCONNECT -> {}
-            VPNType.WIREGUARD -> {}
+            VPNType.WIREGUARD -> {
+                wireGuardCoreConcrete.stopVpnService(passedContext)
+            }
             VPNType.IPSECIKEV2 -> {}
             VPNType.SINGBOX -> {}
         }

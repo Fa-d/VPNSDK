@@ -1,8 +1,6 @@
 package com.faddy.tunnelkitlib.interfaces
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import com.faddy.tunnelkitlib.model.VPNStatus
 import com.faddy.tunnelkitlib.model.VPNType
 
 interface IVpnLifecycle {

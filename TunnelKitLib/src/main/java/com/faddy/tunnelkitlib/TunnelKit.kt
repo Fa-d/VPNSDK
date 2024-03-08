@@ -33,7 +33,7 @@ import java.util.Locale
 
 @SuppressLint("StaticFieldLeak")
 object TunnelKit : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
-    private lateinit var motherContext: Context
+    private lateinit var tunnelKitContext: Context
     private val vpnSwitchFactory = VpnSwitchFactory()
 
     var connectedVpnTime = MutableLiveData("00:00:00")
@@ -47,7 +47,7 @@ object TunnelKit : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
     var funInvoker: (() -> Unit)? = null
 
     fun init(passedContext: Context): TunnelKit {
-        motherContext = passedContext
+        tunnelKitContext = passedContext
         return this
     }
 
@@ -79,8 +79,8 @@ object TunnelKit : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
     }
 
     override fun disconnect(): LiveData<VPNStatus> {
-        vpnSwitchFactory.stopVpn(getLastSelectedVpn(), motherContext)
-        stopTimerService(motherContext)
+        vpnSwitchFactory.stopVpn(getLastSelectedVpn(), tunnelKitContext)
+        stopTimerService(tunnelKitContext)
         currentUploadSpeed?.postValue(0L)
         currentDownloadSpeed?.postValue(0L)
         connectedStatus?.postValue(VPNStatus.DISCONNECTED)
@@ -97,10 +97,10 @@ object TunnelKit : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
 
     override fun setVpnType(vpnProfile: VpnProfile) {
         SessionManager(
-            motherContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
+            tunnelKitContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
         ).setLastConnVpnType(vpnProfile.vpnType.name)
         SessionManager(
-            motherContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
+            tunnelKitContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
         ).setLastConnServerIP(vpnProfile.serverIP.split(":")[0])
 
     }
@@ -113,7 +113,7 @@ object TunnelKit : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
     }
 
     override fun isVpnServicePrepared(): Boolean {
-        return VpnService.prepare(motherContext) == null
+        return VpnService.prepare(tunnelKitContext) == null
     }
 
     override fun prepareVPNService(context: Activity) {
@@ -130,7 +130,7 @@ object TunnelKit : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
     override fun onVPNResume(passedContext: Context) {
         vpnSwitchFactory.onVPNResume(getLastSelectedVpn(), passedContext)
         resetVpnListeners()
-        LocalBroadcastManager.getInstance(motherContext)
+        LocalBroadcastManager.getInstance(tunnelKitContext)
             .registerReceiver(receiver, IntentFilter(CountdownTimerService.TIME_INFO));
         funInvoker?.invoke()
     }
@@ -141,7 +141,7 @@ object TunnelKit : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
 
     override fun onVPNPause() {
         vpnSwitchFactory.onVPNPause(getLastSelectedVpn())
-        LocalBroadcastManager.getInstance(motherContext).unregisterReceiver(receiver);
+        LocalBroadcastManager.getInstance(tunnelKitContext).unregisterReceiver(receiver);
     }
 
     override fun getUploadSpeed(): LiveData<Long> {
@@ -158,7 +158,7 @@ object TunnelKit : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
 
     private fun getLastSelectedVpn(): VPNType {
         val vpnState = SessionManager(
-            motherContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
+            tunnelKitContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
         ).getLastConnVpnType() ?: ""
         val currentType = when (vpnState) {
             "OPENVPN" -> VPNType.OPENVPN
@@ -192,7 +192,7 @@ object TunnelKit : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
                         getPingCurrentServer()
                         myCurrentIp?.postValue(
                             SessionManager(
-                                motherContext.getSharedPreferences(
+                                tunnelKitContext.getSharedPreferences(
                                     "user_info_mother_lib", Context.MODE_PRIVATE
                                 )
                             ).getLastConnServerIP()
