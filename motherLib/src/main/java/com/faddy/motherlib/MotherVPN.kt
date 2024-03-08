@@ -6,6 +6,7 @@ import android.content.Context
 import android.net.VpnService
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import com.faddy.motherlib.interfaces.ICoreVpn
 import com.faddy.motherlib.interfaces.IVpnLifecycle
 import com.faddy.motherlib.interfaces.IVpnSpeedIP
@@ -14,6 +15,7 @@ import com.faddy.motherlib.model.VPNStatus
 import com.faddy.motherlib.model.VPNType
 import com.faddy.motherlib.model.VpnProfile
 import com.faddy.motherlib.utils.SessionManager
+import com.faddy.motherlib.utils.toMutableLiveData
 import com.faddy.motherlib.vpnCores.VpnSwitchFactory
 
 @SuppressLint("StaticFieldLeak")
@@ -24,10 +26,11 @@ object MotherVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
     var connectedVpnTime = MutableLiveData("00:00:00")
     private val totalUploadSpeed = MutableLiveData(0L)
     private val totalDownloadSpeed = MutableLiveData(0L)
-    var currentUploadSpeed: LiveData<Long>? = null
-    var currentDownloadSpeed: LiveData<Long>? = null
-    var connectedStatus: LiveData<VPNStatus>? = null
-    var myCurrentIp: LiveData<String>? = null
+    var currentUploadSpeed: MutableLiveData<Long>? = null
+    var currentDownloadSpeed: MutableLiveData<Long>? = null
+    var connectedStatus: MutableLiveData<VPNStatus>? = null
+    var myCurrentIp: MutableLiveData<String>? = null
+    var funInvoker: (() -> Unit)? = null
 
     fun init(passedContext: Context): MotherVPN {
         motherContext = passedContext
@@ -35,10 +38,24 @@ object MotherVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
     }
 
     fun resetVpnListeners() {
-        currentUploadSpeed = vpnSwitchFactory.getDownloadSpeed(getLastSelectedVpn())
-        currentDownloadSpeed = vpnSwitchFactory.getUploadSpeed(getLastSelectedVpn())
-        connectedStatus = vpnSwitchFactory.setVpnStateListeners(getLastSelectedVpn())
-        myCurrentIp = vpnSwitchFactory.getCurrentIp(getLastSelectedVpn())
+        currentUploadSpeed =
+            vpnSwitchFactory.getDownloadSpeed(getLastSelectedVpn()).toMutableLiveData()
+        currentDownloadSpeed =
+            vpnSwitchFactory.getUploadSpeed(getLastSelectedVpn()).toMutableLiveData()
+        connectedStatus =
+            vpnSwitchFactory.setVpnStateListeners(getLastSelectedVpn()).toMutableLiveData()
+        myCurrentIp = vpnSwitchFactory.getCurrentIp(getLastSelectedVpn()).toMutableLiveData()
+
+        /*if (isVpnConnected()) {
+            currentUploadSpeed = vpnSwitchFactory.getDownloadSpeed(getLastSelectedVpn())
+            currentDownloadSpeed = vpnSwitchFactory.getUploadSpeed(getLastSelectedVpn())
+            connectedStatus = vpnSwitchFactory.setVpnStateListeners(getLastSelectedVpn())
+            myCurrentIp = vpnSwitchFactory.getCurrentIp(getLastSelectedVpn())
+        } else {
+            currentUploadSpeed = liveData { 0L }
+            currentDownloadSpeed = liveData { 0L }
+            myCurrentIp = liveData { "0.0.0.0" }
+        }*/
     }
     override fun startConnect(
         passedActivity: Activity, vpnProfile: VpnProfile
@@ -51,11 +68,17 @@ object MotherVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
             disconnect()
         }
         resetVpnListeners()
+        funInvoker?.invoke()
         return vpnSwitchFactory.setVpnStateListeners(getLastSelectedVpn())
     }
 
     override fun disconnect(): LiveData<VPNStatus> {
         vpnSwitchFactory.stopVpn(getLastSelectedVpn(), motherContext)
+        currentUploadSpeed?.postValue(0L)
+        currentDownloadSpeed?.postValue(0L)
+        connectedStatus?.postValue(VPNStatus.DISCONNECTED)
+        myCurrentIp?.postValue("0.0.0.0")
+        funInvoker?.invoke()
         return vpnSwitchFactory.setVpnStateListeners(getLastSelectedVpn())
     }
 
@@ -69,7 +92,7 @@ object MotherVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
         ).setLastConnVpnType(vpnType.name)
     }
     override fun getConnectedTime(): LiveData<String> {
-        return connectedVpnTime
+        return if (isVpnConnected()) connectedVpnTime else liveData { "00:00:00" }
     }
 
     override fun isVpnConnected(): Boolean {
@@ -92,8 +115,9 @@ object MotherVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
     }
 
     override fun onVPNResume(passedContext: Context) {
-        resetVpnListeners()
         vpnSwitchFactory.onVPNResume(getLastSelectedVpn(), passedContext)
+        resetVpnListeners()
+        funInvoker?.invoke()
     }
 
     override fun onVPNDestroy() {

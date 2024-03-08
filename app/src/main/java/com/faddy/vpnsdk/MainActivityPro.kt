@@ -36,39 +36,41 @@ class MainActivityPro : AppCompatActivity() {
     }
 
     private fun initObserver() {
-        coreSdk.myCurrentIp?.observe(this) { text ->
-            binding.ipText.text = text
-        }
+        coreSdk.funInvoker = {
+            coreSdk.myCurrentIp?.observe(this) { text ->
+                binding.ipText.text = text
+            }
 
-        coreSdk.currentUploadSpeed?.observe(this) { text ->
-            binding.uploadText.text = text.toString()
-        }
+            coreSdk.currentUploadSpeed?.observe(this) { text ->
+                binding.uploadText.text = text.toString()
+            }
 
-        coreSdk.currentDownloadSpeed?.observe(this) { text ->
-            binding.downloadText.text = text.toString()
-        }
+            coreSdk.currentDownloadSpeed?.observe(this) { text ->
+                binding.downloadText.text = text.toString()
+            }
 
-        coreSdk.connectedVpnTime.observe(this) { text ->
-            binding.timerText.text = text.toString()
-        }
+            coreSdk.connectedVpnTime.observe(this) { text ->
+                binding.timerText.text = text.toString()
+            }
 
-        coreSdk.connectedStatus?.observe(this) { status ->
-            Log.e("getVpnConnectedStatus", status.name)
-            when (status) {
-                VPNStatus.DISCONNECTING -> {
-                    binding.connectionStatus.text = "DISCONNECTING"
-                }
+            coreSdk.connectedStatus?.observe(this) { status ->
+                Log.e("getVpnConnectedStatus", status.name)
+                when (status) {
+                    VPNStatus.DISCONNECTING -> {
+                        binding.connectionStatus.text = "DISCONNECTING"
+                    }
 
-                VPNStatus.CONNECTED -> {
-                    binding.connectionStatus.text = "CONNECTED"
-                }
+                    VPNStatus.CONNECTED -> {
+                        binding.connectionStatus.text = "CONNECTED"
+                    }
 
-                VPNStatus.CONNECTING -> {
-                    binding.connectionStatus.text = "CONNECTING"
-                }
+                    VPNStatus.CONNECTING -> {
+                        binding.connectionStatus.text = "CONNECTING"
+                    }
 
-                VPNStatus.DISCONNECTED -> {
-                    binding.connectionStatus.text = "DISCONNECTED"
+                    VPNStatus.DISCONNECTED -> {
+                        binding.connectionStatus.text = "DISCONNECTED"
+                    }
                 }
             }
         }
