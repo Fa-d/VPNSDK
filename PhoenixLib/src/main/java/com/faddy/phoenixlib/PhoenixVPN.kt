@@ -22,6 +22,7 @@ import com.faddy.phoenixlib.utils.SessionManager
 import com.faddy.phoenixlib.utils.ping
 import com.faddy.phoenixlib.utils.toMutableLiveData
 import com.faddy.phoenixlib.vpnCores.VpnSwitchFactory
+import com.faddy.singbox.CustomApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,6 +49,7 @@ object PhoenixVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
 
     fun init(passedContext: Context): PhoenixVPN {
         phoenixContext = passedContext
+        CustomApplication().init(passedContext)
         return this
     }
 

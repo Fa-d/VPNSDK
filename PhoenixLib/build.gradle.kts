@@ -39,7 +39,7 @@ dependencies {
     //implementation(project(":openconnectlib"))
     implementation(project(":wgtunlib"))
     //implementation(project(":strongswan"))
-    //implementation(project(":SingBox"))
+    implementation(project(":singbox"))
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

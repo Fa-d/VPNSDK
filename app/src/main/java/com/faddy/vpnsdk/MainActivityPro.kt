@@ -3,26 +3,26 @@ package com.faddy.vpnsdk
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.faddy.phoenixlib.model.VPNStatus
+/*import com.faddy.phoenixlib.model.VPNStatus
 import com.faddy.phoenixlib.model.VPNType
-import com.faddy.phoenixlib.model.VpnProfile
+import com.faddy.phoenixlib.model.VpnProfile*/
 import com.faddy.vpnsdk.databinding.ActivityMainBinding
 
 class MainActivityPro : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val coreSdk = MainApp.vpnSdk!!
+    //private val coreSdk = MainApp.vpnSdk!!
     override fun onPause() {
         super.onPause()
-        coreSdk.onVPNPause()
+      //  coreSdk.onVPNPause()
     }
 
     override fun onResume() {
         super.onResume()
-        coreSdk.onVPNResume(this@MainActivityPro)
+        //coreSdk.onVPNResume(this@MainActivityPro)
     }
 
     override fun onDestroy() {
-        coreSdk.onVPNDestroy()
+       // coreSdk.onVPNDestroy()
         super.onDestroy()
     }
 
@@ -34,7 +34,7 @@ class MainActivityPro : AppCompatActivity() {
     }
 
     private fun initObserver() {
-        coreSdk.funInvoker = {
+     /*   coreSdk.funInvoker = {
             coreSdk.myCurrentIp?.observe(this) { text ->
                 binding.ipText.text = text
             }
@@ -75,12 +75,12 @@ class MainActivityPro : AppCompatActivity() {
                     }
                 }
             }
-        }
+        }*/
     }
 
     private fun initClickListener() {
         binding.button1.setOnClickListener {
-            if (coreSdk.isVpnServicePrepared()) {
+            /*if (coreSdk.isVpnServicePrepared()) {
                 if (coreSdk.isVpnConnected()) {
                     coreSdk.disconnect()
                 } else {
@@ -94,7 +94,7 @@ class MainActivityPro : AppCompatActivity() {
                 }
             } else {
                 coreSdk.prepareVPNService(this@MainActivityPro)
-            }
+            }*/
         }
     }
 

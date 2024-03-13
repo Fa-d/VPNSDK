@@ -37,7 +37,7 @@ class TunnelControlTile : TileService() {
         super.onStartListening()
         Timber.d("On start listening called")
         scope.launch {
-            vpnService.vpnState.collect {
+            vpnService.vpnServiceState.collect {
                 when (it.status) {
                     Tunnel.State.UP -> setActive()
                     Tunnel.State.DOWN -> setInactive()

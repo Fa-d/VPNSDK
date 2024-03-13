@@ -90,7 +90,7 @@ class WireGuardTunnelService : ForegroundService() {
                 }
             }
             launch {
-                vpnService.vpnState.collect { state ->
+                vpnService.vpnServiceState.collect { state ->
                     state.statistics?.mapPeerStats()?.map { it.value?.handshakeStatus() }
                         .let { statuses ->
                             when {

@@ -9,7 +9,7 @@ interface VpnService : Tunnel {
 
     suspend fun stopTunnel()
 
-    val vpnState: StateFlow<VpnState>
+    val vpnServiceState: StateFlow<VpnState>
 
     fun getState(): Tunnel.State
 }

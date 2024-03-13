@@ -33,7 +33,7 @@ class WireGuardTunnel @Inject constructor(
     private val context: Context
 ) : VpnService {
     private val _vpnState = MutableStateFlow(VpnState())
-    override val vpnState: StateFlow<VpnState> = _vpnState.asStateFlow()
+    override val vpnServiceState: StateFlow<VpnState> = _vpnState.asStateFlow()
 
     private val scope = CoroutineScope(Dispatchers.IO)
 

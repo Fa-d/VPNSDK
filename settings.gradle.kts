@@ -25,5 +25,6 @@ include(":wgtunlib")
 include(":openvpnlib")
 //include(":openconnectlib")
 //include(":strongswan")
-//include(":SingBox")
 include(":PhoenixLib")
+include(":singbox")
+
