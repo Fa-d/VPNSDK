@@ -22,6 +22,7 @@ import com.faddy.tunnelkitlib.utils.SessionManager
 import com.faddy.tunnelkitlib.utils.ping
 import com.faddy.tunnelkitlib.utils.toMutableLiveData
 import com.faddy.tunnelkitlib.vpnCores.VpnSwitchFactory
+import com.faddy.singbox.CustomApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,6 +49,7 @@ object TunnelKit : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
 
     fun init(passedContext: Context): TunnelKit {
         tunnelKitContext = passedContext
+        CustomApplication().init(passedContext)
         return this
     }
 

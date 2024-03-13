@@ -247,7 +247,7 @@ class WireGuardConnectivityWatcherService : ForegroundService() {
     }
 
     private suspend fun watchForVpnConnectivityChanges() {
-        vpnService.vpnState.collect {
+        vpnService.vpnServiceState.collect {
             when (it.status) {
                 Tunnel.State.DOWN -> networkEventsFlow.value = networkEventsFlow.value.copy(
                     isVpnConnected = false,

@@ -8,9 +8,10 @@ import com.faddy.wgtunlib.service.foreground.ServiceManager
 import com.faddy.wgtunlib.service.tile.TunnelControlTile
 import com.faddy.wgtunlib.service.tunnel.VpnService
 import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 
-@EntryPoint
 class WireGuardCore {
 
     @Inject
@@ -20,7 +21,7 @@ class WireGuardCore {
             passedContext,
             ComponentName(passedContext, TunnelControlTile::class.java),
         )
-        vpnService.vpnState
+        //vpnService.vpnState
     }
 
 

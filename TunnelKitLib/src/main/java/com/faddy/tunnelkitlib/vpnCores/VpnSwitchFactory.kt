@@ -3,6 +3,7 @@ package com.faddy.tunnelkitlib.vpnCores
 import android.app.Activity
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import com.faddy.tunnelkitlib.interfaces.IStartStop
 import com.faddy.tunnelkitlib.interfaces.IVpnLifecycleTyped
@@ -10,6 +11,8 @@ import com.faddy.tunnelkitlib.interfaces.IVpnSpeedIPTyped
 import com.faddy.tunnelkitlib.model.VPNStatus
 import com.faddy.tunnelkitlib.model.VPNType
 import com.faddy.tunnelkitlib.model.VpnProfile
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
 
@@ -19,7 +22,10 @@ class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
         return when (vpnType) {
             VPNType.NONE -> liveData {  }
             VPNType.OPENVPN -> openVpnCoreConcrete.currentVpnState
-            VPNType.OPENCONNECT -> openVpnCoreConcrete.currentVpnState
+            VPNType.OPENCONNECT -> {
+                wireGuardCoreConcrete.vpnServiceWireguard.getState()
+                return liveData {  }
+            }
             VPNType.WIREGUARD -> openVpnCoreConcrete.currentVpnState
             VPNType.IPSECIKEV2 -> openVpnCoreConcrete.currentVpnState
             VPNType.SINGBOX -> openVpnCoreConcrete.currentVpnState
