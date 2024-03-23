@@ -39,7 +39,7 @@ dependencies {
     //implementation(project(":openconnectlib"))
     implementation(project(":wgtunlib"))
     //implementation(project(":strongswan"))
-    implementation(project(":singbox"))
+    //implementation(project(":singbox"))
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -80,4 +80,9 @@ dependencies {
     implementation(libs.material.icons.extended)
     // serialization
     implementation(libs.kotlinx.serialization.json)
+
+    //wg
+    implementation(libs.tunnel)
+    implementation(libs.androidx.lifecycle.service)
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

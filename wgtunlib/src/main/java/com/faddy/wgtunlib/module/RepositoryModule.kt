@@ -5,8 +5,6 @@ import com.faddy.wgtunlib.data.SettingsDao
 import com.faddy.wgtunlib.data.TunnelConfigDao
 import com.faddy.wgtunlib.data.repository.SettingsRepository
 import com.faddy.wgtunlib.data.repository.SettingsRepositoryImpl
-import com.faddy.wgtunlib.data.repository.TunnelConfigRepository
-import com.faddy.wgtunlib.data.repository.TunnelConfigRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,12 +24,6 @@ class RepositoryModule {
     @Provides
     fun provideTunnelConfigDoa(appDatabase: AppDatabase): TunnelConfigDao {
         return appDatabase.tunnelConfigDoa()
-    }
-
-    @Singleton
-    @Provides
-    fun provideTunnelConfigRepository(tunnelConfigDao: TunnelConfigDao): TunnelConfigRepository {
-        return TunnelConfigRepositoryImpl(tunnelConfigDao)
     }
 
     @Singleton

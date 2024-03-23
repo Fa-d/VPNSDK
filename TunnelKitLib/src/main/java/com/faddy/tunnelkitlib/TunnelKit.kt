@@ -22,7 +22,7 @@ import com.faddy.tunnelkitlib.utils.SessionManager
 import com.faddy.tunnelkitlib.utils.ping
 import com.faddy.tunnelkitlib.utils.toMutableLiveData
 import com.faddy.tunnelkitlib.vpnCores.VpnSwitchFactory
-import com.faddy.singbox.CustomApplication
+//import com.faddy.singbox.CustomApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -49,7 +49,7 @@ object TunnelKit : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
 
     fun init(passedContext: Context): TunnelKit {
         tunnelKitContext = passedContext
-        CustomApplication().init(passedContext)
+        // CustomApplication().init(passedContext)
         return this
     }
 
@@ -104,7 +104,6 @@ object TunnelKit : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
         SessionManager(
             tunnelKitContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
         ).setLastConnServerIP(vpnProfile.serverIP.split(":")[0])
-
     }
     override fun getConnectedTime(): LiveData<String> {
         return connectedVpnTime
