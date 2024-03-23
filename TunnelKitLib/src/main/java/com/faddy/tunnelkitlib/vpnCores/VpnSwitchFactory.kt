@@ -131,7 +131,7 @@ class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
             }
 
             VPNType.WIREGUARD -> {
-                return liveData { 0L }
+                return wireGuardCoreConcrete.currentTxSpeed
             }
 
             VPNType.IPSECIKEV2 -> {
@@ -159,7 +159,7 @@ class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
             }
 
             VPNType.WIREGUARD -> {
-                return liveData { 0L }
+                return wireGuardCoreConcrete.currentRxSpeed
             }
 
             VPNType.IPSECIKEV2 -> {
