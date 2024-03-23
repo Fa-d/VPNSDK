@@ -53,11 +53,15 @@ object PhoenixVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
         return this
     }
 
-    fun resetVpnListeners() {
+    private fun uploadDownloadLitener() {
         currentUploadSpeed =
             vpnSwitchFactory.getDownloadSpeed(getLastSelectedVpn()).toMutableLiveData()
         currentDownloadSpeed =
             vpnSwitchFactory.getUploadSpeed(getLastSelectedVpn()).toMutableLiveData()
+    }
+
+    private fun resetVpnListeners() {
+        uploadDownloadLitener()
         connectedStatus =
             vpnSwitchFactory.setVpnStateListeners(getLastSelectedVpn()).toMutableLiveData()
         myCurrentIp = vpnSwitchFactory.getCurrentIp(getLastSelectedVpn()).toMutableLiveData()
@@ -190,7 +194,10 @@ object PhoenixVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
                         myCurrentIp?.postValue(getIPAddress(true))
                         connectedStatus?.postValue(VPNStatus.DISCONNECTED)
                     } else {
+                        getUploadSpeed()
+                        getDownloadSpeed()
                         getPingCurrentServer()
+                        uploadDownloadLitener()
                         myCurrentIp?.postValue(
                             SessionManager(
                                 phoenixContext.getSharedPreferences(

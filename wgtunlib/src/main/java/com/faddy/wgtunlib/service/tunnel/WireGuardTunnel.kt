@@ -29,7 +29,6 @@ class WireGuardTunnel : VpnService {
 
     fun initBackend(context: Context) {
         backend = GoBackend(context)
-        _vpnState.value.statistics?.totalRx()
     }
 
     override suspend fun startTunnel(tunnelConfig: TunnelConfig): State {
@@ -56,6 +55,16 @@ class WireGuardTunnel : VpnService {
         _vpnState.tryEmit(
             _vpnState.value.copy(statistics = statistics)
         )
+        _vpnState.tryEmit(_vpnState.value.copy(curRx = config?.peers?.get(0)?.publicKey?.let {
+            backend?.getStatistics(this)?.peer(
+                it
+            )?.rxBytes
+        } ?: 0L))
+        _vpnState.tryEmit(_vpnState.value.copy(curTx = config?.peers?.get(0)?.publicKey?.let {
+            backend?.getStatistics(this)?.peer(
+                it
+            )?.txBytes
+        } ?: 0L))
     }
 
     private suspend fun emitTunnelName(name: String) {
