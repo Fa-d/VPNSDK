@@ -18,7 +18,6 @@ class CustomApplication {
         application?.registerReceiver(AppChangeReceiver(), IntentFilter().apply {
             addAction(Intent.ACTION_PACKAGE_ADDED)
             addDataScheme("package")
-
         })
         Seq.setContext(application)
     }

@@ -26,5 +26,5 @@ include(":openvpnlib")
 //include(":openconnectlib")
 //include(":strongswan")
 include(":PhoenixLib")
-include(":singbox")
+//include(":singbox")
 

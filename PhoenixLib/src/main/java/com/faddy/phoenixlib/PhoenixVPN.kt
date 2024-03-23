@@ -22,7 +22,7 @@ import com.faddy.phoenixlib.utils.SessionManager
 import com.faddy.phoenixlib.utils.ping
 import com.faddy.phoenixlib.utils.toMutableLiveData
 import com.faddy.phoenixlib.vpnCores.VpnSwitchFactory
-import com.faddy.singbox.CustomApplication
+//import com.faddy.singbox.CustomApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -49,7 +49,7 @@ object PhoenixVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
 
     fun init(passedContext: Context): PhoenixVPN {
         phoenixContext = passedContext
-        CustomApplication().init(passedContext)
+        // CustomApplication().init(passedContext)
         return this
     }
 
@@ -104,7 +104,6 @@ object PhoenixVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
         SessionManager(
             phoenixContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
         ).setLastConnServerIP(vpnProfile.serverIP.split(":")[0])
-
     }
     override fun getConnectedTime(): LiveData<String> {
         return connectedVpnTime
