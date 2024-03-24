@@ -36,10 +36,10 @@ android {
 
 dependencies {
     implementation(project(":openvpnlib"))
-    //implementation(project(":openconnectlib"))
     implementation(project(":wgtunlib"))
+    implementation(project(":singbox"))
+    //implementation(project(":openconnectlib"))
     //implementation(project(":strongswan"))
-    //implementation(project(":singbox"))
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

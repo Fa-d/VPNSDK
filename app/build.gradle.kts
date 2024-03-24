@@ -54,8 +54,6 @@ android {
 
 dependencies {
 
-    implementation(project(":TunnelKitLib"))
-    implementation(fileTree("libs"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core)
     implementation(libs.androidx.appcompat)
@@ -66,6 +64,7 @@ dependencies {
     // hilt
     implementation(libs.hilt.android)
     implementation(libs.androidx.room.ktx)
+    implementation(project(":TunnelKitLib"))
     ksp(libs.hilt.android.compiler)
 
     //lifecycle

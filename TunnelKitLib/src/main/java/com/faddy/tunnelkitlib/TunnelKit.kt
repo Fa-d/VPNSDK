@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.VpnService
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -22,7 +23,7 @@ import com.faddy.tunnelkitlib.utils.SessionManager
 import com.faddy.tunnelkitlib.utils.ping
 import com.faddy.tunnelkitlib.utils.toMutableLiveData
 import com.faddy.tunnelkitlib.vpnCores.VpnSwitchFactory
-//import com.faddy.singbox.CustomApplication
+import com.faddy.singbox.CustomApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -49,7 +50,7 @@ object TunnelKit : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
 
     fun init(passedContext: Context): TunnelKit {
         tunnelKitContext = passedContext
-        // CustomApplication().init(passedContext)
+        CustomApplication().init(passedContext)
         return this
     }
 
@@ -130,6 +131,10 @@ object TunnelKit : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
 
     override fun onVPNStart() {
         vpnSwitchFactory.onVPNStart(getLastSelectedVpn())
+    }
+
+    override fun onVpnCreate(passedContext: Context, lifecycleObserver: LifecycleOwner) {
+        vpnSwitchFactory.onVpnCreate(passedContext, lifecycleObserver)
     }
 
     override fun onVPNResume(passedContext: Context) {

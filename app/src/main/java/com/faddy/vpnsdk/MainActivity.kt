@@ -45,9 +45,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initClickListener() {
-        binding.button1.setOnClickListener {
 
-        }
         binding.button2.setOnClickListener {
         }
     }

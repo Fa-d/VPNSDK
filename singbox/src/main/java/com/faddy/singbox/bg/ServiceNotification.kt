@@ -13,7 +13,6 @@ import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import androidx.lifecycle.MutableLiveData
-import io.nekohasekai.sfa.R
 import com.faddy.singbox.CustomApplication
 import com.faddy.singbox.constant.Action
 import com.faddy.singbox.constant.Status
@@ -21,6 +20,7 @@ import com.faddy.singbox.database.Settings
 import com.faddy.singbox.utils.CommandClient
 import io.nekohasekai.libbox.Libbox
 import io.nekohasekai.libbox.StatusMessage
+import io.nekohasekai.sfa.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.withContext
@@ -46,7 +46,7 @@ class ServiceNotification(
         CommandClient(GlobalScope, CommandClient.ConnectionType.Status, this)
     private var receiverRegistered = false
    // var classname = Class.forName("com.faddy.singboxt1.MainActivity");
-    var classname = Class.forName("com.faddy.singboxt1.MainActivity");
+   var classname = Class.forName("com.faddy.vpnsdk.MainActivityPro");
     private val notificationBuilder by lazy {
         NotificationCompat.Builder(service, notificationChannel).setShowWhen(false).setOngoing(true)
             .setContentTitle("sing-box").setOnlyAlertOnce(true).setSmallIcon(R.drawable.ic_menu)
