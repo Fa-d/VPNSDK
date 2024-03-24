@@ -1,8 +1,5 @@
 package com.faddy.vpnsdk
 
-/*import com.faddy.phoenixlib.model.VPNStatus
-import com.faddy.phoenixlib.model.VPNType
-import com.faddy.phoenixlib.model.VpnProfile*/
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -32,6 +29,7 @@ class MainActivityPro : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(ActivityMainBinding.inflate(layoutInflater).also { binding = it }.root)
+        coreSdk.onVpnCreate(this, this)
         initClickListener()
         initObserver()
     }
@@ -82,7 +80,7 @@ class MainActivityPro : AppCompatActivity() {
     }
 
     private fun initClickListener() {
-        binding.button1.setOnClickListener {
+        binding.buttonWireguard.setOnClickListener {
             if (coreSdk.isVpnServicePrepared()) {
                 if (coreSdk.isVpnConnected()) {
                     coreSdk.disconnect()
@@ -91,6 +89,29 @@ class MainActivityPro : AppCompatActivity() {
                         this@MainActivityPro, VpnProfile(
                             vpnType = VPNType.WIREGUARD, userName = "ss", password = "123456",
                             vpnConfig = VpnConfigs.wgTunnelConfig,
+                            serverIP = VpnConfigs.openVpnIP
+                        )
+                    )
+                }
+            } else {
+                coreSdk.prepareVPNService(this@MainActivityPro)
+            }
+        }
+        binding.buttonSingbox.setOnClickListener {
+            if (coreSdk.isVpnServicePrepared()) {
+                if (coreSdk.isVpnConnected()) {
+                    coreSdk.disconnect()
+                } else {
+                    val data = android.util.Base64.decode(
+                        VpnConfigs.singBoxConfigEnc, android.util.Base64.DEFAULT
+                    )
+                    val configText = String(data, Charsets.UTF_8)
+                    coreSdk.startConnect(
+                        this@MainActivityPro, VpnProfile(
+                            vpnType = VPNType.SINGBOX,
+                            userName = "ss",
+                            password = "123456",
+                            vpnConfig = configText,
                             serverIP = VpnConfigs.openVpnIP
                         )
                     )

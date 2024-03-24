@@ -54,8 +54,6 @@ android {
 
 dependencies {
 
-    implementation(project(":PhoenixLib"))
-    implementation(fileTree("libs"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core)
     implementation(libs.androidx.appcompat)
@@ -66,6 +64,7 @@ dependencies {
     // hilt
     implementation(libs.hilt.android)
     implementation(libs.androidx.room.ktx)
+    implementation(project(":PhoenixLib"))
     ksp(libs.hilt.android.compiler)
 
     //lifecycle

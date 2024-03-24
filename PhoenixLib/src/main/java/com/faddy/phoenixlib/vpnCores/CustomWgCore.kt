@@ -2,6 +2,7 @@ package com.faddy.phoenixlib.vpnCores
 
 import android.app.Activity
 import android.content.Context
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.faddy.phoenixlib.interfaces.IStartStop
@@ -51,6 +52,10 @@ class CustomWgCore : IVpnSpeedIP, IVpnLifecycle, IStartStop {
     }
 
     override fun onVPNStart() {
+
+    }
+
+    override fun onVpnCreate(passedContext: Context, lifecycleObserver: LifecycleOwner) {
 
     }
 

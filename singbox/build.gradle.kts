@@ -44,7 +44,6 @@ android {
 }
 
 dependencies {
-    // implementation(files("/Users/kolpolok/AndroidStudioProjects/copies/2/VPNSDK/app/libs/box.aar"))
     implementation(fileTree("libs"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

@@ -11,6 +11,7 @@ import android.os.Looper
 import android.os.RemoteException
 import android.util.Base64
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.faddy.phoenixlib.interfaces.IStartStop
@@ -99,6 +100,9 @@ class OpenVpnCore(/* motherContext: Context,  passedActivity: Activity*/) :
         return currentDownloadSpeed
     }
     override fun onVPNStart() {}
+    override fun onVpnCreate(passedContext: Context, lifecycleObserver: LifecycleOwner) {
+
+    }
 
     override fun onVPNResume(passedContext: Context) {
         val intent = Intent(passedContext, OpenVPNService::class.java)

@@ -17,7 +17,6 @@ import com.faddy.singbox.CustomApplication
 import com.faddy.singbox.constant.Action
 import com.faddy.singbox.constant.Alert
 import com.faddy.singbox.constant.Status
-import com.faddy.singbox.database.ProfileManager
 import com.faddy.singbox.database.Settings
 import go.Seq
 import io.nekohasekai.libbox.BoxService
@@ -120,37 +119,14 @@ class BoxService(
     }
 
     private var lastProfileName = ""
-    private suspend fun startService(delayStart: Boolean = false) {
+    private suspend fun startService(delayStart: Boolean = false, passedConf: String) {
         try {
             withContext(Dispatchers.Main) {
                 notification.show(lastProfileName, R.string.status_starting)
             }
-
-            val selectedProfileId = 1L
-            if (selectedProfileId == -1L) {
+            if (passedConf.isBlank()) {
                 stopAndAlert(Alert.EmptyConfiguration)
                 return
-            }
-
-            val profile = ProfileManager.get(selectedProfileId)
-            if (profile == null) {
-                stopAndAlert(Alert.EmptyConfiguration)
-                return
-            }
-
-            //val content = File(profile.typed.path).readText()
-            val configFile = File("/data/data/com.faddy.vpnsdk/files/configs/1.json").readText()
-            if (configFile.isBlank()) {
-                stopAndAlert(Alert.EmptyConfiguration)
-                return
-            }
-
-            lastProfileName = profile.name
-            withContext(Dispatchers.Main) {
-                notification.show(lastProfileName, R.string.status_starting)
-                binder.broadcast {
-                    it.onServiceResetLogs(listOf())
-                }
             }
 
             DefaultNetworkMonitor.start()
@@ -158,7 +134,7 @@ class BoxService(
             Libbox.setMemoryLimit(!Settings.disableMemoryLimit)
 
             val newService = try {
-                Libbox.newService(configFile, platformInterface)
+                Libbox.newService(passedConf, platformInterface)
             } catch (e: Exception) {
                 stopAndAlert(Alert.CreateService, e.message)
                 return
@@ -169,7 +145,6 @@ class BoxService(
             }
 
             newService.start()
-
 
             boxService = newService
             commandServer?.setService(boxService)
@@ -205,7 +180,7 @@ class BoxService(
         }
         boxService = null
         runBlocking {
-            startService(true)
+            startService(true, "")
         }
     }
 
@@ -218,14 +193,18 @@ class BoxService(
         return status
     }
 
+    override fun postServiceClose() {
+
+    }
+
     override fun setSystemProxyEnabled(isEnabled: Boolean) {
-        serviceReload()
+        //serviceReload()
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun serviceUpdateIdleMode() {
         if (CustomApplication.powerManager.isDeviceIdleMode) {
-            boxService?.sleep()
+            boxService?.close()
         } else {
             boxService?.wake()
         }
@@ -310,7 +289,8 @@ class BoxService(
                 stopAndAlert(Alert.StartCommandServer, e.message)
                 return@launch
             }
-            startService()
+            val passedConf = intent?.getStringExtra("daad") ?: ""
+            startService(passedConf = passedConf)
         }
         return Service.START_NOT_STICKY
     }
