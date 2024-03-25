@@ -1,4 +1,4 @@
-package com.faddy.wgtunlib.data.model
+package com.faddy.wgtunlib.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

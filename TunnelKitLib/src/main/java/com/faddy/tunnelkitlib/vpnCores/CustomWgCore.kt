@@ -11,8 +11,8 @@ import com.faddy.tunnelkitlib.interfaces.IVpnSpeedIP
 import com.faddy.tunnelkitlib.model.VPNStatus
 import com.faddy.tunnelkitlib.model.VPNType
 import com.faddy.tunnelkitlib.model.VpnProfile
-import com.faddy.wgtunlib.data.model.TunnelConfig
-import com.faddy.wgtunlib.service.tunnel.WireGuardTunnel
+import com.faddy.wgtunlib.data.TunnelConfig
+import com.faddy.wgtunlib.service.WireGuardTunnel
 import com.wireguard.android.backend.Tunnel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

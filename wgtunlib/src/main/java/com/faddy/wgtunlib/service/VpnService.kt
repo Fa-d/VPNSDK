@@ -1,7 +1,8 @@
-package com.faddy.wgtunlib.service.tunnel
+package com.faddy.wgtunlib.service
 
 import com.wireguard.android.backend.Tunnel
-import com.faddy.wgtunlib.data.model.TunnelConfig
+import com.faddy.wgtunlib.data.TunnelConfig
+import com.faddy.wgtunlib.data.VpnState
 import kotlinx.coroutines.flow.StateFlow
 
 interface VpnService : Tunnel {

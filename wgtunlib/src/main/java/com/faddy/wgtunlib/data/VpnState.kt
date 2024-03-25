@@ -1,4 +1,4 @@
-package com.faddy.wgtunlib.service.tunnel
+package com.faddy.wgtunlib.data
 
 import com.wireguard.android.backend.Statistics
 import com.wireguard.android.backend.Tunnel
