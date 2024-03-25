@@ -1,7 +1,8 @@
-package com.faddy.wgtunlib.service.tunnel
+package com.faddy.wgtunlib.service
 
 import android.content.Context
-import com.faddy.wgtunlib.data.model.TunnelConfig
+import com.faddy.wgtunlib.data.TunnelConfig
+import com.faddy.wgtunlib.data.VpnState
 import com.faddy.wgtunlib.util.Constants
 import com.wireguard.android.backend.Backend
 import com.wireguard.android.backend.BackendException

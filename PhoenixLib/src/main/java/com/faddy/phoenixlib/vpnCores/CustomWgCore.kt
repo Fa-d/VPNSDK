@@ -11,8 +11,8 @@ import com.faddy.phoenixlib.interfaces.IVpnSpeedIP
 import com.faddy.phoenixlib.model.VPNStatus
 import com.faddy.phoenixlib.model.VPNType
 import com.faddy.phoenixlib.model.VpnProfile
-import com.faddy.wgtunlib.data.model.TunnelConfig
-import com.faddy.wgtunlib.service.tunnel.WireGuardTunnel
+import com.faddy.wgtunlib.data.TunnelConfig
+import com.faddy.wgtunlib.service.WireGuardTunnel
 import com.wireguard.android.backend.Tunnel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
