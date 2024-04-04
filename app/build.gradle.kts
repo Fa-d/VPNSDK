@@ -23,15 +23,7 @@ android {
         }
     }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -49,12 +41,41 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
-    }
-    packagingOptions {
         jniLibs {
             useLegacyPackaging = true
         }
     }
+    signingConfigs {
+        create("release") {
+            keyAlias = "sym"
+            keyPassword = "34567890"
+            storeFile =
+                file("/Users/kolpolok/AndroidStudioProjects/copies/2/VPNSDK/key/Untitled")
+            storePassword = "34567890"
+        }
+    }
+
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            )
+            signingConfig = signingConfigs.getByName("release")
+            isDebuggable = false
+        }
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("debug")
+            isDebuggable = true
+        }
+    }
+//    sourceSets { main { jniLibs.srcDirs = ['libs'] } }
+
+    /*packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }*/
 }
 
 dependencies {

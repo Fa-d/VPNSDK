@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivityPro">
 
     <TextView
         android:textColor="@color/black"
@@ -79,7 +79,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start Wuardireg"
-        app:layout_constraintBottom_toTopOf="@+id/connectionStatus"
+        app:layout_constraintBottom_toTopOf="@+id/buttonIpSec"
         app:layout_constraintEnd_toStartOf="@id/button2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/timerText" />
@@ -89,10 +89,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start Singbox"
-        app:layout_constraintBottom_toTopOf="@+id/connectionStatus"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonWireguard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/buttonWireguard"
-        app:layout_constraintTop_toBottomOf="@+id/timerText" />
+        app:layout_constraintTop_toTopOf="@+id/buttonWireguard" />
+
+    <Button
+        android:id="@+id/buttonIpSec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start IpSec"
+        app:layout_constraintBottom_toTopOf="@+id/connectionStatus"
+        app:layout_constraintEnd_toStartOf="@id/button2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonWireguard" />
+
+
+    <Button
+        android:id="@+id/buttonOvpn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start OVpn"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonIpSec"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonIpSec"
+        app:layout_constraintTop_toTopOf="@+id/buttonIpSec" />
 
     <TextView
         android:textColor="@color/black"
@@ -105,7 +126,7 @@
         app:layout_constraintBottom_toTopOf="@+id/button2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonWireguard" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonIpSec" />
 
     <Button
         android:id="@+id/button2"

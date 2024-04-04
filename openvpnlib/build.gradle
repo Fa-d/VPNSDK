@@ -26,6 +26,12 @@ android {
     buildToolsVersion '34.0.0'
     buildFeatures {
         buildConfig true
+        aidl true
+    }
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
     }
 }
 
