@@ -41,6 +41,7 @@ class BoxService(
 ) : CommandServerHandler {
 
     companion object {
+        private var boxService: BoxService? = null
         private var initializeOnce = false
         private fun initialize() {
             if (initializeOnce) return
@@ -73,6 +74,7 @@ class BoxService(
                     CustomApplication.application?.packageName
                 )
             )
+            boxService?.close()
         }
 
         fun reload() {
@@ -89,7 +91,6 @@ class BoxService(
     private val status = MutableLiveData(Status.Stopped)
     private val binder = ServiceBinder(status)
     private val notification = ServiceNotification(status, service)
-    private var boxService: BoxService? = null
     private var commandServer: CommandServer? = null
     private var receiverRegistered = false
     private val receiver = object : BroadcastReceiver() {
@@ -132,6 +133,12 @@ class BoxService(
             DefaultNetworkMonitor.start()
             Libbox.registerLocalDNSTransport(LocalResolver)
             Libbox.setMemoryLimit(!Settings.disableMemoryLimit)
+
+            try {
+                Libbox.checkConfig(passedConf)
+            } catch (ex: Exception) {
+                Log.e("checkConfig", ex.message.toString())
+            }
 
             val newService = try {
                 Libbox.newService(passedConf, platformInterface)

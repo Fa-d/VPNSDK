@@ -18,11 +18,7 @@ import com.faddy.singbox.SingBoxInternal
 import com.faddy.singbox.bg.BoxService
 import com.faddy.singbox.bg.ServiceConnection
 import com.faddy.singbox.constant.Status
-import com.faddy.singbox.database.Settings
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import io.nekohasekai.sfa.VPNService
 
 class SingBoxCore : ServiceConnection.Callback, IVpnSpeedIP, IVpnLifecycle, IStartStop {
     val serviceStatus = MutableLiveData(Status.Stopped)
@@ -78,24 +74,19 @@ class SingBoxCore : ServiceConnection.Callback, IVpnSpeedIP, IVpnLifecycle, ISta
                     else -> {}
                 }
             }
+        } else {
+            Log.e("LifecyclerOwner", "is really null")
         }
 
     }
 
     override fun startVpn(vpnProfile: VpnProfile, passedContext: Activity) {
         connection = ServiceConnection(passedContext, this)
-        CoroutineScope(Dispatchers.IO).launch {
-            if (Settings.rebuildServiceMode()) {
-                reconnect()
-            }
-            val intent = Intent(passedContext, Settings.serviceClass())
-            if (!vpnProfile.vpnConfig.isNullOrEmpty()) {
-                intent.putExtra("daad", vpnProfile.vpnConfig)
-               // intent.putExtra("filePath", vpnProfile.vpnConfig)
-                withContext(Dispatchers.Main) {
-                    ContextCompat.startForegroundService(passedContext, intent)
-                }
-            }
+        reconnect()
+        val intent = Intent(passedContext, VPNService::class.java)
+        if (!vpnProfile.vpnConfig.isNullOrEmpty()) {
+            intent.putExtra("daad", vpnProfile.vpnConfig)
+            ContextCompat.startForegroundService(passedContext, intent)
         }
     }
 

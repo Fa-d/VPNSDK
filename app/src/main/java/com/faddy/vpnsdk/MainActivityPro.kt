@@ -111,8 +111,54 @@ class MainActivityPro : AppCompatActivity() {
                             vpnType = VPNType.SINGBOX,
                             userName = "ss",
                             password = "123456",
+                            vpnConfig = VpnConfigs.wireGuardJson,
+                            // vpnConfig = configText,
+                            serverIP = VpnConfigs.openVpnIP
+                        )
+                    )
+                }
+            } else {
+                coreSdk.prepareVPNService(this@MainActivityPro)
+            }
+        }
+        binding.buttonIpSec.setOnClickListener {
+            if (coreSdk.isVpnServicePrepared()) {
+                if (coreSdk.isVpnConnected()) {
+                    coreSdk.disconnect()
+                } else {
+                    val data = android.util.Base64.decode(
+                        VpnConfigs.singBoxConfigEnc, android.util.Base64.DEFAULT
+                    )
+                    val configText = String(data, Charsets.UTF_8)
+                    coreSdk.startConnect(
+                        this@MainActivityPro, VpnProfile(
+                            vpnType = VPNType.SINGBOX,
+                            userName = "ss",
+                            password = "123456",
+                            // vpnConfig = VpnConfigs.wireGuardJson,
                             vpnConfig = configText,
                             serverIP = VpnConfigs.openVpnIP
+                        )
+                    )
+                }
+            } else {
+                coreSdk.prepareVPNService(this@MainActivityPro)
+            }
+        }
+        binding.buttonOvpn.setOnClickListener {
+            if (coreSdk.isVpnServicePrepared()) {
+                if (coreSdk.isVpnConnected()) {
+                    coreSdk.disconnect()
+                } else {
+                    val data = android.util.Base64.decode(
+                        VpnConfigs.singBoxConfigEnc, android.util.Base64.DEFAULT
+                    )
+                    val configText = String(data, Charsets.UTF_8)
+                    coreSdk.startConnect(
+                        this@MainActivityPro, VpnProfile(
+                            vpnType = VPNType.OPENVPN, userName = "ss", password = "123456",
+                            // vpnConfig = VpnConfigs.wireGuardJson,
+                            vpnConfig = VpnConfigs.openVpnConf, serverIP = VpnConfigs.openVpnIP
                         )
                     )
                 }

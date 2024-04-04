@@ -3,7 +3,7 @@ package com.faddy.wgtunlib.service
 import android.content.Context
 import com.faddy.wgtunlib.data.TunnelConfig
 import com.faddy.wgtunlib.data.VpnState
-import com.faddy.wgtunlib.util.Constants
+import com.faddy.wgtunlib.data.Constants
 import com.wireguard.android.backend.Backend
 import com.wireguard.android.backend.BackendException
 import com.wireguard.android.backend.GoBackend

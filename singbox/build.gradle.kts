@@ -37,22 +37,20 @@ android {
         jvmTarget = "17"
     }
     buildFeatures {
-        aidl = true
         buildConfig = true
-        viewBinding = true
+        aidl = true
+    }
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
     }
 }
 
 dependencies {
-    implementation(fileTree("libs"))
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+    //api(project(":singboxLib"))
     implementation("androidx.room:room-runtime:2.6.1")
     implementation(libs.androidx.work.runtime.ktx)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
     ksp("androidx.room:room-compiler:2.6.1")
     implementation("androidx.preference:preference-ktx:1.2.1")
     // hilt
