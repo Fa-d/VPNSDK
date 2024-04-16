@@ -1,9 +1,9 @@
 package com.faddy.wgtunlib.service
 
 import android.content.Context
+import com.faddy.wgtunlib.data.Constants
 import com.faddy.wgtunlib.data.TunnelConfig
 import com.faddy.wgtunlib.data.VpnState
-import com.faddy.wgtunlib.data.Constants
 import com.wireguard.android.backend.Backend
 import com.wireguard.android.backend.BackendException
 import com.wireguard.android.backend.GoBackend
@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class WireGuardTunnel : VpnService {
     val _vpnState = MutableStateFlow(VpnState())
@@ -41,7 +40,7 @@ class WireGuardTunnel : VpnService {
             emitTunnelState(state ?: State.DOWN)
             state ?: State.DOWN
         } catch (e: Exception) {
-            Timber.e("Failed to start tunnel with error: ${e.message}")
+
             State.DOWN
         }
     }
@@ -57,14 +56,10 @@ class WireGuardTunnel : VpnService {
             _vpnState.value.copy(statistics = statistics)
         )
         _vpnState.tryEmit(_vpnState.value.copy(curRx = config?.peers?.get(0)?.publicKey?.let {
-            backend?.getStatistics(this)?.peer(
-                it
-            )?.rxBytes
+            backend?.getStatistics(this)?.peerRx(it)
         } ?: 0L))
         _vpnState.tryEmit(_vpnState.value.copy(curTx = config?.peers?.get(0)?.publicKey?.let {
-            backend?.getStatistics(this)?.peer(
-                it
-            )?.txBytes
+            backend?.getStatistics(this)?.peerRx(it)
         } ?: 0L))
     }
 
@@ -94,7 +89,6 @@ class WireGuardTunnel : VpnService {
                 emitTunnelState(state ?: State.DOWN)
             }
         } catch (e: BackendException) {
-            Timber.e("Failed to stop tunnel with error: ${e.message}")
         }
     }
 

@@ -23,10 +23,13 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
-        packaging.jniLibs.keepDebugSymbols.addAll(
+/*        packaging.jniLibs.keepDebugSymbols.addAll(
             listOf("libwg-go.so", "libwg-quick.so", "libwg.so"),
-        )
+        )*/
     }
+    packaging.jniLibs.keepDebugSymbols.addAll(
+        listOf("libwg-go.so", "libwg-quick.so", "libwg.so"),
+    )
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -34,15 +37,26 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+    //  sourceSets { main { jniLibs.srcDirs = ['libs'] } }
+    /*    java.sourceSets["main"].java {
+            srcDir("jniLibs")
+        }*/
+    buildFeatures {
+        buildConfig = true
+        aidl = true
+    }
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
 
-    //wg
-    implementation(libs.tunnel)
     implementation(libs.androidx.lifecycle.service)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
