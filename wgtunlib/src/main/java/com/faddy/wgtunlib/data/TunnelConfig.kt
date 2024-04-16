@@ -1,20 +1,16 @@
 package com.faddy.wgtunlib.data
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Index
-import androidx.room.PrimaryKey
 import com.wireguard.config.Config
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.io.InputStream
 
-@Entity(indices = [Index(value = ["name"], unique = true)])
+//@Entity(indices = [Index(value = ["name"], unique = true)])
 @Serializable
-data class TunnelConfig(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo(name = "name") var name: String,
-    @ColumnInfo(name = "wg_quick") var wgQuick: String
+data class TunnelConfig(/*    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+        @ColumnInfo(name = "name") var name: String,
+        @ColumnInfo(name = "wg_quick") var wgQuick: String*/
+                        val id: Int = 0, var name: String, var wgQuick: String
 ) {
     override fun toString(): String {
         return Json.encodeToString(serializer(), this)

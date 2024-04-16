@@ -14,7 +14,6 @@ android {
         minSdk = 24
         targetSdk = 34
     }
-    ksp { arg("room.schemaLocation", "$projectDir/schemas") }
 
     buildTypes {
         release {
@@ -23,19 +22,17 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
-/*        packaging.jniLibs.keepDebugSymbols.addAll(
-            listOf("libwg-go.so", "libwg-quick.so", "libwg.so"),
-        )*/
     }
     packaging.jniLibs.keepDebugSymbols.addAll(
         listOf("libwg-go.so", "libwg-quick.so", "libwg.so"),
     )
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        //isCoreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "1.8"
     }
     //  sourceSets { main { jniLibs.srcDirs = ['libs'] } }
     /*    java.sourceSets["main"].java {
@@ -63,10 +60,6 @@ dependencies {
     // logging
     implementation(libs.timber)
 
-    // compose navigation
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.hilt.navigation.compose)
-
     // hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
@@ -84,12 +77,8 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
 
     // lifecycle
-    implementation(libs.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.process)
-
-    // icons
-    implementation(libs.material.icons.extended)
     // serialization
     implementation(libs.kotlinx.serialization.json)
 }

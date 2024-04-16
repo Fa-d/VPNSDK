@@ -47,7 +47,7 @@ android {
             keyAlias = "key0"
             keyPassword = "34567890"
             storeFile =
-                file("/Users/kolpolok/AndroidStudioProjects/copies/2/VPNSDK/key/Untitled")
+                file("/Users/faddy/MyLab/AndroidAllProjects/VPNSDK/key/Untitled")
             storePassword = "34567890"
         }
     }
@@ -82,7 +82,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.multidex:multidex:2.0.1")
+    implementation(libs.androidx.multidex)
 
     // hilt
     implementation(libs.hilt.android)

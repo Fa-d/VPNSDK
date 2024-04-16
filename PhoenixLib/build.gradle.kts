@@ -36,7 +36,9 @@ android {
 
 dependencies {
     implementation(project(":openvpnlib"))
-    implementation(project(":wgtunlib"))
+    implementation(project(":wgtunlib")){
+        isTransitive = true
+    }
     implementation(project(":singbox"))
     //implementation(project(":openconnectlib"))
     //implementation(project(":strongswan"))
@@ -50,10 +52,6 @@ dependencies {
 
     // logging
     implementation(libs.timber)
-
-    // compose navigation
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.hilt.navigation.compose)
 
     // hilt
     implementation(libs.hilt.android)
@@ -69,15 +67,12 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.datastore.preferences)
 
     // lifecycle
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.process)
 
-    // icons
-    implementation(libs.material.icons.extended)
     // serialization
     implementation(libs.kotlinx.serialization.json)
 

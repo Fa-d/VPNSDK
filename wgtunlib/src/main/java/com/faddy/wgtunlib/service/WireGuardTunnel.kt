@@ -56,10 +56,12 @@ class WireGuardTunnel : VpnService {
             _vpnState.value.copy(statistics = statistics)
         )
         _vpnState.tryEmit(_vpnState.value.copy(curRx = config?.peers?.get(0)?.publicKey?.let {
-            backend?.getStatistics(this)?.peerRx(it)
+            //backend?.getStatistics(this)?.peerRx(it)
+            0L
         } ?: 0L))
         _vpnState.tryEmit(_vpnState.value.copy(curTx = config?.peers?.get(0)?.publicKey?.let {
-            backend?.getStatistics(this)?.peerRx(it)
+            // backend?.getStatistics(this)?.peerTx(it)
+            0L
         } ?: 0L))
     }
 

@@ -20,7 +20,8 @@
 }
 -keep class com.wireguard.android.backend.Tunnel.** { *; }
 -keep class com.faddy.wgtunlib.** { *; }
--keep class com.wireguard.android.** { *; }
+-keep class com.wireguard.** { *; }
+-keep class com.wireguard.android.backend.** { *; }
 -dontwarn com.google.**
 -dontnote com.google.**
 -keepnames class com.google.gson.** {*;}
