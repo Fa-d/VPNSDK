@@ -15,14 +15,14 @@ import com.faddy.phoenixlib.model.VpnProfile
 class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
 
     val openVpnCoreConcrete = OpenVpnCore()
-    val wireGuardCoreConcrete = CustomWgCore()
+   // val wireGuardCoreConcrete = CustomWgCore()
     val singBoxCoreConcrete = SingBoxCore()
     fun setVpnStateListeners(vpnType: VPNType): LiveData<VPNStatus> {
         return when (vpnType) {
             VPNType.NONE -> liveData {  }
             VPNType.OPENVPN -> openVpnCoreConcrete.currentVpnState
             VPNType.OPENCONNECT -> return liveData { }
-            VPNType.WIREGUARD -> wireGuardCoreConcrete.currentVpnState
+            VPNType.WIREGUARD -> return liveData { }
             VPNType.IPSECIKEV2 -> return liveData { }
             VPNType.SINGBOX -> return singBoxCoreConcrete.currentVpnState
         }
@@ -36,7 +36,7 @@ class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
 
             VPNType.OPENCONNECT -> {}
             VPNType.WIREGUARD -> {
-                wireGuardCoreConcrete.onVPNStart()
+               // wireGuardCoreConcrete.onVPNStart()
             }
             VPNType.IPSECIKEV2 -> {}
             VPNType.SINGBOX -> {
@@ -47,7 +47,7 @@ class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
 
     override fun onVpnCreate(passedContext: Context, lifecycleObserver: LifecycleOwner) {
         openVpnCoreConcrete.onVpnCreate(passedContext, lifecycleObserver)
-        wireGuardCoreConcrete.onVpnCreate(passedContext, lifecycleObserver)
+       // wireGuardCoreConcrete.onVpnCreate(passedContext, lifecycleObserver)
         singBoxCoreConcrete.onVpnCreate(passedContext, lifecycleObserver)
     }
 
@@ -60,7 +60,7 @@ class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
 
             VPNType.OPENCONNECT -> {}
             VPNType.WIREGUARD -> {
-                wireGuardCoreConcrete.onVpnResume()
+              //  wireGuardCoreConcrete.onVpnResume()
             }
             VPNType.IPSECIKEV2 -> {}
             VPNType.SINGBOX -> {
@@ -79,7 +79,7 @@ class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
 
             VPNType.OPENCONNECT -> {}
             VPNType.WIREGUARD -> {
-                wireGuardCoreConcrete.onVPNDestroy()
+               // wireGuardCoreConcrete.onVPNDestroy()
             }
             VPNType.IPSECIKEV2 -> {}
             VPNType.SINGBOX -> {
@@ -97,11 +97,11 @@ class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
 
             VPNType.OPENCONNECT -> {}
             VPNType.WIREGUARD -> {
-                wireGuardCoreConcrete.onVPNPause()
+               // wireGuardCoreConcrete.onVPNPause()
             }
             VPNType.IPSECIKEV2 -> {}
             VPNType.SINGBOX -> {
-                wireGuardCoreConcrete.onVPNPause()
+                //wireGuardCoreConcrete.onVPNPause()
             }
         }
     }
@@ -115,7 +115,7 @@ class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
 
             VPNType.OPENCONNECT -> {}
             VPNType.WIREGUARD -> {
-                wireGuardCoreConcrete.startVpn(vpnProfile, passedActivity)
+               // wireGuardCoreConcrete.startVpn(vpnProfile, passedActivity)
             }
             VPNType.IPSECIKEV2 -> {}
             VPNType.SINGBOX -> {
@@ -133,7 +133,7 @@ class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
 
             VPNType.OPENCONNECT -> {}
             VPNType.WIREGUARD -> {
-                wireGuardCoreConcrete.stopVpn(vpnType, passedContext)
+               // wireGuardCoreConcrete.stopVpn(vpnType, passedContext)
             }
             VPNType.IPSECIKEV2 -> {}
             VPNType.SINGBOX -> {
@@ -157,7 +157,7 @@ class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
             }
 
             VPNType.WIREGUARD -> {
-                return wireGuardCoreConcrete.currentTxSpeed
+                return return liveData { }
             }
 
             VPNType.IPSECIKEV2 -> {
@@ -185,7 +185,7 @@ class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
             }
 
             VPNType.WIREGUARD -> {
-                return wireGuardCoreConcrete.currentRxSpeed
+                return return liveData { }
             }
 
             VPNType.IPSECIKEV2 -> {

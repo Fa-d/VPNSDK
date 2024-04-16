@@ -11,7 +11,7 @@ import androidx.core.content.getSystemService
 import com.faddy.singbox.bg.AppChangeReceiver
 import go.Seq
 
-class CustomApplication {
+open class CustomApplication {
 
     fun init(passedApplication: Context) {
         application = passedApplication

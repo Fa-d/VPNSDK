@@ -10,10 +10,9 @@
 -keep class * {
     public private *;
 }
--keep class org.infradead.** { *; }
--keep class de.blinkt.openvpn.core.** { *; }
--keep class net.openvpn.ovpn3.** { *; }
--keep class com.google.** { *; }
+-keep class com.wireguard.android.backend.Tunnel.** { *; }
+-keep class com.wireguard.android.** { *; }
+-keepattributes Signature
 
 -dontwarn com.google.**
 -dontnote com.google.**
