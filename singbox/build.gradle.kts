@@ -13,8 +13,9 @@ android {
 
     defaultConfig {
         minSdk = 24
-        targetSdk = 34
+        lint.targetSdk = 34
     }
+    buildToolsVersion = "34.0.0"
 
     ksp {
         arg("room.incremental", "true")
@@ -49,10 +50,10 @@ android {
 
 dependencies {
     //api(project(":singboxLib"))
-    implementation("androidx.room:room-runtime:2.6.1")
+    implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.work.runtime.ktx)
-    ksp("androidx.room:room-compiler:2.6.1")
-    implementation("androidx.preference:preference-ktx:1.2.1")
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.preference.ktx)
     // hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)

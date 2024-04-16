@@ -68,14 +68,19 @@ class OpenVpnCore(/* motherContext: Context,  passedActivity: Activity*/) :
             CoroutineScope(Dispatchers.Main).launch {
                 currentVpnState.value = VPNStatus.CONNECTED
             }
-        } else {
-            Handler(Looper.getMainLooper()).postDelayed({
+        }
+        else if (state == "CONNECTING" || state == "WAIT" || state == "AUTH" || state == "GET_CONFIG" || state == "ASSIGN_IP") {
+            CoroutineScope(Dispatchers.Main).launch {
+                currentVpnState.value = VPNStatus.CONNECTING
+            }
+        }else {
+            /*Handler(Looper.getMainLooper()).postDelayed({
                 if (VpnStatus.mLastLevel == ConnectionStatus.LEVEL_CONNECTING_NO_SERVER_REPLY_YET) {
                     CoroutineScope(Dispatchers.Main).launch {
                         currentVpnState.value = VPNStatus.CONNECTING
                     }
                 }
-            }, 300L);
+            }, 300L);*/
         }
     }
 

@@ -41,13 +41,10 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
-        jniLibs {
-            useLegacyPackaging = true
-        }
     }
     signingConfigs {
         create("release") {
-            keyAlias = "sym"
+            keyAlias = "key0"
             keyPassword = "YOUR_KEY_PASSWORD"
             storeFile =
                 file("key/your-keystore-file")
@@ -71,11 +68,11 @@ android {
     }
 //    sourceSets { main { jniLibs.srcDirs = ['libs'] } }
 
-    /*packagingOptions {
+    packagingOptions {
         jniLibs {
             useLegacyPackaging = true
         }
-    }*/
+    }
 }
 
 dependencies {
