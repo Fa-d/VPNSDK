@@ -1,7 +1,6 @@
 package com.faddy.phoenixlib.utils
 
 import android.content.Context
-import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,12 +14,11 @@ object SessionManagerModule {
 
     @Singleton
     @Provides
-    fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences =
+    fun provideSessionManager(
+        @ApplicationContext context: Context
+    ) = SessionManagerInternal(
         context.getSharedPreferences(
             "user_info_mother_lib", Context.MODE_PRIVATE
         )
-
-    @Singleton
-    @Provides
-    fun provideSessionManager(preferences: SharedPreferences) = SessionManager(preferences)
+    )
 }

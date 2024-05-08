@@ -36,11 +36,10 @@ class CustomWgCore : IVpnSpeedIP, IVpnLifecycle, IStartStop {
 
     override fun startVpn(vpnProfile: VpnProfile, passedContext: Activity) {
         onVpnResume()
+        val tunnelConfig = TunnelConfig(id = 1, name = "wgTunnel", wgQuick = vpnProfile.vpnConfig)
+        wgTun.initBackend(context = passedContext)
         CoroutineScope(Dispatchers.IO).launch {
-            val tunnelConfig =
-                TunnelConfig(id = 1, name = "wgTunnel", wgQuick = vpnProfile.vpnConfig)
-            wgTun?.initBackend(context = passedContext)
-            wgTun?.startTunnel(tunnelConfig)
+            wgTun.startTunnel(tunnelConfig)
         }
     }
 

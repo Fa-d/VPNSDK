@@ -12,6 +12,7 @@ import com.faddy.singbox.constant.Action
 import com.faddy.singbox.constant.Alert
 import com.faddy.singbox.constant.Status
 import com.faddy.singbox.database.Settings
+import io.nekohasekai.sfa.VPNService
 import io.nekohasekai.sfa.aidl.IService
 import io.nekohasekai.sfa.aidl.IServiceCallback
 import kotlinx.coroutines.Dispatchers
@@ -56,11 +57,12 @@ class ServiceConnection(
             context.unbindService(this)
         } catch (_: IllegalArgumentException) {
         }
-        val intent = runBlocking {
+        val intent =   Intent(context, VPNService::class.java).setAction(Action.SERVICE)
+     /*   runBlocking {
             withContext(Dispatchers.IO) {
-                Intent(context, Settings.serviceClass()).setAction(Action.SERVICE)
+
             }
-        }
+        }*/
         context.bindService(intent, this, AppCompatActivity.BIND_AUTO_CREATE)
         Log.d(TAG, "request reconnect")
     }

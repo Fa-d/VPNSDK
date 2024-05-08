@@ -19,7 +19,7 @@ import com.faddy.phoenixlib.model.VPNStatus
 import com.faddy.phoenixlib.model.VPNType
 import com.faddy.phoenixlib.model.VpnProfile
 import com.faddy.phoenixlib.service.CountdownTimerService
-import com.faddy.phoenixlib.utils.SessionManager
+import com.faddy.phoenixlib.utils.SessionManagerInternal
 import com.faddy.phoenixlib.utils.ping
 import com.faddy.phoenixlib.utils.toMutableLiveData
 import com.faddy.phoenixlib.vpnCores.VpnSwitchFactory
@@ -103,10 +103,10 @@ object PhoenixVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
     }
 
     override fun setVpnType(vpnProfile: VpnProfile) {
-        SessionManager(
+        SessionManagerInternal(
             phoenixContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
         ).setLastConnVpnType(vpnProfile.vpnType.name)
-        SessionManager(
+        SessionManagerInternal(
             phoenixContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
         ).setLastConnServerIP(vpnProfile.serverIP.split(":")[0])
     }
@@ -167,7 +167,7 @@ object PhoenixVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
     }
 
     private fun getLastSelectedVpn(): VPNType {
-        val vpnState = SessionManager(
+        val vpnState = SessionManagerInternal(
             phoenixContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
         ).getLastConnVpnType() ?: ""
         val currentType = when (vpnState) {
@@ -204,7 +204,7 @@ object PhoenixVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
                         getPingCurrentServer()
                         uploadDownloadLitener()
                         myCurrentIp?.postValue(
-                            SessionManager(
+                            SessionManagerInternal(
                                 phoenixContext.getSharedPreferences(
                                     "user_info_mother_lib", Context.MODE_PRIVATE
                                 )
