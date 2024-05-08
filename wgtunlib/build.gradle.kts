@@ -23,9 +23,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
-/*        packaging.jniLibs.keepDebugSymbols.addAll(
-            listOf("libwg-go.so", "libwg-quick.so", "libwg.so"),
-        )*/
+        debug {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            )
+        }
     }
     packaging.jniLibs.keepDebugSymbols.addAll(
         listOf("libwg-go.so", "libwg-quick.so", "libwg.so"),

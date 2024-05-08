@@ -4,7 +4,7 @@ import android.content.SharedPreferences;
 
 import javax.inject.Inject;
 
-class SessionManager @Inject constructor(private val preferences: SharedPreferences) {
+class SessionManagerInternal @Inject constructor(private val preferences: SharedPreferences) {
 
     fun getUserName() = preferences.getString("username", "")
 

@@ -37,8 +37,8 @@ class WireGuardTunnel : VpnService {
             emitTunnelName(tunnelConfig.name)
             config = TunnelConfig.configFromQuick(tunnelConfig.wgQuick)
             val state = backend?.setState(this, State.UP, config)
-            emitTunnelState(state ?: State.DOWN)
-            state ?: State.DOWN
+            //emitTunnelState(state ?: State.DOWN)
+            state ?: State.UP
         } catch (e: Exception) {
 
             State.DOWN

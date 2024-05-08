@@ -19,7 +19,7 @@ import com.faddy.tunnelkitlib.model.VPNStatus
 import com.faddy.tunnelkitlib.model.VPNType
 import com.faddy.tunnelkitlib.model.VpnProfile
 import com.faddy.tunnelkitlib.service.CountdownTimerService
-import com.faddy.tunnelkitlib.utils.SessionManager
+import com.faddy.tunnelkitlib.utils.SessionManagerInternal
 import com.faddy.tunnelkitlib.utils.ping
 import com.faddy.tunnelkitlib.utils.toMutableLiveData
 import com.faddy.tunnelkitlib.vpnCores.VpnSwitchFactory
@@ -103,10 +103,10 @@ object TunnelKit : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
     }
 
     override fun setVpnType(vpnProfile: VpnProfile) {
-        SessionManager(
+        SessionManagerInternal(
             tunnelKitContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
         ).setLastConnVpnType(vpnProfile.vpnType.name)
-        SessionManager(
+        SessionManagerInternal(
             tunnelKitContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
         ).setLastConnServerIP(vpnProfile.serverIP.split(":")[0])
     }
@@ -167,7 +167,7 @@ object TunnelKit : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
     }
 
     private fun getLastSelectedVpn(): VPNType {
-        val vpnState = SessionManager(
+        val vpnState = SessionManagerInternal(
             tunnelKitContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
         ).getLastConnVpnType() ?: ""
         val currentType = when (vpnState) {
@@ -204,7 +204,7 @@ object TunnelKit : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
                         getPingCurrentServer()
                         uploadDownloadLitener()
                         myCurrentIp?.postValue(
-                            SessionManager(
+                            SessionManagerInternal(
                                 tunnelKitContext.getSharedPreferences(
                                     "user_info_mother_lib", Context.MODE_PRIVATE
                                 )
