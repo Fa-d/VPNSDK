@@ -11,11 +11,14 @@ import com.faddy.phoenixlib.interfaces.IVpnSpeedIPTyped
 import com.faddy.phoenixlib.model.VPNStatus
 import com.faddy.phoenixlib.model.VPNType
 import com.faddy.phoenixlib.model.VpnProfile
+import com.faddy.wgtunlib.service.WireGuardTunnel
+import javax.inject.Inject
 
-class VpnSwitchFactory : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
+class VpnSwitchFactory @Inject constructor(wireGuardTunnel: WireGuardTunnel) : IVpnLifecycleTyped,
+    IStartStop, IVpnSpeedIPTyped {
 
     val openVpnCoreConcrete = OpenVpnCore()
-    val wireGuardCoreConcrete = CustomWgCore()
+    val wireGuardCoreConcrete = CustomWgCore(wireGuardTunnel)
     val singBoxCoreConcrete = SingBoxCore()
     fun setVpnStateListeners(vpnType: VPNType): LiveData<VPNStatus> {
         return when (vpnType) {

@@ -5,7 +5,10 @@
 
 package com.wireguard.config;
 
+import android.os.Build;
+
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.wireguard.util.NonNullForAll;
 

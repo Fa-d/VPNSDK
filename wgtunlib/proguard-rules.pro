@@ -18,9 +18,8 @@
 -keep class * {
     public private *;
 }
--keep class com.wireguard.android.backend.Tunnel.** { *; }
 -keep class com.faddy.** { *; }
--keep class com.wireguard.android.** { *; }
+-keep class com.wireguard.** { *; }
 -dontwarn com.google.**
 -dontnote com.google.**
 -keepnames class com.google.gson.** {*;}

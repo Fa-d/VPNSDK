@@ -1,10 +1,8 @@
 package com.faddy.wgtunlib.service
 
-import android.content.Context
-import com.faddy.wgtunlib.data.Constants
+import android.util.Log
 import com.faddy.wgtunlib.data.TunnelConfig
 import com.faddy.wgtunlib.data.VpnState
-import com.wireguard.android.backend.Backend
 import com.wireguard.android.backend.BackendException
 import com.wireguard.android.backend.GoBackend
 import com.wireguard.android.backend.Statistics
@@ -18,43 +16,36 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class WireGuardTunnel : VpnService {
+class WireGuardTunnel @Inject constructor(val backend: GoBackend) : IVpnServiceTunnel {
     val _vpnState = MutableStateFlow(VpnState())
     override val vpnServiceState: StateFlow<VpnState> = _vpnState.asStateFlow()
     private val scope = CoroutineScope(Dispatchers.IO)
     private lateinit var statsJob: Job
     private var config: Config? = null
-    private var backend: Backend? = null
-
-    fun initBackend(context: Context) {
-        backend = GoBackend(context)
-    }
+    // lateinit var backend: GoBackend
 
     override suspend fun startTunnel(tunnelConfig: TunnelConfig): State {
         return try {
             stopTunnelOnConfigChange(tunnelConfig)
             emitTunnelName(tunnelConfig.name)
             config = TunnelConfig.configFromQuick(tunnelConfig.wgQuick)
-            val state = backend?.setState(this, State.UP, config)
+            val state = backend.setState(this, State.UP, config)
             //emitTunnelState(state ?: State.DOWN)
             state ?: State.UP
-        } catch (e: Exception) {
-
+        } catch (e: BackendException) {
+            Log.e("sadfgfh", e.reason.name.toString())
             State.DOWN
         }
     }
 
     private fun emitTunnelState(state: State) {
-        _vpnState.tryEmit(
-            _vpnState.value.copy(status = state)
-        )
+        _vpnState.tryEmit(_vpnState.value.copy(status = state))
     }
 
     private fun emitBackendStatistics(statistics: Statistics) {
-        _vpnState.tryEmit(
-            _vpnState.value.copy(statistics = statistics)
-        )
+        _vpnState.tryEmit(_vpnState.value.copy(statistics = statistics))
         _vpnState.tryEmit(_vpnState.value.copy(curRx = config?.peers?.get(0)?.publicKey?.let {
             backend?.getStatistics(this)?.peerRx(it)
         } ?: 0L))
@@ -64,9 +55,7 @@ class WireGuardTunnel : VpnService {
     }
 
     private suspend fun emitTunnelName(name: String) {
-        _vpnState.emit(
-            _vpnState.value.copy(name = name)
-        )
+        _vpnState.emit(_vpnState.value.copy(name = name))
     }
 
     private suspend fun stopTunnelOnConfigChange(tunnelConfig: TunnelConfig) {
@@ -105,7 +94,7 @@ class WireGuardTunnel : VpnService {
                     backend?.getStatistics(tunnel)?.let { statistics ->
                         emitBackendStatistics(statistics)
                     }
-                    delay(Constants.VPN_STATISTIC_CHECK_INTERVAL)
+                    delay(1000L)
                 }
             }
         }
@@ -114,5 +103,9 @@ class WireGuardTunnel : VpnService {
                 statsJob.cancel()
             }
         }
+    }
+
+    fun initBackend() {
+
     }
 }

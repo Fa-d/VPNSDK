@@ -102,7 +102,7 @@ object DefaultNetworkListener {
         )
     )
 
-    suspend fun get() = if (fallback) @TargetApi(23) {
+    suspend fun get() = if (fallback)  {
         CustomApplication.connectivity.activeNetwork
             ?: throw UnknownHostException() // failed to listen, return current if available
     } else NetworkMessage.Get().run {

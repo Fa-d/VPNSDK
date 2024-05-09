@@ -1,6 +1,5 @@
 package com.faddy.phoenixlib
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -31,12 +30,14 @@ import java.net.InetAddress
 import java.net.NetworkInterface
 import java.util.Collections
 import java.util.Locale
+import javax.inject.Inject
 
 
-@SuppressLint("StaticFieldLeak")
-object PhoenixVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
-    private lateinit var phoenixContext: Context
-    private val vpnSwitchFactory = VpnSwitchFactory()
+class PhoenixVPN @Inject constructor(
+    private val vpnSwitchFactory: VpnSwitchFactory,
+    private val phoenixContext: Context,
+) : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
+
 
     var connectedVpnTime = MutableLiveData("00:00:00")
     var currentPing = MutableLiveData("0")
@@ -48,9 +49,8 @@ object PhoenixVPN : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
     var myCurrentIp: MutableLiveData<String>? = null
     var funInvoker: (() -> Unit)? = null
 
-    fun init(passedContext: Context): PhoenixVPN {
-        phoenixContext = passedContext
-        CustomApplication().init(passedContext)
+    fun init(): PhoenixVPN {
+        CustomApplication().init(phoenixContext)
         return this
     }
 

@@ -5,7 +5,7 @@ import com.faddy.wgtunlib.data.TunnelConfig
 import com.faddy.wgtunlib.data.VpnState
 import kotlinx.coroutines.flow.StateFlow
 
-interface VpnService : Tunnel {
+interface IVpnServiceTunnel : Tunnel {
     suspend fun startTunnel(tunnelConfig: TunnelConfig): Tunnel.State
 
     suspend fun stopTunnel()

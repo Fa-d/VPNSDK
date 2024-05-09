@@ -3,6 +3,7 @@ package com.faddy.vpnsdk
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.faddy.phoenixlib.PhoenixVPN
 import com.faddy.phoenixlib.model.VPNStatus
 import com.faddy.phoenixlib.model.VPNType
 import com.faddy.phoenixlib.model.VpnProfile
@@ -10,7 +11,7 @@ import com.faddy.vpnsdk.databinding.ActivityMainBinding
 
 class MainActivityPro : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val coreSdk = MainApp.vpnSdk!!
+    private lateinit var coreSdk: PhoenixVPN
     override fun onPause() {
         super.onPause()
         coreSdk.onVPNPause()
@@ -29,6 +30,7 @@ class MainActivityPro : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(ActivityMainBinding.inflate(layoutInflater).also { binding = it }.root)
+        coreSdk = (applicationContext as MainApp).vpnSdk!!
         coreSdk.onVpnCreate(this, this)
         initClickListener()
         initObserver()
