@@ -18,14 +18,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CustomWgCore : IVpnSpeedIP, IVpnLifecycle, IStartStop {
+class CustomWgCore @Inject constructor(private val wgTun: WireGuardTunnel) : IVpnSpeedIP,
+    IVpnLifecycle, IStartStop {
 
     val currentTxSpeed = MutableLiveData(0L)
-    val currentRxSpeed = MutableLiveData(0L)
-    companion object {
-        val wgTun = WireGuardTunnel()
-    }
+    val currentRxSpeed =
+        MutableLiveData(0L)/*  companion object {  val wgTun = WireGuardTunnel() }*/
 
     val currentVpnState = MutableLiveData(VPNStatus.DISCONNECTED)
 
@@ -37,7 +37,7 @@ class CustomWgCore : IVpnSpeedIP, IVpnLifecycle, IStartStop {
     override fun startVpn(vpnProfile: VpnProfile, passedContext: Activity) {
         onVpnResume()
         val tunnelConfig = TunnelConfig(id = 1, name = "wgTunnel", wgQuick = vpnProfile.vpnConfig)
-        wgTun.initBackend(context = passedContext)
+        wgTun.initBackend()
         CoroutineScope(Dispatchers.IO).launch {
             wgTun.startTunnel(tunnelConfig)
         }

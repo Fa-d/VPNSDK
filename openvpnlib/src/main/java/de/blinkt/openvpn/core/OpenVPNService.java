@@ -354,7 +354,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
             }
             nbuilder.setContentIntent(pIntent);
         } else {
-            nbuilder.setContentIntent(getGraphPendingIntent());
+            //nbuilder.setContentIntent(getGraphPendingIntent());
         }
 
         if (when != 0)
@@ -1019,7 +1019,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         mLocalIPv6 = null;
         mDomain = null;
 
-        builder.setConfigureIntent(getGraphPendingIntent());
+        //builder.setConfigureIntent(getGraphPendingIntent());
 
         try {
             //Debug.stopMethodTracing();
