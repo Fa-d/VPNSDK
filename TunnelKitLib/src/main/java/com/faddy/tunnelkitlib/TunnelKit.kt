@@ -35,7 +35,7 @@ import javax.inject.Inject
 
 class TunnelKit @Inject constructor(
     private val vpnSwitchFactory: VpnSwitchFactory,
-    private val tunnelKitContext: Context,
+    private val tunnelKitContext: Context, private val customApplication: CustomApplication,
 ) : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
 
 
@@ -48,11 +48,6 @@ class TunnelKit @Inject constructor(
     var connectedStatus: MutableLiveData<VPNStatus>? = null
     var myCurrentIp: MutableLiveData<String>? = null
     var funInvoker: (() -> Unit)? = null
-
-    fun init(): TunnelKit {
-        CustomApplication().init(tunnelKitContext)
-        return this
-    }
 
     private fun uploadDownloadLitener() {
         currentUploadSpeed =

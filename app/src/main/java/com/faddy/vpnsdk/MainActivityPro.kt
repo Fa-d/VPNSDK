@@ -30,7 +30,7 @@ class MainActivityPro : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(ActivityMainBinding.inflate(layoutInflater).also { binding = it }.root)
-        coreSdk = (applicationContext as MainApp).vpnSdk!!
+        coreSdk = (applicationContext as MainApp).vpnSdk
         coreSdk.onVpnCreate(this, this)
         initClickListener()
         initObserver()

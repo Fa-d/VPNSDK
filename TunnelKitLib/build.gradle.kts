@@ -76,8 +76,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.process)
 
-    // icons
-    implementation(libs.material.icons.extended)
+
     // serialization
     implementation(libs.kotlinx.serialization.json)
 
