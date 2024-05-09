@@ -35,7 +35,7 @@ import javax.inject.Inject
 
 class PhoenixVPN @Inject constructor(
     private val vpnSwitchFactory: VpnSwitchFactory,
-    private val phoenixContext: Context,
+    private val phoenixContext: Context, private val customApplication: CustomApplication,
 ) : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
 
 
@@ -48,11 +48,6 @@ class PhoenixVPN @Inject constructor(
     var connectedStatus: MutableLiveData<VPNStatus>? = null
     var myCurrentIp: MutableLiveData<String>? = null
     var funInvoker: (() -> Unit)? = null
-
-    fun init(): PhoenixVPN {
-        CustomApplication().init(phoenixContext)
-        return this
-    }
 
     private fun uploadDownloadLitener() {
         currentUploadSpeed =

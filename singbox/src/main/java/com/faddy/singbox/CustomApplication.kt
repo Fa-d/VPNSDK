@@ -10,16 +10,17 @@ import android.os.PowerManager
 import androidx.core.content.getSystemService
 import com.faddy.singbox.bg.AppChangeReceiver
 import go.Seq
+import javax.inject.Inject
 
-open class CustomApplication {
+class CustomApplication @Inject constructor(private val passedApplication: Context) {
 
-    fun init(passedApplication: Context) {
+    init {
         application = passedApplication
-        application?.registerReceiver(AppChangeReceiver(), IntentFilter().apply {
+        passedApplication?.registerReceiver(AppChangeReceiver(), IntentFilter().apply {
             addAction(Intent.ACTION_PACKAGE_ADDED)
             addDataScheme("package")
         })
-        Seq.setContext(application)
+        Seq.setContext(passedApplication)
     }
 
     companion object {

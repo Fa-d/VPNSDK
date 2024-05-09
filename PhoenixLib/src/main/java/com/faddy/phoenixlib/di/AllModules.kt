@@ -2,6 +2,7 @@ package com.faddy.phoenixlib.di
 
 import android.content.Context
 import com.faddy.phoenixlib.vpnCores.VpnSwitchFactory
+import com.faddy.singbox.CustomApplication
 import com.faddy.wgtunlib.service.WireGuardTunnel
 import com.wireguard.android.backend.GoBackend
 import dagger.Module
@@ -25,5 +26,13 @@ object AllModules {
     @Provides
     @Singleton
     fun providesVPNSwitchFactory(wgTun: WireGuardTunnel) = VpnSwitchFactory(wgTun)
+
+    @Provides
+    @Singleton
+    fun providesAppContext(@ApplicationContext context: Context) = context
+
+    @Provides
+    @Singleton
+    fun providesCustomApplication(@ApplicationContext context: Context) = CustomApplication(context)
 
 }
