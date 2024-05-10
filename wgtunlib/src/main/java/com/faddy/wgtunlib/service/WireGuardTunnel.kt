@@ -24,16 +24,13 @@ class WireGuardTunnel @Inject constructor(val backend: GoBackend) : IVpnServiceT
     private val scope = CoroutineScope(Dispatchers.IO)
     private lateinit var statsJob: Job
     private var config: Config? = null
-    // lateinit var backend: GoBackend
 
     override suspend fun startTunnel(tunnelConfig: TunnelConfig): State {
         return try {
             stopTunnelOnConfigChange(tunnelConfig)
             emitTunnelName(tunnelConfig.name)
             config = TunnelConfig.configFromQuick(tunnelConfig.wgQuick)
-            val state = backend.setState(this, State.UP, config)
-            //emitTunnelState(state ?: State.DOWN)
-            state ?: State.UP
+            backend.setState(this, State.UP, config)
         } catch (e: BackendException) {
             Log.e("sadfgfh", e.reason.name.toString())
             State.DOWN
@@ -47,10 +44,10 @@ class WireGuardTunnel @Inject constructor(val backend: GoBackend) : IVpnServiceT
     private fun emitBackendStatistics(statistics: Statistics) {
         _vpnState.tryEmit(_vpnState.value.copy(statistics = statistics))
         _vpnState.tryEmit(_vpnState.value.copy(curRx = config?.peers?.get(0)?.publicKey?.let {
-            backend?.getStatistics(this)?.peerRx(it)
+            backend.getStatistics(this).peerRx(it)
         } ?: 0L))
         _vpnState.tryEmit(_vpnState.value.copy(curTx = config?.peers?.get(0)?.publicKey?.let {
-            backend?.getStatistics(this)?.peerRx(it)
+            backend.getStatistics(this).peerRx(it)
         } ?: 0L))
     }
 
@@ -69,20 +66,19 @@ class WireGuardTunnel @Inject constructor(val backend: GoBackend) : IVpnServiceT
     }
 
     override suspend fun stopTunnel() {
-        val state = backend?.setState(this, State.DOWN, null)
-        emitTunnelState(state ?: State.DOWN)
+        val state = backend.setState(this, State.DOWN, null)
+        emitTunnelState(state)
         try {
             _vpnState.value.status
             if (_vpnState.value.status == State.UP) {
-                val state = backend?.setState(this, State.DOWN, null)
-                emitTunnelState(state ?: State.DOWN)
+                emitTunnelState(backend.setState(this, State.DOWN, null))
             }
-        } catch (e: BackendException) {
+        } catch (_: BackendException) {
         }
     }
 
     override fun getState(): State {
-        return backend?.getState(this) ?: State.DOWN
+        return backend.getState(this)
     }
 
     override fun onStateChange(state: State) {
@@ -91,9 +87,7 @@ class WireGuardTunnel @Inject constructor(val backend: GoBackend) : IVpnServiceT
         if (state == State.UP) {
             statsJob = scope.launch {
                 while (true) {
-                    backend?.getStatistics(tunnel)?.let { statistics ->
-                        emitBackendStatistics(statistics)
-                    }
+                    emitBackendStatistics(backend.getStatistics(tunnel))
                     delay(1000L)
                 }
             }
@@ -105,7 +99,4 @@ class WireGuardTunnel @Inject constructor(val backend: GoBackend) : IVpnServiceT
         }
     }
 
-    fun initBackend() {
-
-    }
 }

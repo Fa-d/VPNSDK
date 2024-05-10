@@ -68,7 +68,7 @@ android {
     }
 //    sourceSets { main { jniLibs.srcDirs = ['libs'] } }
 
-    packagingOptions {
+    packaging {
         jniLibs {
             useLegacyPackaging = true
         }
