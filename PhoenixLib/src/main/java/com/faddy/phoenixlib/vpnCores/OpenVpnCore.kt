@@ -11,6 +11,7 @@ import android.util.Base64
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import com.faddy.phoenixlib.interfaces.IStartStop
 import com.faddy.phoenixlib.interfaces.IVpnLifecycle
 import com.faddy.phoenixlib.interfaces.IVpnSpeedIP
@@ -83,10 +84,6 @@ class OpenVpnCore @Inject constructor(private val appContext: Context) :
         currentDownloadSpeed.postValue(diffOut)
     }
 
-     fun getCurrentIp(): LiveData<String> {
-        return currentIp
-    }
-
     override fun getUploadSpeed(): LiveData<Long> {
         return currentUploadSpeed
     }
@@ -94,6 +91,11 @@ class OpenVpnCore @Inject constructor(private val appContext: Context) :
     override fun getDownloadSpeed(): LiveData<Long> {
         return currentDownloadSpeed
     }
+
+    override fun getCurrentIp(): LiveData<String> {
+        return liveData { }
+    }
+
     override fun onVPNStart() {}
     override fun onVpnCreate() {
 

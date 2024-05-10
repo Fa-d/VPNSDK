@@ -5,7 +5,7 @@
 
     <application>
         <service
-            android:name=".service.CountdownTimerService"
+            android:name=".utils.CountdownTimerService"
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="specialUse" />

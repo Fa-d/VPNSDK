@@ -6,10 +6,6 @@ import com.faddy.phoenixlib.model.VPNType
 interface IVpnSpeedIP {
     fun getUploadSpeed(): LiveData<Long>
     fun getDownloadSpeed(): LiveData<Long>
-}
-
-interface IVpnSpeedIPTyped {
-    fun getUploadSpeed(): LiveData<Long>
-    fun getDownloadSpeed(): LiveData<Long>
     fun getCurrentIp(): LiveData<String>
+
 }

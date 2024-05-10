@@ -4,8 +4,8 @@ import android.app.Activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.faddy.phoenixlib.interfaces.IStartStop
-import com.faddy.phoenixlib.interfaces.IVpnLifecycleTyped
-import com.faddy.phoenixlib.interfaces.IVpnSpeedIPTyped
+import com.faddy.phoenixlib.interfaces.IVpnLifecycle
+import com.faddy.phoenixlib.interfaces.IVpnSpeedIP
 import com.faddy.phoenixlib.model.VPNStatus
 import com.faddy.phoenixlib.model.VPNType
 import com.faddy.phoenixlib.model.VpnProfile
@@ -17,7 +17,7 @@ class VpnSwitchFactory @Inject constructor(
     private val openVpnCoreConcrete: OpenVpnCore,
     private val singBoxCoreConcrete: SingBoxCore,
     private val internalSession: SessionManagerInternal
-) : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
+) : IVpnLifecycle, IStartStop, IVpnSpeedIP {
 
     private fun providesLastSelectedVpnType() = when (internalSession.getLastConnVpnType()) {
         "OPENVPN" -> VPNType.OPENVPN

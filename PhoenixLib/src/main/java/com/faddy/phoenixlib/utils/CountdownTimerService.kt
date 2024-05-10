@@ -1,11 +1,10 @@
-package com.faddy.phoenixlib.service
+package com.faddy.phoenixlib.utils
 
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.os.SystemClock
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.faddy.phoenixlib.utils.SessionManagerInternal
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
 import java.util.Timer

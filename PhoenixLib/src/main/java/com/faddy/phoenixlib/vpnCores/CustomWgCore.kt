@@ -1,14 +1,13 @@
 package com.faddy.phoenixlib.vpnCores
 
 import android.app.Activity
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import com.faddy.phoenixlib.interfaces.IStartStop
 import com.faddy.phoenixlib.interfaces.IVpnLifecycle
 import com.faddy.phoenixlib.interfaces.IVpnSpeedIP
 import com.faddy.phoenixlib.model.VPNStatus
-import com.faddy.phoenixlib.model.VPNType
 import com.faddy.phoenixlib.model.VpnProfile
 import com.faddy.wgtunlib.data.TunnelConfig
 import com.faddy.wgtunlib.service.WireGuardTunnel
@@ -73,6 +72,10 @@ class CustomWgCore @Inject constructor(private val wgTun: WireGuardTunnel) : IVp
 
     override fun getDownloadSpeed(): LiveData<Long> {
         return currentRxSpeed
+    }
+
+    override fun getCurrentIp(): LiveData<String> {
+        return liveData { }
     }
 
     fun wgStateListener() {
