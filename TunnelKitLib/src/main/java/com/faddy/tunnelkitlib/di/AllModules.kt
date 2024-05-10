@@ -19,6 +19,15 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AllModules {
+
+    @Singleton
+    @Provides
+    fun provideSessionManager(
+        @ApplicationContext context: Context
+    ) = SessionManagerInternal(
+        context.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
+    )
+
     @Provides
     @Singleton
     fun providesGoBackend(@ApplicationContext context: Context) = GoBackend(context)

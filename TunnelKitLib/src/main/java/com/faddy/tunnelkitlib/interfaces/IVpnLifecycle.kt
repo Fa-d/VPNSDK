@@ -10,12 +10,3 @@ interface IVpnLifecycle {
     fun onVPNPause()
 }
 
-interface IVpnLifecycleTyped {
-    fun onVPNStart()
-
-    fun onVpnCreate()
-    fun onVPNResume()
-    fun onVPNDestroy()
-    fun onVPNPause()
-}
-

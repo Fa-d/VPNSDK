@@ -5,14 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import com.faddy.tunnelkitlib.interfaces.IStartStop
 import com.faddy.tunnelkitlib.interfaces.IVpnLifecycle
 import com.faddy.tunnelkitlib.interfaces.IVpnSpeedIP
 import com.faddy.tunnelkitlib.model.VPNStatus
-import com.faddy.tunnelkitlib.model.VPNType
 import com.faddy.tunnelkitlib.model.VpnProfile
 import com.faddy.singbox.SingBoxInternal
 import com.faddy.singbox.bg.BoxService
@@ -95,6 +94,9 @@ class SingBoxCore @Inject constructor(private val appContext: Context) :
 
     override fun getDownloadSpeed(): LiveData<Long> {
         return internalClass.downloadDiff
+    }
+    override fun getCurrentIp(): LiveData<String> {
+        return liveData { }
     }
 
 }

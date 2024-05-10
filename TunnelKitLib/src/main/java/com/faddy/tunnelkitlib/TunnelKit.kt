@@ -15,7 +15,7 @@ import com.faddy.tunnelkitlib.interfaces.IVpnSpeedIP
 import com.faddy.tunnelkitlib.interfaces.IVpnStatus
 import com.faddy.tunnelkitlib.model.VPNStatus
 import com.faddy.tunnelkitlib.model.VpnProfile
-import com.faddy.tunnelkitlib.service.CountdownTimerService
+import com.faddy.tunnelkitlib.utils.CountdownTimerService
 import com.faddy.tunnelkitlib.utils.SessionManagerInternal
 import com.faddy.tunnelkitlib.utils.ping
 import com.faddy.tunnelkitlib.utils.toMutableLiveData
@@ -150,10 +150,9 @@ class TunnelKit @Inject constructor(
         return vpnSwitchFactory.getDownloadSpeed()
     }
 
-    fun getCurrentIp(): LiveData<String> {
+    override fun getCurrentIp(): LiveData<String> {
         return vpnSwitchFactory.getCurrentIp()
     }
-
     fun startTimerService(passedActivity: Activity) {
         val intent = Intent(passedActivity, CountdownTimerService::class.java)
         passedActivity.startService(intent)
