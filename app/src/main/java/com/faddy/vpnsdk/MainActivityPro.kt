@@ -19,7 +19,7 @@ class MainActivityPro : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        coreSdk.onVPNResume(this@MainActivityPro)
+        coreSdk.onVPNResume()
     }
 
     override fun onDestroy() {
@@ -31,7 +31,7 @@ class MainActivityPro : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(ActivityMainBinding.inflate(layoutInflater).also { binding = it }.root)
         coreSdk = (applicationContext as MainApp).vpnSdk
-        coreSdk.onVpnCreate(this, this)
+        coreSdk.onVpnCreate()
         initClickListener()
         initObserver()
     }

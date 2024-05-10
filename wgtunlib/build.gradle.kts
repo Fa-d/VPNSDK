@@ -13,14 +13,12 @@ android {
     defaultConfig {
         minSdk = 26
         targetSdk = 34
+        consumerProguardFiles("lib-proguard-rules.txt")
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
-            )
         }
         debug {
             isMinifyEnabled = false
@@ -41,6 +39,7 @@ android {
             useLegacyPackaging = true
         }
     }
+    buildToolsVersion = "34.0.0"
 }
 
 dependencies {

@@ -13,10 +13,13 @@
 #-keep class com.wireguard.android.backend.Tunnel.** { *; }
 #-keep class com.faddy.wgtunlib.** { *; }
 #-keep class com.wireguard.android.** { *; }
--keepattributes SourceFile,LineNumberTable
+-keepattributes SourceFile,LineNumberTable, Exceptions, InnerClasses
 -ignorewarnings
 -keep class * {
     public private *;
+}
+-keep class com.wireguard.android.backend.*$* {
+    *;
 }
 -keep class com.faddy.** { *; }
 -keep class com.wireguard.** { *; }

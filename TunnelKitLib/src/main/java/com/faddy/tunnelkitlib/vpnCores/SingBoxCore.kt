@@ -19,8 +19,10 @@ import com.faddy.singbox.bg.BoxService
 import com.faddy.singbox.bg.ServiceConnection
 import com.faddy.singbox.constant.Status
 import io.nekohasekai.sfa.VPNService
+import javax.inject.Inject
 
-class SingBoxCore : ServiceConnection.Callback, IVpnSpeedIP, IVpnLifecycle, IStartStop {
+class SingBoxCore @Inject constructor(private val appContext: Context) :
+    ServiceConnection.Callback, IVpnSpeedIP, IVpnLifecycle, IStartStop {
     val serviceStatus = MutableLiveData(Status.Stopped)
     val internalClass = SingBoxInternal()
     val currentVpnState = MutableLiveData(VPNStatus.DISCONNECTED)
@@ -49,44 +51,17 @@ class SingBoxCore : ServiceConnection.Callback, IVpnSpeedIP, IVpnLifecycle, ISta
     }
 
 
-    fun reconnect(lifecycleOwner: LifecycleOwner? = null) {
+    private fun reconnect() {
         connection?.reconnect()
-        if (lifecycleOwner != null) {
-            serviceStatus.observe(lifecycleOwner) {
-                when (it) {
-                    Status.Stopped -> {
-                        currentVpnState.postValue(VPNStatus.DISCONNECTED)
-                    }
-
-                    Status.Starting -> {
-                        currentVpnState.postValue(VPNStatus.CONNECTING)
-                    }
-
-                    Status.Started -> {
-                        internalClass.statusClient.connect()
-                        currentVpnState.postValue(VPNStatus.CONNECTED)
-                    }
-
-                    Status.Stopping -> {
-                        currentVpnState.postValue(VPNStatus.DISCONNECTING)
-                    }
-
-                    else -> {}
-                }
-            }
-        } else {
-            Log.e("LifecyclerOwner", "is really null")
-        }
-
     }
 
     override fun startVpn(vpnProfile: VpnProfile, passedContext: Activity) {
-        connection = ServiceConnection(passedContext, this)
+        connection = ServiceConnection(appContext, this)
         reconnect()
-        val intent = Intent(passedContext, VPNService::class.java)
+        val intent = Intent(appContext, VPNService::class.java)
         if (!vpnProfile.vpnConfig.isNullOrEmpty()) {
             intent.putExtra("daad", vpnProfile.vpnConfig)
-            ContextCompat.startForegroundService(passedContext, intent)
+            ContextCompat.startForegroundService(appContext, intent)
         }
     }
 
@@ -97,12 +72,12 @@ class SingBoxCore : ServiceConnection.Callback, IVpnSpeedIP, IVpnLifecycle, ISta
     override fun onVPNStart() {
     }
 
-    override fun onVpnCreate(passedContext: Context, lifecycleObserver: LifecycleOwner) {
-        reconnect(lifecycleObserver)
+    override fun onVpnCreate() {
+        reconnect()
     }
 
-    override fun onVPNResume(passedContext: Context) {
-        connection = ServiceConnection(passedContext, this)
+    override fun onVPNResume() {
+        connection = ServiceConnection(appContext, this)
         reconnect()
     }
 
