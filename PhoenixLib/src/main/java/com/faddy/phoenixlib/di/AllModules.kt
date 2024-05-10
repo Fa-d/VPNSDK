@@ -43,12 +43,11 @@ object AllModules {
     @Provides
     @Singleton
     fun providesVPNSwitchFactory(
-        @ApplicationContext context: Context,
         customWgCore: CustomWgCore,
         ovpnCore: OpenVpnCore,
         singBoxCore: SingBoxCore,
         internalSession: SessionManagerInternal
-    ) = VpnSwitchFactory(context, customWgCore, ovpnCore, singBoxCore, internalSession)
+    ) = VpnSwitchFactory(customWgCore, ovpnCore, singBoxCore, internalSession)
 
     @Provides
     @Singleton
@@ -57,23 +56,5 @@ object AllModules {
     @Provides
     @Singleton
     fun providesCustomApplication(@ApplicationContext context: Context) = CustomApplication(context)
-
-    /* @Provides
-     @Singleton
-     fun providesLastSelectedVpnType(@ApplicationContext appContext: Context): VPNType {
-         val vpnState = SessionManagerInternal(
-             appContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
-         ).getLastConnVpnType() ?: ""
-         val currentType = when (vpnState) {
-             "OPENVPN" -> VPNType.OPENVPN
-             "OPENCONNECT" -> VPNType.OPENCONNECT
-             "WIREGUARD" -> VPNType.WIREGUARD
-             "IPSECIKEV2" -> VPNType.IPSECIKEV2
-             "SINGBOX" -> VPNType.SINGBOX
-             else -> VPNType.NONE
-         }
-         Log.e("TAG", "providesLastSelectedVpnType: $currentType")
-         return currentType
-     }*/
 
 }

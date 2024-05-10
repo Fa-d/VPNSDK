@@ -46,7 +46,6 @@ class CountdownTimerService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startTime = SystemClock.elapsedRealtime()
-        /*    this.getSharedPreferences("iplock_vpn_pref", Context.MODE_PRIVATE).edit().putLong("lastConnStartTime", System.currentTimeMillis()).apply()*/
         sessionManager.setLastConnStartTime(System.currentTimeMillis())
         timer.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {

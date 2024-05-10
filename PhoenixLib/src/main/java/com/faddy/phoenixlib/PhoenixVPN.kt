@@ -34,7 +34,8 @@ import javax.inject.Inject
 class PhoenixVPN @Inject constructor(
     private val vpnSwitchFactory: VpnSwitchFactory,
     private val phoenixContext: Context,
-    private val customApplication: CustomApplication
+    private val customApplication: CustomApplication,
+    private val internalSession: SessionManagerInternal
 ) : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
 
 
@@ -94,12 +95,8 @@ class PhoenixVPN @Inject constructor(
     }
 
     override fun setVpnType(vpnProfile: VpnProfile) {
-        SessionManagerInternal(
-            phoenixContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
-        ).setLastConnVpnType(vpnProfile.vpnType.name)
-        SessionManagerInternal(
-            phoenixContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
-        ).setLastConnServerIP(vpnProfile.serverIP.split(":")[0])
+        internalSession.setLastConnVpnType(vpnProfile.vpnType.name)
+        internalSession.setLastConnServerIP(vpnProfile.serverIP.split(":")[0])
     }
     override fun getConnectedTime(): LiveData<String> {
         return connectedVpnTime
@@ -157,21 +154,6 @@ class PhoenixVPN @Inject constructor(
         return vpnSwitchFactory.getCurrentIp()
     }
 
-    /*    private fun getLastSelectedVpn(): VPNType {
-            val vpnState = SessionManagerInternal(
-                phoenixContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
-            ).getLastConnVpnType() ?: ""
-            val currentType = when (vpnState) {
-                "OPENVPN" -> VPNType.OPENVPN
-                "OPENCONNECT" -> VPNType.OPENCONNECT
-                "WIREGUARD" -> VPNType.WIREGUARD
-                "IPSECIKEV2" -> VPNType.IPSECIKEV2
-                "SINGBOX" -> VPNType.SINGBOX
-                else -> VPNType.NONE
-            }
-            return currentType
-        }*/
-
     fun startTimerService(passedActivity: Activity) {
         val intent = Intent(passedActivity, CountdownTimerService::class.java)
         passedActivity.startService(intent)
@@ -194,13 +176,7 @@ class PhoenixVPN @Inject constructor(
                         getDownloadSpeed()
                         getPingCurrentServer()
                         uploadDownloadLitener()
-                        myCurrentIp?.postValue(
-                            SessionManagerInternal(
-                                phoenixContext.getSharedPreferences(
-                                    "user_info_mother_lib", Context.MODE_PRIVATE
-                                )
-                            ).getLastConnServerIP()
-                        )
+                        myCurrentIp?.postValue(internalSession.getLastConnServerIP())
                         connectedVpnTime.postValue(intent.getStringExtra("VALUE"))
                     }
                 }
