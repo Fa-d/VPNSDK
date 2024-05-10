@@ -65,7 +65,7 @@ class SingBoxCore @Inject constructor(private val appContext: Context) :
         }
     }
 
-    override fun stopVpn(vpnProfile: VPNType, passedContext: Context) {
+    override fun stopVpn() {
         BoxService.stop()
     }
 

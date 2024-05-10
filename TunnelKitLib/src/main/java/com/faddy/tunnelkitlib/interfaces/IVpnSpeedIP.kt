@@ -9,7 +9,7 @@ interface IVpnSpeedIP {
 }
 
 interface IVpnSpeedIPTyped {
-    fun getUploadSpeed(vpnType: VPNType): LiveData<Long>
-    fun getDownloadSpeed(vpnType: VPNType): LiveData<Long>
-    fun getCurrentIp(vpnType: VPNType): LiveData<String>
+    fun getUploadSpeed(): LiveData<Long>
+    fun getDownloadSpeed(): LiveData<Long>
+    fun getCurrentIp(): LiveData<String>
 }

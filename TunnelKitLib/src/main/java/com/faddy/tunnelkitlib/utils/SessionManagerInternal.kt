@@ -16,7 +16,7 @@ class SessionManagerInternal @Inject constructor(private val preferences: Shared
 
     fun setPass(value: String) = preferences.edit().putString("pass", value).apply()
 
-    fun getLastConnVpnType() = preferences.getString("lastConnVpnType", "")
+    fun getLastConnVpnType() = preferences.getString("lastConnVpnType", "") ?: ""
 
     fun setLastConnVpnType(value: String) =
         preferences.edit().putString("lastConnVpnType", value).apply()

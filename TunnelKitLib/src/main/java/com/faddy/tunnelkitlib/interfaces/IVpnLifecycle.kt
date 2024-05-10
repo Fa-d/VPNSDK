@@ -11,11 +11,11 @@ interface IVpnLifecycle {
 }
 
 interface IVpnLifecycleTyped {
-    fun onVPNStart(vpnType: VPNType)
+    fun onVPNStart()
 
     fun onVpnCreate()
-    fun onVPNResume(vpnType: VPNType)
-    fun onVPNDestroy(vpnType: VPNType)
-    fun onVPNPause(vpnType: VPNType)
+    fun onVPNResume()
+    fun onVPNDestroy()
+    fun onVPNPause()
 }
 
