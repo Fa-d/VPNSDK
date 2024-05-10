@@ -15,7 +15,6 @@ import com.faddy.phoenixlib.interfaces.IStartStop
 import com.faddy.phoenixlib.interfaces.IVpnLifecycle
 import com.faddy.phoenixlib.interfaces.IVpnSpeedIP
 import com.faddy.phoenixlib.model.VPNStatus
-import com.faddy.phoenixlib.model.VPNType
 import com.faddy.phoenixlib.model.VpnProfile
 import de.blinkt.openvpn.LaunchVPN
 import de.blinkt.openvpn.core.ConfigParser
@@ -158,9 +157,9 @@ class OpenVpnCore @Inject constructor(private val appContext: Context) :
         passedContext.startActivity(intent)
     }
 
-    override fun stopVpn(vpnProfile: VPNType, passedContext: Context) {
+    override fun stopVpn() {
         if (VpnStatus.isVPNActive()) {
-            ProfileManager.setConntectedVpnProfileDisconnected(passedContext)
+            ProfileManager.setConntectedVpnProfileDisconnected(appContext)
             if (mServiceOV != null) {
                 try {
                     mServiceOV?.stopVPN(false)

@@ -14,7 +14,6 @@ import com.faddy.phoenixlib.interfaces.IVpnLifecycle
 import com.faddy.phoenixlib.interfaces.IVpnSpeedIP
 import com.faddy.phoenixlib.interfaces.IVpnStatus
 import com.faddy.phoenixlib.model.VPNStatus
-import com.faddy.phoenixlib.model.VPNType
 import com.faddy.phoenixlib.model.VpnProfile
 import com.faddy.phoenixlib.service.CountdownTimerService
 import com.faddy.phoenixlib.utils.SessionManagerInternal
@@ -50,17 +49,14 @@ class PhoenixVPN @Inject constructor(
     var funInvoker: (() -> Unit)? = null
 
     private fun uploadDownloadLitener() {
-        currentUploadSpeed =
-            vpnSwitchFactory.getDownloadSpeed(getLastSelectedVpn()).toMutableLiveData()
-        currentDownloadSpeed =
-            vpnSwitchFactory.getUploadSpeed(getLastSelectedVpn()).toMutableLiveData()
+        currentUploadSpeed = vpnSwitchFactory.getDownloadSpeed().toMutableLiveData()
+        currentDownloadSpeed = vpnSwitchFactory.getUploadSpeed().toMutableLiveData()
     }
 
     private fun resetVpnListeners() {
         uploadDownloadLitener()
-        connectedStatus =
-            vpnSwitchFactory.setVpnStateListeners(getLastSelectedVpn()).toMutableLiveData()
-        myCurrentIp = vpnSwitchFactory.getCurrentIp(getLastSelectedVpn()).toMutableLiveData()
+        connectedStatus = vpnSwitchFactory.setVpnStateListeners().toMutableLiveData()
+        myCurrentIp = vpnSwitchFactory.getCurrentIp().toMutableLiveData()
 
     }
     override fun startConnect(
@@ -77,11 +73,11 @@ class PhoenixVPN @Inject constructor(
         resetVpnListeners()
         funInvoker?.invoke()
 
-        return vpnSwitchFactory.setVpnStateListeners(getLastSelectedVpn())
+        return vpnSwitchFactory.setVpnStateListeners()
     }
 
     override fun disconnect(): LiveData<VPNStatus> {
-        vpnSwitchFactory.stopVpn(getLastSelectedVpn(), phoenixContext)
+        vpnSwitchFactory.stopVpn()
         stopTimerService(phoenixContext)
         currentUploadSpeed?.postValue(0L)
         currentDownloadSpeed?.postValue(0L)
@@ -90,11 +86,11 @@ class PhoenixVPN @Inject constructor(
         connectedVpnTime.postValue("00:00:00")
         currentPing.postValue("0")
         funInvoker?.invoke()
-        return vpnSwitchFactory.setVpnStateListeners(getLastSelectedVpn())
+        return vpnSwitchFactory.setVpnStateListeners()
     }
 
     override fun getVpnConnectedStatus(): LiveData<VPNStatus> {
-        return vpnSwitchFactory.setVpnStateListeners(getLastSelectedVpn())
+        return vpnSwitchFactory.setVpnStateListeners()
     }
 
     override fun setVpnType(vpnProfile: VpnProfile) {
@@ -110,7 +106,7 @@ class PhoenixVPN @Inject constructor(
     }
 
     override fun isVpnConnected(): Boolean {
-        return vpnSwitchFactory.setVpnStateListeners(getLastSelectedVpn()).value == VPNStatus.CONNECTED
+        return vpnSwitchFactory.setVpnStateListeners().value == VPNStatus.CONNECTED
     }
 
     override fun isVpnServicePrepared(): Boolean {
@@ -125,7 +121,7 @@ class PhoenixVPN @Inject constructor(
     }
 
     override fun onVPNStart() {
-        vpnSwitchFactory.onVPNStart(getLastSelectedVpn())
+        vpnSwitchFactory.onVPNStart()
     }
 
     override fun onVpnCreate() {
@@ -133,7 +129,7 @@ class PhoenixVPN @Inject constructor(
     }
 
     override fun onVPNResume() {
-        vpnSwitchFactory.onVPNResume(getLastSelectedVpn())
+        vpnSwitchFactory.onVPNResume()
         resetVpnListeners()
         LocalBroadcastManager.getInstance(phoenixContext)
             .registerReceiver(receiver, IntentFilter(CountdownTimerService.TIME_INFO));
@@ -141,40 +137,40 @@ class PhoenixVPN @Inject constructor(
     }
 
     override fun onVPNDestroy() {
-        vpnSwitchFactory.onVPNDestroy(getLastSelectedVpn())
+        vpnSwitchFactory.onVPNDestroy()
     }
 
     override fun onVPNPause() {
-        vpnSwitchFactory.onVPNPause(getLastSelectedVpn())
+        vpnSwitchFactory.onVPNPause()
         LocalBroadcastManager.getInstance(phoenixContext).unregisterReceiver(receiver);
     }
 
     override fun getUploadSpeed(): LiveData<Long> {
-        return vpnSwitchFactory.getUploadSpeed(getLastSelectedVpn())
+        return vpnSwitchFactory.getUploadSpeed()
     }
 
     override fun getDownloadSpeed(): LiveData<Long> {
-        return vpnSwitchFactory.getDownloadSpeed(getLastSelectedVpn())
+        return vpnSwitchFactory.getDownloadSpeed()
     }
 
     fun getCurrentIp(): LiveData<String> {
-        return vpnSwitchFactory.getCurrentIp(getLastSelectedVpn())
+        return vpnSwitchFactory.getCurrentIp()
     }
 
-    private fun getLastSelectedVpn(): VPNType {
-        val vpnState = SessionManagerInternal(
-            phoenixContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
-        ).getLastConnVpnType() ?: ""
-        val currentType = when (vpnState) {
-            "OPENVPN" -> VPNType.OPENVPN
-            "OPENCONNECT" -> VPNType.OPENCONNECT
-            "WIREGUARD" -> VPNType.WIREGUARD
-            "IPSECIKEV2" -> VPNType.IPSECIKEV2
-            "SINGBOX" -> VPNType.SINGBOX
-            else -> VPNType.NONE
-        }
-        return currentType
-    }
+    /*    private fun getLastSelectedVpn(): VPNType {
+            val vpnState = SessionManagerInternal(
+                phoenixContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
+            ).getLastConnVpnType() ?: ""
+            val currentType = when (vpnState) {
+                "OPENVPN" -> VPNType.OPENVPN
+                "OPENCONNECT" -> VPNType.OPENCONNECT
+                "WIREGUARD" -> VPNType.WIREGUARD
+                "IPSECIKEV2" -> VPNType.IPSECIKEV2
+                "SINGBOX" -> VPNType.SINGBOX
+                else -> VPNType.NONE
+            }
+            return currentType
+        }*/
 
     fun startTimerService(passedActivity: Activity) {
         val intent = Intent(passedActivity, CountdownTimerService::class.java)

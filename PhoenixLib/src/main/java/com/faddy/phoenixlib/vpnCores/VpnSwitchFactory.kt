@@ -10,17 +10,28 @@ import com.faddy.phoenixlib.interfaces.IVpnSpeedIPTyped
 import com.faddy.phoenixlib.model.VPNStatus
 import com.faddy.phoenixlib.model.VPNType
 import com.faddy.phoenixlib.model.VpnProfile
+import com.faddy.phoenixlib.utils.SessionManagerInternal
 import javax.inject.Inject
 
 class VpnSwitchFactory @Inject constructor(
+    private val context: Context,
     private val wireGuardCoreConcrete: CustomWgCore,
     private val openVpnCoreConcrete: OpenVpnCore,
-    private val singBoxCoreConcrete: SingBoxCore
+    private val singBoxCoreConcrete: SingBoxCore,
+    private val internalSession: SessionManagerInternal
 ) : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
 
+    private fun providesLastSelectedVpnType() = when (internalSession.getLastConnVpnType()) {
+        "OPENVPN" -> VPNType.OPENVPN
+        "OPENCONNECT" -> VPNType.OPENCONNECT
+        "WIREGUARD" -> VPNType.WIREGUARD
+        "IPSECIKEV2" -> VPNType.IPSECIKEV2
+        "SINGBOX" -> VPNType.SINGBOX
+        else -> VPNType.NONE
+    }
 
-    fun setVpnStateListeners(vpnType: VPNType): LiveData<VPNStatus> {
-        return when (vpnType) {
+    fun setVpnStateListeners(): LiveData<VPNStatus> {
+        return when (providesLastSelectedVpnType()) {
             VPNType.NONE -> liveData {  }
             VPNType.OPENVPN -> openVpnCoreConcrete.currentVpnState
             VPNType.OPENCONNECT -> return liveData { }
@@ -29,8 +40,9 @@ class VpnSwitchFactory @Inject constructor(
             VPNType.SINGBOX -> return singBoxCoreConcrete.currentVpnState
         }
     }
-    override fun onVPNStart(vpnType: VPNType) {
-        when (vpnType) {
+
+    override fun onVPNStart() {
+        when (providesLastSelectedVpnType()) {
             VPNType.NONE -> {}
             VPNType.OPENVPN -> {
                 openVpnCoreConcrete.onVPNStart()
@@ -53,8 +65,8 @@ class VpnSwitchFactory @Inject constructor(
         singBoxCoreConcrete.onVpnCreate()
     }
 
-    override fun onVPNResume(vpnType: VPNType) {
-        when (vpnType) {
+    override fun onVPNResume() {
+        when (providesLastSelectedVpnType()) {
             VPNType.NONE -> {}
             VPNType.OPENVPN -> {
                 openVpnCoreConcrete.onVPNResume()
@@ -71,9 +83,9 @@ class VpnSwitchFactory @Inject constructor(
         }
     }
 
-    override fun onVPNDestroy(vpnType: VPNType) {
+    override fun onVPNDestroy() {
 
-        when (vpnType) {
+        when (providesLastSelectedVpnType()) {
             VPNType.NONE -> {}
             VPNType.OPENVPN -> {
                 openVpnCoreConcrete.onVPNDestroy()
@@ -90,8 +102,8 @@ class VpnSwitchFactory @Inject constructor(
         }
     }
 
-    override fun onVPNPause(vpnType: VPNType) {
-        when (vpnType) {
+    override fun onVPNPause() {
+        when (providesLastSelectedVpnType()) {
             VPNType.NONE -> {}
             VPNType.OPENVPN -> {
                 openVpnCoreConcrete.onVPNPause()
@@ -126,26 +138,26 @@ class VpnSwitchFactory @Inject constructor(
         }
     }
 
-    override fun stopVpn(vpnType: VPNType, passedContext: Context) {
-        when (vpnType) {
+    override fun stopVpn() {
+        when (providesLastSelectedVpnType()) {
             VPNType.NONE -> {}
             VPNType.OPENVPN -> {
-                openVpnCoreConcrete.stopVpn(vpnType, passedContext)
+                openVpnCoreConcrete.stopVpn()
             }
 
             VPNType.OPENCONNECT -> {}
             VPNType.WIREGUARD -> {
-                wireGuardCoreConcrete.stopVpn(vpnType, passedContext)
+                wireGuardCoreConcrete.stopVpn()
             }
             VPNType.IPSECIKEV2 -> {}
             VPNType.SINGBOX -> {
-                singBoxCoreConcrete.stopVpn(vpnType, passedContext)
+                singBoxCoreConcrete.stopVpn()
             }
         }
     }
 
-    override fun getUploadSpeed(vpnType: VPNType): LiveData<Long> {
-        when (vpnType) {
+    override fun getUploadSpeed(): LiveData<Long> {
+        when (providesLastSelectedVpnType()) {
             VPNType.NONE -> {
                 return liveData { 0L }
             }
@@ -172,8 +184,8 @@ class VpnSwitchFactory @Inject constructor(
         }
     }
 
-    override fun getDownloadSpeed(vpnType: VPNType): LiveData<Long> {
-        when (vpnType) {
+    override fun getDownloadSpeed(): LiveData<Long> {
+        when (providesLastSelectedVpnType()) {
             VPNType.NONE -> {
                 return liveData { 0L }
             }
@@ -200,9 +212,9 @@ class VpnSwitchFactory @Inject constructor(
         }
     }
 
-    override fun getCurrentIp(vpnType: VPNType): LiveData<String> {
+    override fun getCurrentIp(): LiveData<String> {
 
-        when (vpnType) {
+        when (providesLastSelectedVpnType()) {
 
             VPNType.NONE -> {
                 return liveData { 0L }

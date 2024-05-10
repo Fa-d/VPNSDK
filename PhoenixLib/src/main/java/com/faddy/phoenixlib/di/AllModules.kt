@@ -1,6 +1,7 @@
 package com.faddy.phoenixlib.di
 
 import android.content.Context
+import com.faddy.phoenixlib.utils.SessionManagerInternal
 import com.faddy.phoenixlib.vpnCores.CustomWgCore
 import com.faddy.phoenixlib.vpnCores.OpenVpnCore
 import com.faddy.phoenixlib.vpnCores.SingBoxCore
@@ -36,13 +37,18 @@ object AllModules {
 
 
     @Provides
+    @Singleton
     fun providesSingBoxCore(@ApplicationContext context: Context) = SingBoxCore(context)
 
     @Provides
     @Singleton
     fun providesVPNSwitchFactory(
-        customWgCore: CustomWgCore, ovpnCore: OpenVpnCore, singBoxCore: SingBoxCore
-    ) = VpnSwitchFactory(customWgCore, ovpnCore, singBoxCore)
+        @ApplicationContext context: Context,
+        customWgCore: CustomWgCore,
+        ovpnCore: OpenVpnCore,
+        singBoxCore: SingBoxCore,
+        internalSession: SessionManagerInternal
+    ) = VpnSwitchFactory(context, customWgCore, ovpnCore, singBoxCore, internalSession)
 
     @Provides
     @Singleton
@@ -51,5 +57,23 @@ object AllModules {
     @Provides
     @Singleton
     fun providesCustomApplication(@ApplicationContext context: Context) = CustomApplication(context)
+
+    /* @Provides
+     @Singleton
+     fun providesLastSelectedVpnType(@ApplicationContext appContext: Context): VPNType {
+         val vpnState = SessionManagerInternal(
+             appContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
+         ).getLastConnVpnType() ?: ""
+         val currentType = when (vpnState) {
+             "OPENVPN" -> VPNType.OPENVPN
+             "OPENCONNECT" -> VPNType.OPENCONNECT
+             "WIREGUARD" -> VPNType.WIREGUARD
+             "IPSECIKEV2" -> VPNType.IPSECIKEV2
+             "SINGBOX" -> VPNType.SINGBOX
+             else -> VPNType.NONE
+         }
+         Log.e("TAG", "providesLastSelectedVpnType: $currentType")
+         return currentType
+     }*/
 
 }

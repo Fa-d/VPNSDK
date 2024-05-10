@@ -42,7 +42,7 @@ class CustomWgCore @Inject constructor(private val wgTun: WireGuardTunnel) : IVp
         }
     }
 
-    override fun stopVpn(vpnProfile: VPNType, passedContext: Context) {
+    override fun stopVpn() {
         onVpnResume()
         CoroutineScope(Dispatchers.IO).launch {
             wgTun.stopTunnel()
