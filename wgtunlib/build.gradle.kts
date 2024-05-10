@@ -34,12 +34,17 @@ android {
         buildConfig = true
         aidl = true
     }
-    packagingOptions {
+    packaging {
         jniLibs {
             useLegacyPackaging = true
         }
     }
     buildToolsVersion = "34.0.0"
+    lint {
+        abortOnError = false
+        absolutePaths = false
+       // baseline = file("lint-baseline.xml")
+    }
 }
 
 dependencies {

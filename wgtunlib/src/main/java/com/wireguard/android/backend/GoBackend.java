@@ -44,7 +44,7 @@ public final class GoBackend implements Backend {
     private static final int DNS_RESOLUTION_RETRIES = 10;
     private static final String TAG = "WireGuard/GoBackend";
     @Nullable private static AlwaysOnCallback alwaysOnCallback;
-    private static GhettoCompletableFuture<VpnService> vpnService = new GhettoCompletableFuture<>();
+    private static GhettoCompletableFuture<CustomVpnService> vpnService = new GhettoCompletableFuture<>();
     private final Context context;
     @Nullable private Config currentConfig;
     @Nullable private Tunnel currentTunnel;
@@ -61,7 +61,7 @@ public final class GoBackend implements Backend {
     }
 
     /**
-     * Set a {@link AlwaysOnCallback} to be invoked when {@link VpnService} is started by the
+     * Set a {@link AlwaysOnCallback} to be invoked when {@link CustomVpnService} is started by the
      * system's Always-On VPN mode.
      *
      * @param cb Callback to be invoked
@@ -213,13 +213,24 @@ public final class GoBackend implements Backend {
             if (config == null)
                 throw new BackendException(Reason.TUNNEL_MISSING_CONFIG);
 
-            if (VpnService.prepare(context) != null)
+            if (CustomVpnService.prepare(context) != null)
                 throw new BackendException(Reason.VPN_NOT_AUTHORIZED);
 
-            final VpnService service;
+            final CustomVpnService service;
             if (!vpnService.isDone()) {
                 Log.d(TAG, "Requesting to start VpnService");
-                context.startService(new Intent(context, VpnService.class));
+                if (context == null) {
+                    Log.e(TAG, "Context is null");
+                }
+                try {
+                    Intent vpnIntent = new Intent(context, CustomVpnService.class);
+                    if(vpnIntent == null){
+                        Log.e(TAG, "Intent is null");
+                    }
+                    context.startService(vpnIntent);
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to start VpnService", e);
+                }
             }
 
             try {
@@ -259,7 +270,7 @@ public final class GoBackend implements Backend {
             final String goConfig = config.toWgUserspaceString();
 
             // Create the vpn tunnel with android API
-            final VpnService.Builder builder = service.getBuilder();
+            final CustomVpnService.Builder builder = service.getBuilder();
             builder.setSession(tunnel.getName());
 
             for (final String excludedApplication : config.getInterface().getExcludedApplications())
@@ -296,8 +307,7 @@ public final class GoBackend implements Backend {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
                 builder.setMetered(false);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                service.setUnderlyingNetworks(null);
+            service.setUnderlyingNetworks(null);
 
             builder.setBlocking(true);
             try (final ParcelFileDescriptor tun = builder.establish()) {
@@ -333,7 +343,7 @@ public final class GoBackend implements Backend {
     }
 
     /**
-     * Callback for {@link GoBackend} that is invoked when {@link VpnService} is started by the
+     * Callback for {@link GoBackend} that is invoked when {@link CustomVpnService} is started by the
      * system's Always-On VPN mode.
      */
     public interface AlwaysOnCallback {
@@ -372,7 +382,7 @@ public final class GoBackend implements Backend {
     /**
      * {@link android.net.VpnService} implementation for {@link GoBackend}
      */
-    public static class VpnService extends android.net.VpnService {
+    public static class CustomVpnService extends android.net.VpnService {
         @Nullable private GoBackend owner;
 
         public Builder getBuilder() {

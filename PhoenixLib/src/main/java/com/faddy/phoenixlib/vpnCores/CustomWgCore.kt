@@ -22,9 +22,7 @@ class CustomWgCore @Inject constructor(private val wgTun: WireGuardTunnel) : IVp
     IVpnLifecycle, IStartStop {
 
     val currentTxSpeed = MutableLiveData(0L)
-    val currentRxSpeed =
-        MutableLiveData(0L)/*  companion object {  val wgTun = WireGuardTunnel() }*/
-
+    val currentRxSpeed = MutableLiveData(0L)
     val currentVpnState = MutableLiveData(VPNStatus.DISCONNECTED)
 
 
@@ -35,7 +33,6 @@ class CustomWgCore @Inject constructor(private val wgTun: WireGuardTunnel) : IVp
     override fun startVpn(vpnProfile: VpnProfile, passedContext: Activity) {
         onVpnResume()
         val tunnelConfig = TunnelConfig(id = 1, name = "wgTunnel", wgQuick = vpnProfile.vpnConfig)
-        wgTun.initBackend()
         CoroutineScope(Dispatchers.IO).launch {
             wgTun.startTunnel(tunnelConfig)
         }
@@ -78,7 +75,7 @@ class CustomWgCore @Inject constructor(private val wgTun: WireGuardTunnel) : IVp
         return liveData { }
     }
 
-    fun wgStateListener() {
+    private fun wgStateListener() {
         CoroutineScope(Dispatchers.IO).launch {
             wgTun.vpnServiceState.collectLatest { theVal ->
                 if (theVal.status == Tunnel.State.UP) {

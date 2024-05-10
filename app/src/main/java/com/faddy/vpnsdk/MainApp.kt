@@ -7,8 +7,8 @@ import javax.inject.Inject
 
 @HiltAndroidApp
 class MainApp : Application() {
-    @Inject
-    lateinit var vpnSdk: PhoenixVPN
+/*    @Inject
+    lateinit var vpnSdk: PhoenixVPN*/
 }
 
 

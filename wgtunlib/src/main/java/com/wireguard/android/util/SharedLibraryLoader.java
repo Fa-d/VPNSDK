@@ -77,7 +77,7 @@ public final class SharedLibraryLoader {
         try {
             f = File.createTempFile("lib", ".so", context.getCodeCacheDir());
             if (extractLibrary(context, libName, f)) {
-                System.load(f.getAbsolutePath());
+                System.loadLibrary(f.getAbsolutePath());
                 return;
             }
         } catch (final Exception e) {
