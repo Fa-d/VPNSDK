@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.VpnService
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -35,7 +34,8 @@ import javax.inject.Inject
 
 class PhoenixVPN @Inject constructor(
     private val vpnSwitchFactory: VpnSwitchFactory,
-    private val phoenixContext: Context, private val customApplication: CustomApplication,
+    private val phoenixContext: Context,
+    private val customApplication: CustomApplication
 ) : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
 
 
@@ -128,12 +128,12 @@ class PhoenixVPN @Inject constructor(
         vpnSwitchFactory.onVPNStart(getLastSelectedVpn())
     }
 
-    override fun onVpnCreate(passedContext: Context, lifecycleObserver: LifecycleOwner) {
-        vpnSwitchFactory.onVpnCreate(passedContext, lifecycleObserver)
+    override fun onVpnCreate() {
+        vpnSwitchFactory.onVpnCreate()
     }
 
-    override fun onVPNResume(passedContext: Context) {
-        vpnSwitchFactory.onVPNResume(getLastSelectedVpn(), passedContext)
+    override fun onVPNResume() {
+        vpnSwitchFactory.onVPNResume(getLastSelectedVpn())
         resetVpnListeners()
         LocalBroadcastManager.getInstance(phoenixContext)
             .registerReceiver(receiver, IntentFilter(CountdownTimerService.TIME_INFO));

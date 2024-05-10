@@ -2,7 +2,6 @@ package com.faddy.phoenixlib.vpnCores
 
 import android.app.Activity
 import android.content.Context
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.faddy.phoenixlib.interfaces.IStartStop
@@ -11,15 +10,15 @@ import com.faddy.phoenixlib.interfaces.IVpnSpeedIPTyped
 import com.faddy.phoenixlib.model.VPNStatus
 import com.faddy.phoenixlib.model.VPNType
 import com.faddy.phoenixlib.model.VpnProfile
-import com.faddy.wgtunlib.service.WireGuardTunnel
 import javax.inject.Inject
 
-class VpnSwitchFactory @Inject constructor(wireGuardTunnel: WireGuardTunnel) : IVpnLifecycleTyped,
-    IStartStop, IVpnSpeedIPTyped {
+class VpnSwitchFactory @Inject constructor(
+    private val wireGuardCoreConcrete: CustomWgCore,
+    private val openVpnCoreConcrete: OpenVpnCore,
+    private val singBoxCoreConcrete: SingBoxCore
+) : IVpnLifecycleTyped, IStartStop, IVpnSpeedIPTyped {
 
-    val openVpnCoreConcrete = OpenVpnCore()
-    val wireGuardCoreConcrete = CustomWgCore(wireGuardTunnel)
-    val singBoxCoreConcrete = SingBoxCore()
+
     fun setVpnStateListeners(vpnType: VPNType): LiveData<VPNStatus> {
         return when (vpnType) {
             VPNType.NONE -> liveData {  }
@@ -48,17 +47,17 @@ class VpnSwitchFactory @Inject constructor(wireGuardTunnel: WireGuardTunnel) : I
         }
     }
 
-    override fun onVpnCreate(passedContext: Context, lifecycleObserver: LifecycleOwner) {
-        openVpnCoreConcrete.onVpnCreate(passedContext, lifecycleObserver)
-        wireGuardCoreConcrete.onVpnCreate(passedContext, lifecycleObserver)
-        singBoxCoreConcrete.onVpnCreate(passedContext, lifecycleObserver)
+    override fun onVpnCreate() {
+        openVpnCoreConcrete.onVpnCreate()
+        wireGuardCoreConcrete.onVpnCreate()
+        singBoxCoreConcrete.onVpnCreate()
     }
 
-    override fun onVPNResume(vpnType: VPNType, passedContext: Context) {
+    override fun onVPNResume(vpnType: VPNType) {
         when (vpnType) {
             VPNType.NONE -> {}
             VPNType.OPENVPN -> {
-                openVpnCoreConcrete.onVPNResume(passedContext)
+                openVpnCoreConcrete.onVPNResume()
             }
 
             VPNType.OPENCONNECT -> {}
@@ -67,7 +66,7 @@ class VpnSwitchFactory @Inject constructor(wireGuardTunnel: WireGuardTunnel) : I
             }
             VPNType.IPSECIKEV2 -> {}
             VPNType.SINGBOX -> {
-                singBoxCoreConcrete.onVPNResume(passedContext)
+                singBoxCoreConcrete.onVPNResume()
             }
         }
     }

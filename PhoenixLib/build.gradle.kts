@@ -14,7 +14,6 @@ android {
         minSdk = 26
         targetSdk = 34
     }
-    ksp { arg("room.schemaLocation", "$projectDir/schemas") }
 
     buildTypes {
         release {
@@ -48,28 +47,10 @@ dependencies {
     //wg
     implementation(libs.androidx.lifecycle.service)
 
-    // logging
-    implementation(libs.timber)
-
-    // compose navigation
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.hilt.navigation.compose)
 
     // hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
-
-    // accompanist
-    implementation(libs.accompanist.systemuicontroller)
-    implementation(libs.accompanist.permissions)
-    implementation(libs.accompanist.flowlayout)
-    implementation(libs.accompanist.drawablepainter)
-
-    // storage
-    implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.datastore.preferences)
 
     // lifecycle
     implementation(libs.lifecycle.runtime.compose)
@@ -80,8 +61,6 @@ dependencies {
     // serialization
     implementation(libs.kotlinx.serialization.json)
 
-    //wg
-    implementation(libs.tunnel)
     implementation(libs.androidx.lifecycle.service)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

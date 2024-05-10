@@ -1,6 +1,9 @@
 package com.faddy.phoenixlib.di
 
 import android.content.Context
+import com.faddy.phoenixlib.vpnCores.CustomWgCore
+import com.faddy.phoenixlib.vpnCores.OpenVpnCore
+import com.faddy.phoenixlib.vpnCores.SingBoxCore
 import com.faddy.phoenixlib.vpnCores.VpnSwitchFactory
 import com.faddy.singbox.CustomApplication
 import com.faddy.wgtunlib.service.WireGuardTunnel
@@ -25,7 +28,21 @@ object AllModules {
 
     @Provides
     @Singleton
-    fun providesVPNSwitchFactory(wgTun: WireGuardTunnel) = VpnSwitchFactory(wgTun)
+    fun providesWGCore(wgTun: WireGuardTunnel) = CustomWgCore(wgTun)
+
+    @Provides
+    @Singleton
+    fun providesOVpnCore(@ApplicationContext context: Context) = OpenVpnCore(context)
+
+
+    @Provides
+    fun providesSingBoxCore(@ApplicationContext context: Context) = SingBoxCore(context)
+
+    @Provides
+    @Singleton
+    fun providesVPNSwitchFactory(
+        customWgCore: CustomWgCore, ovpnCore: OpenVpnCore, singBoxCore: SingBoxCore
+    ) = VpnSwitchFactory(customWgCore, ovpnCore, singBoxCore)
 
     @Provides
     @Singleton

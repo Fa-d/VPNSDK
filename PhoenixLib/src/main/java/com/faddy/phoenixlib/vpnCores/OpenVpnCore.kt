@@ -5,13 +5,10 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.os.Handler
 import android.os.IBinder
-import android.os.Looper
 import android.os.RemoteException
 import android.util.Base64
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.faddy.phoenixlib.interfaces.IStartStop
@@ -33,8 +30,9 @@ import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.Reader
 import java.io.StringReader
+import javax.inject.Inject
 
-class OpenVpnCore(/* motherContext: Context,  passedActivity: Activity*/) :
+class OpenVpnCore @Inject constructor(private val appContext: Context) :
     VpnStatus.StateListener, VpnStatus.ByteCountListener, IVpnSpeedIP, IVpnLifecycle, IStartStop {
     private val totalUploadSpeed = MutableLiveData(0L)
     private val totalDownloadSpeed = MutableLiveData(0L)
@@ -74,13 +72,6 @@ class OpenVpnCore(/* motherContext: Context,  passedActivity: Activity*/) :
                 currentVpnState.value = VPNStatus.CONNECTING
             }
         }else {
-            /*Handler(Looper.getMainLooper()).postDelayed({
-                if (VpnStatus.mLastLevel == ConnectionStatus.LEVEL_CONNECTING_NO_SERVER_REPLY_YET) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        currentVpnState.value = VPNStatus.CONNECTING
-                    }
-                }
-            }, 300L);*/
         }
     }
 
@@ -105,14 +96,14 @@ class OpenVpnCore(/* motherContext: Context,  passedActivity: Activity*/) :
         return currentDownloadSpeed
     }
     override fun onVPNStart() {}
-    override fun onVpnCreate(passedContext: Context, lifecycleObserver: LifecycleOwner) {
+    override fun onVpnCreate() {
 
     }
 
-    override fun onVPNResume(passedContext: Context) {
-        val intent = Intent(passedContext, OpenVPNService::class.java)
+    override fun onVPNResume() {
+        val intent = Intent(appContext, OpenVPNService::class.java)
         intent.action = OpenVPNService.START_SERVICE
-        passedContext.bindService(intent, mConnectionOV, AppCompatActivity.BIND_AUTO_CREATE)
+        appContext.bindService(intent, mConnectionOV, AppCompatActivity.BIND_AUTO_CREATE)
         VpnStatus.addStateListener(this)
         VpnStatus.addByteCountListener(this)
     }

@@ -2,7 +2,6 @@ package com.faddy.phoenixlib.vpnCores
 
 import android.app.Activity
 import android.content.Context
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.faddy.phoenixlib.interfaces.IStartStop
@@ -46,7 +45,7 @@ class CustomWgCore @Inject constructor(private val wgTun: WireGuardTunnel) : IVp
     override fun stopVpn(vpnProfile: VPNType, passedContext: Context) {
         onVpnResume()
         CoroutineScope(Dispatchers.IO).launch {
-            wgTun?.stopTunnel()
+            wgTun.stopTunnel()
         }
     }
 
@@ -54,11 +53,11 @@ class CustomWgCore @Inject constructor(private val wgTun: WireGuardTunnel) : IVp
 
     }
 
-    override fun onVpnCreate(passedContext: Context, lifecycleObserver: LifecycleOwner) {
+    override fun onVpnCreate() {
 
     }
 
-    override fun onVPNResume(passedContext: Context) {
+    override fun onVPNResume() {
         wgStateListener()
     }
 
@@ -78,7 +77,7 @@ class CustomWgCore @Inject constructor(private val wgTun: WireGuardTunnel) : IVp
 
     fun wgStateListener() {
         CoroutineScope(Dispatchers.IO).launch {
-            wgTun?.vpnServiceState?.collectLatest { theVal ->
+            wgTun.vpnServiceState.collectLatest { theVal ->
                 if (theVal.status == Tunnel.State.UP) {
                     currentTxSpeed.postValue(wgTun._vpnState.value.curTx)
                     currentRxSpeed.postValue(wgTun._vpnState.value.curRx)
