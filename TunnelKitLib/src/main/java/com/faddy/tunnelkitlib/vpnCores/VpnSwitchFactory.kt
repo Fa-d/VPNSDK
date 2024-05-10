@@ -1,7 +1,6 @@
 package com.faddy.tunnelkitlib.vpnCores
 
 import android.app.Activity
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.faddy.tunnelkitlib.interfaces.IStartStop
@@ -14,7 +13,6 @@ import com.faddy.tunnelkitlib.utils.SessionManagerInternal
 import javax.inject.Inject
 
 class VpnSwitchFactory @Inject constructor(
-    private val context: Context,
     private val wireGuardCoreConcrete: CustomWgCore,
     private val openVpnCoreConcrete: OpenVpnCore,
     private val singBoxCoreConcrete: SingBoxCore,
