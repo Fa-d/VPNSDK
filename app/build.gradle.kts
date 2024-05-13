@@ -86,7 +86,6 @@ dependencies {
 
     // hilt
     implementation(libs.hilt.android)
-    implementation(libs.androidx.room.ktx)
     implementation(project(":TunnelKitLib"))
     ksp(libs.hilt.android.compiler)
 

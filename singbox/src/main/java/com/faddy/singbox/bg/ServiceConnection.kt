@@ -57,11 +57,6 @@ class ServiceConnection(
         } catch (_: IllegalArgumentException) {
         }
         val intent =   Intent(context, VPNService::class.java).setAction(Action.SERVICE)
-     /*   runBlocking {
-            withContext(Dispatchers.IO) {
-
-            }
-        }*/
         context.bindService(intent, this, AppCompatActivity.BIND_AUTO_CREATE)
         Log.d(TAG, "request reconnect")
     }
