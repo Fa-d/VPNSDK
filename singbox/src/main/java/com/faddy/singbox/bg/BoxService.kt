@@ -271,7 +271,7 @@ class BoxService(
         if (status.value != Status.Stopped) return Service.START_NOT_STICKY
         status.value = Status.Starting
 
-        if (!receiverRegistered) {
+     /*   if (!receiverRegistered) {
             ContextCompat.registerReceiver(service, receiver, IntentFilter().apply {
                 addAction(Action.SERVICE_CLOSE)
                 addAction(Action.SERVICE_RELOAD)
@@ -280,7 +280,7 @@ class BoxService(
                 }
             }, ContextCompat.RECEIVER_NOT_EXPORTED)
             receiverRegistered = true
-        }
+        }*/
 
         GlobalScope.launch(Dispatchers.IO) {
             initialize()

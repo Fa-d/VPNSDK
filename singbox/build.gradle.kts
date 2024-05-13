@@ -19,11 +19,6 @@ android {
     }
     buildToolsVersion = "34.0.0"
 
-    ksp {
-        arg("room.incremental", "true")
-        arg("room.schemaLocation", "$projectDir/schemas")
-    }
-
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -52,9 +47,6 @@ android {
 
 dependencies {
     //api(project(":singboxLib"))
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.work.runtime.ktx)
-    ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.preference.ktx)
     // hilt
     implementation(libs.hilt.android)
