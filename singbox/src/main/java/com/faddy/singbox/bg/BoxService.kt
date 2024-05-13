@@ -17,7 +17,6 @@ import com.faddy.singbox.CustomApplication
 import com.faddy.singbox.constant.Action
 import com.faddy.singbox.constant.Alert
 import com.faddy.singbox.constant.Status
-import com.faddy.singbox.database.Settings
 import go.Seq
 import io.nekohasekai.libbox.BoxService
 import io.nekohasekai.libbox.CommandServer
@@ -26,7 +25,6 @@ import io.nekohasekai.libbox.Libbox
 import io.nekohasekai.libbox.PlatformInterface
 import io.nekohasekai.libbox.SystemProxyStatus
 import io.nekohasekai.sfa.BuildConfig
-import io.nekohasekai.sfa.R
 import io.nekohasekai.sfa.VPNService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -62,7 +60,7 @@ class BoxService(
         fun start() {
             val intent = runBlocking {
                 withContext(Dispatchers.IO) {
-                    Intent(CustomApplication.application, Settings.serviceClass())
+                    Intent(CustomApplication.application, VPNService::class.java)
                 }
             }
             ContextCompat.startForegroundService(CustomApplication.application!!, intent)
@@ -90,7 +88,8 @@ class BoxService(
 
     private val status = MutableLiveData(Status.Stopped)
     private val binder = ServiceBinder(status)
-    private val notification = ServiceNotification(status, service)
+
+    //  private val notification = ServiceNotification(status, service)
     private var commandServer: CommandServer? = null
     private var receiverRegistered = false
     private val receiver = object : BroadcastReceiver() {
@@ -123,7 +122,7 @@ class BoxService(
     private suspend fun startService(delayStart: Boolean = false, passedConf: String) {
         try {
             withContext(Dispatchers.Main) {
-                notification.show(lastProfileName, R.string.status_starting)
+                //  notification.show(lastProfileName, R.string.status_starting)
             }
             if (passedConf.isBlank()) {
                 stopAndAlert(Alert.EmptyConfiguration)
@@ -132,7 +131,7 @@ class BoxService(
 
             DefaultNetworkMonitor.start()
             Libbox.registerLocalDNSTransport(LocalResolver)
-            Libbox.setMemoryLimit(!Settings.disableMemoryLimit)
+            Libbox.setMemoryLimit(false)
 
             try {
                 Libbox.checkConfig(passedConf)
@@ -156,10 +155,8 @@ class BoxService(
             boxService = newService
             commandServer?.setService(boxService)
             status.postValue(Status.Started)
-            withContext(Dispatchers.Main) {
-                notification.show(lastProfileName, R.string.status_started)
-            }
-            notification.start()
+            //    withContext(Dispatchers.Main) { notification.show(lastProfileName, R.string.status_started) }
+            // notification.start()
         } catch (e: Exception) {
             Log.e("StartService", e.message.toString())
             stopAndAlert(Alert.StartService, e.message)
@@ -169,7 +166,7 @@ class BoxService(
     }
 
     override fun serviceReload() {
-        notification.close()
+        //  notification.close()
         status.postValue(Status.Starting)
         val pfd = fileDescriptor
         if (pfd != null) {
@@ -224,7 +221,7 @@ class BoxService(
             service.unregisterReceiver(receiver)
             receiverRegistered = false
         }
-        notification.close()
+        //notification.close()
         GlobalScope.launch(Dispatchers.IO) {
             val pfd = fileDescriptor
             if (pfd != null) {
@@ -249,7 +246,6 @@ class BoxService(
                 Seq.destroyRef(refnum)
             }
             commandServer = null
-            Settings.startedByUser = false
             withContext(Dispatchers.Main) {
                 status.value = Status.Stopped
                 service.stopSelf()
@@ -258,13 +254,12 @@ class BoxService(
     }
 
     private suspend fun stopAndAlert(type: Alert, message: String? = null) {
-        Settings.startedByUser = false
         withContext(Dispatchers.Main) {
             if (receiverRegistered) {
                 service.unregisterReceiver(receiver)
                 receiverRegistered = false
             }
-            notification.close()
+            //notification.close()
             binder.broadcast { callback ->
                 callback.onServiceAlert(type.ordinal, message)
             }
@@ -288,7 +283,6 @@ class BoxService(
         }
 
         GlobalScope.launch(Dispatchers.IO) {
-            Settings.startedByUser = true
             initialize()
             try {
                 startCommandServer()

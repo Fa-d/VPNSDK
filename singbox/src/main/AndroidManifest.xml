@@ -29,22 +29,6 @@
         android:supportsRtl="true"
         tools:targetApi="34">
 
-
-        <service
-            android:name="io.nekohasekai.sfa.TileService"
-            android:directBootAware="true"
-            android:exported="true"
-            android:icon="@drawable/ic_menu"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
-            tools:targetApi="n">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-            <meta-data
-                android:name="android.service.quicksettings.TOGGLEABLE_TILE"
-                android:value="true" />
-        </service>
-
         <service
             android:name="io.nekohasekai.sfa.VPNService"
             android:exported="false"

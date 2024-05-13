@@ -14,6 +14,8 @@ android {
     defaultConfig {
         minSdk = 24
         lint.targetSdk = 34
+        multiDexEnabled = true
+        consumerProguardFiles("proguard-rules.pro")
     }
     buildToolsVersion = "34.0.0"
 
@@ -57,5 +59,8 @@ dependencies {
     // hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+
+    implementation(libs.androidx.multidex)
+
 
 }

@@ -16,14 +16,11 @@ import androidx.lifecycle.MutableLiveData
 import com.faddy.singbox.CustomApplication
 import com.faddy.singbox.constant.Action
 import com.faddy.singbox.constant.Status
-import com.faddy.singbox.database.Settings
 import com.faddy.singbox.utils.CommandClient
 import io.nekohasekai.libbox.Libbox
 import io.nekohasekai.libbox.StatusMessage
 import io.nekohasekai.sfa.R
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.withContext
 
 class ServiceNotification(
     private val status: MutableLiveData<Status>, private val service: Service
@@ -45,19 +42,20 @@ class ServiceNotification(
     private val commandClient =
         CommandClient(GlobalScope, CommandClient.ConnectionType.Status, this)
     private var receiverRegistered = false
-   // var classname = Class.forName("com.faddy.singboxt1.MainActivity");
-   var classname = Class.forName("com.faddy.vpnsdk.MainActivityPro");
+
+    //  var classname = Class.forName("com.faddy.vpnsdk.MainActivityPro");
+    //val info: ActivityInfo? = packageManager?.getActivityInfo(this.classname, 0)
     private val notificationBuilder by lazy {
         NotificationCompat.Builder(service, notificationChannel).setShowWhen(false).setOngoing(true)
             .setContentTitle("sing-box").setOnlyAlertOnce(true).setSmallIcon(R.drawable.ic_menu)
-            .setCategory(NotificationCompat.CATEGORY_SERVICE).setContentIntent(  //todo
+            .setCategory(NotificationCompat.CATEGORY_SERVICE)/*.setContentIntent(  //todo
                 PendingIntent.getActivity(
                     service,
                     0,
                     Intent(service, classname).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT),
                     flags
                 )
-            ).setPriority(NotificationCompat.PRIORITY_LOW).apply {
+            )*/.setPriority(NotificationCompat.PRIORITY_LOW).apply {
                 addAction(
                     NotificationCompat.Action.Builder(
                         0, service.getText(R.string.stop), PendingIntent.getBroadcast(
@@ -79,19 +77,10 @@ class ServiceNotification(
                 )
             )
         }
-        service.startForeground(
-            notificationId,
-            notificationBuilder.setContentTitle(lastProfileName.takeIf { it.isNotBlank() }
-                ?: "sing-box").setContentText(service.getString(contentTextId)).build())
+        //  service.startForeground(notificationId, notificationBuilder.setContentTitle(lastProfileName.takeIf { it.isNotBlank() } ?: "sing-box").setContentText(service.getString(contentTextId)).build())
     }
 
     suspend fun start() {
-        if (Settings.dynamicNotification) {
-            commandClient.connect()
-            withContext(Dispatchers.Main) {
-                registerReceiver()
-            }
-        }
     }
 
     private fun registerReceiver() {
@@ -105,9 +94,7 @@ class ServiceNotification(
     override fun updateStatus(status: StatusMessage) {
         val content =
             Libbox.formatBytes(status.uplink) + "/s ↑\t" + Libbox.formatBytes(status.downlink) + "/s ↓"
-        CustomApplication.notificationManager.notify(
-            notificationId, notificationBuilder.setContentText(content).build()
-        )
+        //CustomApplication.notificationManager.notify(notificationId, notificationBuilder.setContentText(content).build())
     }
 
     override fun onReceive(context: Context, intent: Intent) {

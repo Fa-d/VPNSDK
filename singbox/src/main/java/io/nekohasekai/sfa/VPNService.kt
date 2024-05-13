@@ -8,9 +8,8 @@ import android.os.Build
 import android.os.IBinder
 import com.faddy.singbox.bg.BoxService
 import com.faddy.singbox.bg.PlatformInterfaceWrapper
-import io.nekohasekai.libbox.TunOptions
-import com.faddy.singbox.database.Settings
 import com.faddy.singbox.ktx.toIpPrefix
+import io.nekohasekai.libbox.TunOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -125,42 +124,24 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
                 }
             }
 
-            if (Settings.perAppProxyEnabled) {
-                val appList = Settings.perAppProxyList
-                if (Settings.perAppProxyMode == Settings.PER_APP_PROXY_INCLUDE) {
-                    appList.forEach {
-                        try {
-                            builder.addAllowedApplication(it)
-                        } catch (_: NameNotFoundException) {
-                        }
-                    }
-                    builder.addAllowedApplication(packageName)
-                } else {
-                    appList.forEach {
-                        try {
-                            builder.addDisallowedApplication(it)
-                        } catch (_: NameNotFoundException) {
-                        }
-                    }
-                }
-            } else {
-                val includePackage = options.includePackage
-                if (includePackage.hasNext()) {
-                    while (includePackage.hasNext()) {
-                        try {
-                            builder.addAllowedApplication(includePackage.next())
-                        } catch (_: NameNotFoundException) {
-                        }
-                    }
-                }
+            //builder.addAllowedApplication(it)
 
-                val excludePackage = options.excludePackage
-                if (excludePackage.hasNext()) {
-                    while (excludePackage.hasNext()) {
-                        try {
-                            builder.addDisallowedApplication(excludePackage.next())
-                        } catch (_: NameNotFoundException) {
-                        }
+            val includePackage = options.includePackage
+            if (includePackage.hasNext()) {
+                while (includePackage.hasNext()) {
+                    try {
+                        builder.addAllowedApplication(includePackage.next())
+                    } catch (_: NameNotFoundException) {
+                    }
+                }
+            }
+
+            val excludePackage = options.excludePackage
+            if (excludePackage.hasNext()) {
+                while (excludePackage.hasNext()) {
+                    try {
+                        builder.addDisallowedApplication(excludePackage.next())
+                    } catch (_: NameNotFoundException) {
                     }
                 }
             }
@@ -168,8 +149,7 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
 
         if (options.isHTTPProxyEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             systemProxyAvailable = true
-            systemProxyEnabled = Settings.systemProxyEnabled
-            if (systemProxyEnabled) builder.setHttpProxy(
+            builder.setHttpProxy(
                 ProxyInfo.buildDirectProxy(
                     options.httpProxyServer, options.httpProxyServerPort
                 )
