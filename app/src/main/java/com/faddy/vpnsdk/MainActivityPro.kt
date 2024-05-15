@@ -162,7 +162,7 @@ class MainActivityPro : AppCompatActivity() {
                     val configText = String(data, Charsets.UTF_8)
                     coreSdk.startConnect(
                         this@MainActivityPro, VpnProfile(
-                            vpnType = VPNType.OPENVPN, userName = "ss", password = "123456",
+                            vpnType = VPNType.OPENVPN, userName = "test1", password = "1111112",
                             // vpnConfig = VpnConfigs.wireGuardJson,
                             vpnConfig = VpnConfigs.openVpnConf, serverIP = VpnConfigs.openVpnIP
                         )

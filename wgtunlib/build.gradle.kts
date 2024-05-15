@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.hilt.android)
     id("org.jetbrains.kotlin.plugin.serialization")
     alias(libs.plugins.ksp)
+    id("maven-publish")
 }
 
 android {
@@ -13,16 +14,22 @@ android {
     defaultConfig {
         minSdk = 26
         targetSdk = 34
-        consumerProguardFiles("lib-proguard-rules.txt")
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isJniDebuggable = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"), "lib-proguard-rules.pro"
+            )
         }
         debug {
-            isMinifyEnabled = false
-            isJniDebuggable = true
+            isMinifyEnabled = true
+            isJniDebuggable = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"), "lib-proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -44,6 +51,28 @@ android {
         abortOnError = false
         absolutePaths = false
        // baseline = file("lint-baseline.xml")
+    }
+}
+
+publishing {
+    publications {
+        register<MavenPublication>("bar") {
+            groupId = "com.pheonixLib.wgtunlib"
+            artifactId = "wgtunlib"
+            version = "0.0.1"
+            artifact("$buildDir/outputs/aar/wgtunlib-release.aar")
+        }
+    }
+
+    repositories {
+        maven {
+            url = uri("http://188.34.191.126:8080/private")
+            isAllowInsecureProtocol = true
+            credentials {
+                username = "name"
+                password = "YG2InE1sWt47Omf1wFVXJzdjF9JxUKavv3JnUCU3anj87jHXb/AL0eQVeVahF19d"
+            }
+        }
     }
 }
 

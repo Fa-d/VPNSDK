@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.hilt.android)
     id("org.jetbrains.kotlin.plugin.serialization")
     alias(libs.plugins.ksp)
+    id("maven-publish")
 }
 
 android {
@@ -30,6 +31,28 @@ android {
     }
     kotlinOptions {
         jvmTarget = "17"
+    }
+}
+
+publishing {
+    publications {
+        register<MavenPublication>("bar") {
+            groupId = "com.pheonixLib.phoenixlib"
+            artifactId = "phoenixlib"
+            version = "0.0.1"
+            artifact("$buildDir/outputs/aar/PhoenixLib-release.aar")
+        }
+    }
+
+    repositories {
+        maven {
+            url = uri("http://188.34.191.126:8080/private")
+            isAllowInsecureProtocol = true
+            credentials {
+                username = "name"
+                password = "YG2InE1sWt47Omf1wFVXJzdjF9JxUKavv3JnUCU3anj87jHXb/AL0eQVeVahF19d"
+            }
+        }
     }
 }
 

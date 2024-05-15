@@ -130,7 +130,7 @@ class BoxService(
             }
 
             DefaultNetworkMonitor.start()
-            Libbox.registerLocalDNSTransport(LocalResolver)
+            //Libbox.registerLocalDNSTransport(LocalResolver)
             Libbox.setMemoryLimit(false)
 
             try {
