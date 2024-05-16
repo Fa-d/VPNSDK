@@ -9,14 +9,13 @@ plugins {
 }
 
 android {
-    namespace = "io.nekohasekai.sfa"
+    namespace = "com.faddy.singbox"
     compileSdk = 34
 
     defaultConfig {
         minSdk = 24
         lint.targetSdk = 34
         multiDexEnabled = true
-        consumerProguardFiles("proguard-rules.pro")
     }
     buildToolsVersion = "34.0.0"
 
@@ -66,7 +65,9 @@ publishing {
         }
     }
 }
+
 dependencies {
+    implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.preference.ktx)
     // hilt
     implementation(libs.hilt.android)

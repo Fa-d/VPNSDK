@@ -9,7 +9,7 @@ import androidx.core.content.getSystemService
 import go.Seq
 import javax.inject.Inject
 
-class CustomApplication @Inject constructor(private val passedApplication: Context) {
+class CustomApplication @Inject constructor(val passedApplication: Context) {
 
     init {
         application = passedApplication

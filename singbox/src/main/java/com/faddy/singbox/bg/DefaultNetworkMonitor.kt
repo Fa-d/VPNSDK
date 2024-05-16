@@ -2,8 +2,8 @@ package com.faddy.singbox.bg
 
 import android.net.Network
 import android.os.Build
-import io.nekohasekai.libbox.InterfaceUpdateListener
 import com.faddy.singbox.CustomApplication
+import io.nekohasekai.libbox.InterfaceUpdateListener
 import java.net.NetworkInterface
 
 object DefaultNetworkMonitor {
@@ -27,8 +27,16 @@ object DefaultNetworkMonitor {
         DefaultNetworkListener.stop(this)
     }
 
+    suspend fun require(): Network {
+        val network = defaultNetwork
+        if (network != null) {
+            return network
+        }
+        return DefaultNetworkListener.get()
+    }
+
     fun setListener(listener: InterfaceUpdateListener?) {
-        DefaultNetworkMonitor.listener = listener
+        this.listener = listener
         checkDefaultInterfaceUpdate(defaultNetwork)
     }
 

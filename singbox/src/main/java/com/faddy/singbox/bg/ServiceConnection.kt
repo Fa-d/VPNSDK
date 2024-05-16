@@ -11,9 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.faddy.singbox.constant.Action
 import com.faddy.singbox.constant.Alert
 import com.faddy.singbox.constant.Status
-import io.nekohasekai.sfa.VPNService
 import io.nekohasekai.sfa.aidl.IService
 import io.nekohasekai.sfa.aidl.IServiceCallback
+import io.nekohasekai.sfa.bg.VPNService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -56,7 +56,11 @@ class ServiceConnection(
             context.unbindService(this)
         } catch (_: IllegalArgumentException) {
         }
-        val intent =   Intent(context, VPNService::class.java).setAction(Action.SERVICE)
+        val intent = runBlocking {
+            withContext(Dispatchers.IO) {
+                Intent(context, VPNService::class.java).setAction(Action.SERVICE)
+            }
+        }
         context.bindService(intent, this, AppCompatActivity.BIND_AUTO_CREATE)
         Log.d(TAG, "request reconnect")
     }

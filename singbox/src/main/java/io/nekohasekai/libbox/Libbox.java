@@ -12,487 +12,317 @@ public abstract class Libbox {
 		Seq.touch(); // for loading the native library
 		_init();
 	}
-
-	private Libbox() {
-	} // uninstantiable
-
+	
+	private Libbox() {} // uninstantiable
+	
 	// touch is called from other bound packages to initialize this package
-	public static void touch() {
-	}
-
+	public static void touch() {}
+	
 	private static native void _init();
-
+	
 	private static final class proxyCommandClientHandler implements Seq.Proxy, CommandClientHandler {
 		public final int refnum;
-
-		@Override
-		public final int incRefnum() {
-			Seq.incGoRef(refnum, this);
-			return refnum;
+		
+		@Override public final int incRefnum() {
+		      Seq.incGoRef(refnum, this);
+		      return refnum;
 		}
-
-		proxyCommandClientHandler(int refnum) {
-			this.refnum = refnum;
-			Seq.trackGoRef(refnum, this);
-		}
-
+		
+		proxyCommandClientHandler(int refnum) { this.refnum = refnum; Seq.trackGoRef(refnum, this); }
+		
 		public native void clearLog();
-
 		public native void connected();
-
 		public native void disconnected(String message);
-
 		public native void initializeClashMode(StringIterator modeList, String currentMode);
-
 		public native void updateClashMode(String newMode);
-
 		public native void writeGroups(OutboundGroupIterator message);
-
 		public native void writeLog(String message);
-
 		public native void writeStatus(StatusMessage message);
 	}
-
 	private static final class proxyCommandServerHandler implements Seq.Proxy, CommandServerHandler {
 		public final int refnum;
-
-		@Override
-		public final int incRefnum() {
-			Seq.incGoRef(refnum, this);
-			return refnum;
+		
+		@Override public final int incRefnum() {
+		      Seq.incGoRef(refnum, this);
+		      return refnum;
 		}
-
-		proxyCommandServerHandler(int refnum) {
-			this.refnum = refnum;
-			Seq.trackGoRef(refnum, this);
-		}
-
+		
+		proxyCommandServerHandler(int refnum) { this.refnum = refnum; Seq.trackGoRef(refnum, this); }
+		
 		public native SystemProxyStatus getSystemProxyStatus();
-
 		public native void postServiceClose();
-
 		public native void serviceReload() throws Exception;
-
 		public native void setSystemProxyEnabled(boolean isEnabled) throws Exception;
 	}
-
 	private static final class proxyFunc implements Seq.Proxy, Func {
 		public final int refnum;
-
-		@Override
-		public final int incRefnum() {
-			Seq.incGoRef(refnum, this);
-			return refnum;
+		
+		@Override public final int incRefnum() {
+		      Seq.incGoRef(refnum, this);
+		      return refnum;
 		}
-
-		proxyFunc(int refnum) {
-			this.refnum = refnum;
-			Seq.trackGoRef(refnum, this);
-		}
-
+		
+		proxyFunc(int refnum) { this.refnum = refnum; Seq.trackGoRef(refnum, this); }
+		
 		public native void invoke() throws Exception;
 	}
-
 	private static final class proxyHTTPClient implements Seq.Proxy, HTTPClient {
 		public final int refnum;
-
-		@Override
-		public final int incRefnum() {
-			Seq.incGoRef(refnum, this);
-			return refnum;
+		
+		@Override public final int incRefnum() {
+		      Seq.incGoRef(refnum, this);
+		      return refnum;
 		}
-
-		proxyHTTPClient(int refnum) {
-			this.refnum = refnum;
-			Seq.trackGoRef(refnum, this);
-		}
-
+		
+		proxyHTTPClient(int refnum) { this.refnum = refnum; Seq.trackGoRef(refnum, this); }
+		
 		public native void close();
-
 		public native void keepAlive();
-
 		public native void modernTLS();
-
 		public native HTTPRequest newRequest();
-
 		public native void pinnedSHA256(String sumHex);
-
 		public native void pinnedTLS12();
-
 		public native void restrictedTLS();
-
 		public native void trySocks5(int port);
 	}
-
 	private static final class proxyHTTPRequest implements Seq.Proxy, HTTPRequest {
 		public final int refnum;
-
-		@Override
-		public final int incRefnum() {
-			Seq.incGoRef(refnum, this);
-			return refnum;
+		
+		@Override public final int incRefnum() {
+		      Seq.incGoRef(refnum, this);
+		      return refnum;
 		}
-
-		proxyHTTPRequest(int refnum) {
-			this.refnum = refnum;
-			Seq.trackGoRef(refnum, this);
-		}
-
+		
+		proxyHTTPRequest(int refnum) { this.refnum = refnum; Seq.trackGoRef(refnum, this); }
+		
 		public native HTTPResponse execute() throws Exception;
-
 		public native void randomUserAgent();
-
 		public native void setContent(byte[] content);
-
 		public native void setContentString(String content);
-
 		public native void setHeader(String key, String value);
-
 		public native void setMethod(String method);
-
 		public native void setURL(String link) throws Exception;
-
 		public native void setUserAgent(String userAgent);
 	}
-
 	private static final class proxyHTTPResponse implements Seq.Proxy, HTTPResponse {
 		public final int refnum;
-
-		@Override
-		public final int incRefnum() {
-			Seq.incGoRef(refnum, this);
-			return refnum;
+		
+		@Override public final int incRefnum() {
+		      Seq.incGoRef(refnum, this);
+		      return refnum;
 		}
-
-		proxyHTTPResponse(int refnum) {
-			this.refnum = refnum;
-			Seq.trackGoRef(refnum, this);
-		}
-
+		
+		proxyHTTPResponse(int refnum) { this.refnum = refnum; Seq.trackGoRef(refnum, this); }
+		
 		public native byte[] getContent() throws Exception;
-
 		public native String getContentString() throws Exception;
-
 		public native void writeTo(String path) throws Exception;
 	}
-
 	private static final class proxyInterfaceUpdateListener implements Seq.Proxy, InterfaceUpdateListener {
 		public final int refnum;
-
-		@Override
-		public final int incRefnum() {
-			Seq.incGoRef(refnum, this);
-			return refnum;
+		
+		@Override public final int incRefnum() {
+		      Seq.incGoRef(refnum, this);
+		      return refnum;
 		}
-
-		proxyInterfaceUpdateListener(int refnum) {
-			this.refnum = refnum;
-			Seq.trackGoRef(refnum, this);
-		}
-
+		
+		proxyInterfaceUpdateListener(int refnum) { this.refnum = refnum; Seq.trackGoRef(refnum, this); }
+		
 		public native void updateDefaultInterface(String interfaceName, int interfaceIndex);
 	}
-
 	private static final class proxyLocalDNSTransport implements Seq.Proxy, LocalDNSTransport {
 		public final int refnum;
-
-		@Override
-		public final int incRefnum() {
-			Seq.incGoRef(refnum, this);
-			return refnum;
+		
+		@Override public final int incRefnum() {
+		      Seq.incGoRef(refnum, this);
+		      return refnum;
 		}
-
-		proxyLocalDNSTransport(int refnum) {
-			this.refnum = refnum;
-			Seq.trackGoRef(refnum, this);
-		}
-
+		
+		proxyLocalDNSTransport(int refnum) { this.refnum = refnum; Seq.trackGoRef(refnum, this); }
+		
 		public native void exchange(ExchangeContext ctx, byte[] message) throws Exception;
-
 		public native void lookup(ExchangeContext ctx, String network, String domain) throws Exception;
-
 		public native boolean raw();
 	}
-
 	private static final class proxyNetworkInterfaceIterator implements Seq.Proxy, NetworkInterfaceIterator {
 		public final int refnum;
-
-		@Override
-		public final int incRefnum() {
-			Seq.incGoRef(refnum, this);
-			return refnum;
+		
+		@Override public final int incRefnum() {
+		      Seq.incGoRef(refnum, this);
+		      return refnum;
 		}
-
-		proxyNetworkInterfaceIterator(int refnum) {
-			this.refnum = refnum;
-			Seq.trackGoRef(refnum, this);
-		}
-
+		
+		proxyNetworkInterfaceIterator(int refnum) { this.refnum = refnum; Seq.trackGoRef(refnum, this); }
+		
 		public native boolean hasNext();
-
 		public native NetworkInterface next();
 	}
-
 	private static final class proxyOnDemandRule implements Seq.Proxy, OnDemandRule {
 		public final int refnum;
-
-		@Override
-		public final int incRefnum() {
-			Seq.incGoRef(refnum, this);
-			return refnum;
+		
+		@Override public final int incRefnum() {
+		      Seq.incGoRef(refnum, this);
+		      return refnum;
 		}
-
-		proxyOnDemandRule(int refnum) {
-			this.refnum = refnum;
-			Seq.trackGoRef(refnum, this);
-		}
-
+		
+		proxyOnDemandRule(int refnum) { this.refnum = refnum; Seq.trackGoRef(refnum, this); }
+		
 		public native StringIterator dnsSearchDomainMatch();
-
 		public native StringIterator dnsServerAddressMatch();
-
 		public native int interfaceTypeMatch();
-
 		public native String probeURL();
-
 		public native StringIterator ssidMatch();
-
 		public native int target();
 	}
-
 	private static final class proxyOnDemandRuleIterator implements Seq.Proxy, OnDemandRuleIterator {
 		public final int refnum;
-
-		@Override
-		public final int incRefnum() {
-			Seq.incGoRef(refnum, this);
-			return refnum;
+		
+		@Override public final int incRefnum() {
+		      Seq.incGoRef(refnum, this);
+		      return refnum;
 		}
-
-		proxyOnDemandRuleIterator(int refnum) {
-			this.refnum = refnum;
-			Seq.trackGoRef(refnum, this);
-		}
-
+		
+		proxyOnDemandRuleIterator(int refnum) { this.refnum = refnum; Seq.trackGoRef(refnum, this); }
+		
 		public native boolean hasNext();
-
 		public native OnDemandRule next();
 	}
-
 	private static final class proxyOutboundGroupItemIterator implements Seq.Proxy, OutboundGroupItemIterator {
 		public final int refnum;
-
-		@Override
-		public final int incRefnum() {
-			Seq.incGoRef(refnum, this);
-			return refnum;
+		
+		@Override public final int incRefnum() {
+		      Seq.incGoRef(refnum, this);
+		      return refnum;
 		}
-
-		proxyOutboundGroupItemIterator(int refnum) {
-			this.refnum = refnum;
-			Seq.trackGoRef(refnum, this);
-		}
-
+		
+		proxyOutboundGroupItemIterator(int refnum) { this.refnum = refnum; Seq.trackGoRef(refnum, this); }
+		
 		public native boolean hasNext();
-
 		public native OutboundGroupItem next();
 	}
-
 	private static final class proxyOutboundGroupIterator implements Seq.Proxy, OutboundGroupIterator {
 		public final int refnum;
-
-		@Override
-		public final int incRefnum() {
-			Seq.incGoRef(refnum, this);
-			return refnum;
+		
+		@Override public final int incRefnum() {
+		      Seq.incGoRef(refnum, this);
+		      return refnum;
 		}
-
-		proxyOutboundGroupIterator(int refnum) {
-			this.refnum = refnum;
-			Seq.trackGoRef(refnum, this);
-		}
-
+		
+		proxyOutboundGroupIterator(int refnum) { this.refnum = refnum; Seq.trackGoRef(refnum, this); }
+		
 		public native boolean hasNext();
-
 		public native OutboundGroup next();
 	}
-
 	private static final class proxyPlatformInterface implements Seq.Proxy, PlatformInterface {
 		public final int refnum;
-
-		@Override
-		public final int incRefnum() {
-			Seq.incGoRef(refnum, this);
-			return refnum;
+		
+		@Override public final int incRefnum() {
+		      Seq.incGoRef(refnum, this);
+		      return refnum;
 		}
-
-		proxyPlatformInterface(int refnum) {
-			this.refnum = refnum;
-			Seq.trackGoRef(refnum, this);
-		}
-
+		
+		proxyPlatformInterface(int refnum) { this.refnum = refnum; Seq.trackGoRef(refnum, this); }
+		
 		public native void autoDetectInterfaceControl(int fd) throws Exception;
-
 		public native void clearDNSCache();
-
 		public native void closeDefaultInterfaceMonitor(InterfaceUpdateListener listener) throws Exception;
-
 		public native int findConnectionOwner(int ipProtocol, String sourceAddress, int sourcePort, String destinationAddress, int destinationPort) throws Exception;
-
 		public native NetworkInterfaceIterator getInterfaces() throws Exception;
-
 		public native int openTun(TunOptions options) throws Exception;
-
 		public native String packageNameByUid(int uid) throws Exception;
-
 		public native WIFIState readWIFIState();
-
 		public native void startDefaultInterfaceMonitor(InterfaceUpdateListener listener) throws Exception;
-
 		public native int uidByPackageName(String packageName) throws Exception;
-
 		public native boolean underNetworkExtension();
-
 		public native boolean usePlatformAutoDetectInterfaceControl();
-
 		public native boolean usePlatformDefaultInterfaceMonitor();
-
 		public native boolean usePlatformInterfaceGetter();
-
 		public native boolean useProcFS();
-
 		public native void writeLog(String message);
 	}
-
 	private static final class proxyProfilePreviewIterator implements Seq.Proxy, ProfilePreviewIterator {
 		public final int refnum;
-
-		@Override
-		public final int incRefnum() {
-			Seq.incGoRef(refnum, this);
-			return refnum;
+		
+		@Override public final int incRefnum() {
+		      Seq.incGoRef(refnum, this);
+		      return refnum;
 		}
-
-		proxyProfilePreviewIterator(int refnum) {
-			this.refnum = refnum;
-			Seq.trackGoRef(refnum, this);
-		}
-
+		
+		proxyProfilePreviewIterator(int refnum) { this.refnum = refnum; Seq.trackGoRef(refnum, this); }
+		
 		public native boolean hasNext();
-
 		public native ProfilePreview next();
 	}
-
 	private static final class proxyRoutePrefixIterator implements Seq.Proxy, RoutePrefixIterator {
 		public final int refnum;
-
-		@Override
-		public final int incRefnum() {
-			Seq.incGoRef(refnum, this);
-			return refnum;
+		
+		@Override public final int incRefnum() {
+		      Seq.incGoRef(refnum, this);
+		      return refnum;
 		}
-
-		proxyRoutePrefixIterator(int refnum) {
-			this.refnum = refnum;
-			Seq.trackGoRef(refnum, this);
-		}
-
+		
+		proxyRoutePrefixIterator(int refnum) { this.refnum = refnum; Seq.trackGoRef(refnum, this); }
+		
 		public native boolean hasNext();
-
 		public native RoutePrefix next();
 	}
-
 	private static final class proxyStringIterator implements Seq.Proxy, StringIterator {
 		public final int refnum;
-
-		@Override
-		public final int incRefnum() {
-			Seq.incGoRef(refnum, this);
-			return refnum;
+		
+		@Override public final int incRefnum() {
+		      Seq.incGoRef(refnum, this);
+		      return refnum;
 		}
-
-		proxyStringIterator(int refnum) {
-			this.refnum = refnum;
-			Seq.trackGoRef(refnum, this);
-		}
-
+		
+		proxyStringIterator(int refnum) { this.refnum = refnum; Seq.trackGoRef(refnum, this); }
+		
 		public native boolean hasNext();
-
 		public native String next();
 	}
-
 	private static final class proxyTunInterface implements Seq.Proxy, TunInterface {
 		public final int refnum;
-
-		@Override
-		public final int incRefnum() {
-			Seq.incGoRef(refnum, this);
-			return refnum;
+		
+		@Override public final int incRefnum() {
+		      Seq.incGoRef(refnum, this);
+		      return refnum;
 		}
-
-		proxyTunInterface(int refnum) {
-			this.refnum = refnum;
-			Seq.trackGoRef(refnum, this);
-		}
-
+		
+		proxyTunInterface(int refnum) { this.refnum = refnum; Seq.trackGoRef(refnum, this); }
+		
 		public native void close() throws Exception;
-
 		public native int fileDescriptor();
 	}
-
 	private static final class proxyTunOptions implements Seq.Proxy, TunOptions {
 		public final int refnum;
-
-		@Override
-		public final int incRefnum() {
-			Seq.incGoRef(refnum, this);
-			return refnum;
+		
+		@Override public final int incRefnum() {
+		      Seq.incGoRef(refnum, this);
+		      return refnum;
 		}
-
-		proxyTunOptions(int refnum) {
-			this.refnum = refnum;
-			Seq.trackGoRef(refnum, this);
-		}
-
+		
+		proxyTunOptions(int refnum) { this.refnum = refnum; Seq.trackGoRef(refnum, this); }
+		
 		public native boolean getAutoRoute();
-
 		public native String getDNSServerAddress() throws Exception;
-
 		public native StringIterator getExcludePackage();
-
 		public native StringIterator getHTTPProxyBypassDomain();
-
 		public native StringIterator getHTTPProxyMatchDomain();
-
 		public native String getHTTPProxyServer();
-
 		public native int getHTTPProxyServerPort();
-
 		public native StringIterator getIncludePackage();
-
 		public native RoutePrefixIterator getInet4Address();
-
 		public native RoutePrefixIterator getInet4RouteAddress();
-
 		public native RoutePrefixIterator getInet4RouteExcludeAddress();
-
 		public native RoutePrefixIterator getInet4RouteRange();
-
 		public native RoutePrefixIterator getInet6Address();
-
 		public native RoutePrefixIterator getInet6RouteAddress();
-
 		public native RoutePrefixIterator getInet6RouteExcludeAddress();
-
 		public native RoutePrefixIterator getInet6RouteRange();
-
 		public native int getMTU();
-
 		public native boolean getStrictRoute();
-
 		public native boolean isHTTPProxyEnabled();
 	}
-
+	
 	public static final int CommandClashMode = 9;
 	public static final int CommandCloseConnections = 4;
 	public static final int CommandGetSystemProxyStatus = 11;
@@ -513,62 +343,34 @@ public abstract class Libbox {
 	public static final int ProfileTypeLocal = 0;
 	public static final int ProfileTypeRemote = 2;
 	public static final int ProfileTypeiCloud = 1;
-
+	
 	public static native void checkConfig(String configContent) throws Exception;
-
 	public static native void clearServiceError();
-
 	public static native ErrorMessage decodeErrorMessage(byte[] data) throws Exception;
-
 	public static native int decodeLengthChunk(byte[] data);
-
 	public static native ProfileContent decodeProfileContent(byte[] data) throws Exception;
-
 	public static native ProfileContentRequest decodeProfileContentRequest(byte[] data) throws Exception;
-
 	public static native byte[] encodeChunkedMessage(byte[] data);
-
 	public static native String formatBytes(long length);
-
 	public static native String formatConfig(String configContent) throws Exception;
-
 	public static native String formatMemoryBytes(long length);
-
 	public static native String generateRemoteProfileImportLink(String name, String remoteURL);
-
 	public static native CommandClient newCommandClient(CommandClientHandler handler, CommandClientOptions options);
-
 	public static native CommandServer newCommandServer(CommandServerHandler handler, int maxLines);
-
 	public static native HTTPClient newHTTPClient();
-
 	public static native PProfServer newPProfServer(long port);
-
 	public static native BoxService newService(String configContent, PlatformInterface platformInterface) throws Exception;
-
 	public static native CommandClient newStandaloneCommandClient();
-
 	public static native WIFIState newWIFIState(String wifiSSID, String wifiBSSID);
-
 	public static native ImportRemoteProfile parseRemoteProfileImportLink(String importLink) throws Exception;
-
 	public static native String proxyDisplayType(String proxyType);
-
 	public static native AndroidVPNType readAndroidVPNType(StringIterator publicSourceDirList) throws Exception;
-
 	public static native String readServiceError() throws Exception;
-
 	public static native void redirectStderr(String path) throws Exception;
-
 	public static native void registerLocalDNSTransport(LocalDNSTransport transport);
-
 	public static native void setMemoryLimit(boolean enabled);
-
 	public static native void setup(String basePath, String workingPath, String tempPath, boolean isTVOS);
-
 	public static native void setupWithUsername(String basePath, String workingPath, String tempPath, String username) throws Exception;
-
 	public static native String version();
-
 	public static native void writeServiceError(String message) throws Exception;
 }

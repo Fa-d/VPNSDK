@@ -53,7 +53,7 @@ interface PlatformInterfaceWrapper : PlatformInterface {
     }
 
     override fun packageNameByUid(uid: Int): String {
-        val packages = CustomApplication.packageManager?.getPackagesForUid(uid)
+        val packages = CustomApplication.packageManager!!.getPackagesForUid(uid)
         if (packages.isNullOrEmpty()) error("android: package not found")
         return packages[0]
     }

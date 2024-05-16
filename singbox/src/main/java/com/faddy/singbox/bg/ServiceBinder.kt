@@ -2,9 +2,9 @@ package com.faddy.singbox.bg
 
 import android.os.RemoteCallbackList
 import androidx.lifecycle.MutableLiveData
-import com.faddy.singbox.constant.Status
 import io.nekohasekai.sfa.aidl.IService
 import io.nekohasekai.sfa.aidl.IServiceCallback
+import com.faddy.singbox.constant.Status
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

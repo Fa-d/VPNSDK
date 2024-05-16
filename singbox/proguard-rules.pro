@@ -20,6 +20,10 @@
 *;
 }
 
+-keep class go.** { *; }
+-keep class io.nekohasekai.** { *; }
+
+
 -dontwarn com.google.**
 -dontnote com.google.**
 -keepnames class com.google.gson.** {*;}

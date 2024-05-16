@@ -14,9 +14,11 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import com.faddy.singbox.CustomApplication
+import com.faddy.singbox.R
 import com.faddy.singbox.constant.Action
 import com.faddy.singbox.constant.Alert
 import com.faddy.singbox.constant.Status
+import com.faddy.singbox.ktx.hasPermission
 import go.Seq
 import io.nekohasekai.libbox.BoxService
 import io.nekohasekai.libbox.CommandServer
@@ -24,8 +26,7 @@ import io.nekohasekai.libbox.CommandServerHandler
 import io.nekohasekai.libbox.Libbox
 import io.nekohasekai.libbox.PlatformInterface
 import io.nekohasekai.libbox.SystemProxyStatus
-import io.nekohasekai.sfa.BuildConfig
-import io.nekohasekai.sfa.VPNService
+import io.nekohasekai.sfa.bg.VPNService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -39,20 +40,18 @@ class BoxService(
 ) : CommandServerHandler {
 
     companion object {
-        private var boxService: BoxService? = null
+
         private var initializeOnce = false
         private fun initialize() {
             if (initializeOnce) return
-            val baseDir = CustomApplication.application?.filesDir
-            baseDir?.mkdirs()
-            val workingDir = CustomApplication.application?.getExternalFilesDir(null) ?: return
+            val baseDir = CustomApplication.application!!.filesDir
+            baseDir.mkdirs()
+            val workingDir = CustomApplication.application!!.getExternalFilesDir(null) ?: return
             workingDir.mkdirs()
-            val tempDir = CustomApplication.application?.cacheDir
-            tempDir?.mkdirs()
-            Libbox.setup(baseDir?.path, workingDir.path, tempDir?.path, false)
-            if (!BuildConfig.DEBUG) {
-                Libbox.redirectStderr(File(workingDir, "stderr.log").path)
-            }
+            val tempDir = CustomApplication.application!!.cacheDir
+            tempDir.mkdirs()
+            Libbox.setup(baseDir.path, workingDir.path, tempDir.path, false)
+            Libbox.redirectStderr(File(workingDir, "stderr.log").path)
             initializeOnce = true
             return
         }
@@ -67,18 +66,17 @@ class BoxService(
         }
 
         fun stop() {
-            CustomApplication.application?.sendBroadcast(
+            CustomApplication.application!!.sendBroadcast(
                 Intent(Action.SERVICE_CLOSE).setPackage(
-                    CustomApplication.application?.packageName
+                    CustomApplication.application!!.packageName
                 )
             )
-            boxService?.close()
         }
 
         fun reload() {
             CustomApplication.application?.sendBroadcast(
                 Intent(Action.SERVICE_RELOAD).setPackage(
-                    CustomApplication.application?.packageName
+                    CustomApplication.application!!.packageName
                 )
             )
         }
@@ -88,8 +86,8 @@ class BoxService(
 
     private val status = MutableLiveData(Status.Stopped)
     private val binder = ServiceBinder(status)
-
-    //  private val notification = ServiceNotification(status, service)
+    private val notification = ServiceNotification(status, service)
+    private var boxService: BoxService? = null
     private var commandServer: CommandServer? = null
     private var receiverRegistered = false
     private val receiver = object : BroadcastReceiver() {
@@ -122,22 +120,46 @@ class BoxService(
     private suspend fun startService(delayStart: Boolean = false, passedConf: String) {
         try {
             withContext(Dispatchers.Main) {
-                //  notification.show(lastProfileName, R.string.status_starting)
+                notification.show(lastProfileName, R.string.status_starting)
             }
+
+            /*  val selectedProfileId = Settings.selectedProfile
+              if (selectedProfileId == -1L) {
+                  stopAndAlert(Alert.EmptyConfiguration)
+                  return
+              }
+
+              val profile = ProfileManager.get(selectedProfileId)
+              if (profile == null) {
+                  stopAndAlert(Alert.EmptyConfiguration)
+                  return
+              }*/
+
+            /*    val content = File(profile.typed.path).readText()
+                if (content.isBlank()) {
+                    stopAndAlert(Alert.EmptyConfiguration)
+                    return
+                }*/
             if (passedConf.isBlank()) {
                 stopAndAlert(Alert.EmptyConfiguration)
                 return
             }
-
-            DefaultNetworkMonitor.start()
-            //Libbox.registerLocalDNSTransport(LocalResolver)
-            Libbox.setMemoryLimit(false)
-
             try {
                 Libbox.checkConfig(passedConf)
             } catch (ex: Exception) {
                 Log.e("checkConfig", ex.message.toString())
             }
+            lastProfileName = "Start"
+            withContext(Dispatchers.Main) {
+                notification.show(lastProfileName, R.string.status_starting)
+                binder.broadcast {
+                    it.onServiceResetLogs(listOf())
+                }
+            }
+
+            DefaultNetworkMonitor.start()
+            Libbox.registerLocalDNSTransport(LocalResolver)
+            Libbox.setMemoryLimit(true)
 
             val newService = try {
                 Libbox.newService(passedConf, platformInterface)
@@ -152,21 +174,34 @@ class BoxService(
 
             newService.start()
 
+            if (newService.needWIFIState()) {
+                val wifiPermission = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                } else {
+                    android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                }
+                if (!service.hasPermission(wifiPermission)) {
+                    newService.close()
+                    stopAndAlert(Alert.RequestLocationPermission)
+                    return
+                }
+            }
+
             boxService = newService
             commandServer?.setService(boxService)
             status.postValue(Status.Started)
-            //    withContext(Dispatchers.Main) { notification.show(lastProfileName, R.string.status_started) }
-            // notification.start()
+            withContext(Dispatchers.Main) {
+                notification.show(lastProfileName, R.string.status_started)
+            }
+            notification.start()
         } catch (e: Exception) {
-            Log.e("StartService", e.message.toString())
             stopAndAlert(Alert.StartService, e.message)
-
             return
         }
     }
 
     override fun serviceReload() {
-        //  notification.close()
+        notification.close()
         status.postValue(Status.Starting)
         val pfd = fileDescriptor
         if (pfd != null) {
@@ -202,13 +237,13 @@ class BoxService(
     }
 
     override fun setSystemProxyEnabled(isEnabled: Boolean) {
-        //serviceReload()
+        serviceReload()
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun serviceUpdateIdleMode() {
         if (CustomApplication.powerManager.isDeviceIdleMode) {
-            boxService?.close()
+            boxService?.pause()
         } else {
             boxService?.wake()
         }
@@ -221,7 +256,7 @@ class BoxService(
             service.unregisterReceiver(receiver)
             receiverRegistered = false
         }
-        //notification.close()
+        notification.close()
         GlobalScope.launch(Dispatchers.IO) {
             val pfd = fileDescriptor
             if (pfd != null) {
@@ -259,7 +294,7 @@ class BoxService(
                 service.unregisterReceiver(receiver)
                 receiverRegistered = false
             }
-            //notification.close()
+            notification.close()
             binder.broadcast { callback ->
                 callback.onServiceAlert(type.ordinal, message)
             }
@@ -271,7 +306,7 @@ class BoxService(
         if (status.value != Status.Stopped) return Service.START_NOT_STICKY
         status.value = Status.Starting
 
-     /*   if (!receiverRegistered) {
+        if (!receiverRegistered) {
             ContextCompat.registerReceiver(service, receiver, IntentFilter().apply {
                 addAction(Action.SERVICE_CLOSE)
                 addAction(Action.SERVICE_RELOAD)
@@ -280,7 +315,7 @@ class BoxService(
                 }
             }, ContextCompat.RECEIVER_NOT_EXPORTED)
             receiverRegistered = true
-        }*/
+        }
 
         GlobalScope.launch(Dispatchers.IO) {
             initialize()
