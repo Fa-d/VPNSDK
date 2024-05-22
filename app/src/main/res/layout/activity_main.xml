@@ -79,7 +79,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start Wuardireg"
-        app:layout_constraintBottom_toTopOf="@+id/buttonIpSec"
+        app:layout_constraintBottom_toTopOf="@+id/buttonValidity"
         app:layout_constraintEnd_toStartOf="@id/button2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/timerText" />
@@ -95,11 +95,11 @@
         app:layout_constraintTop_toTopOf="@+id/buttonWireguard" />
 
     <Button
-        android:id="@+id/buttonIpSec"
+        android:id="@+id/buttonValidity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start IpSec"
-        android:visibility="gone"
+        android:text="Check Validity"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/connectionStatus"
         app:layout_constraintEnd_toStartOf="@id/button2"
         app:layout_constraintStart_toStartOf="parent"
@@ -111,9 +111,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start OVpn"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonIpSec"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonValidity"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonValidity"
         app:layout_constraintTop_toBottomOf="@+id/buttonSingbox" />
 
     <TextView

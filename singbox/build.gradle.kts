@@ -38,7 +38,7 @@ android {
         buildConfig = true
         aidl = true
     }
-    packagingOptions {
+    packaging {
         jniLibs {
             useLegacyPackaging = true
         }

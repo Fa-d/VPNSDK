@@ -13,7 +13,6 @@ import com.faddy.singbox.constant.Alert
 import com.faddy.singbox.constant.Status
 import io.nekohasekai.sfa.aidl.IService
 import io.nekohasekai.sfa.aidl.IServiceCallback
-import io.nekohasekai.sfa.bg.VPNService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext

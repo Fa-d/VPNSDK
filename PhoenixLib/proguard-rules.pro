@@ -10,6 +10,7 @@
 -keep class * {
     public private *;
 }
+-keep class android.arch.** { *; }
 -keep class com.google.** { *; }
 -dontwarn com.google.**
 -dontnote com.google.**

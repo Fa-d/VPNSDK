@@ -1,7 +1,9 @@
 package com.faddy.vpnsdk
 
 import android.os.Bundle
+import android.os.Process
 import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.faddy.phoenixlib.PhoenixVPN
 import com.faddy.phoenixlib.model.VPNStatus
@@ -100,7 +102,7 @@ class MainActivityPro : AppCompatActivity() {
                     )
                 }
             } else {
-                coreSdk.prepareVPNService(this@MainActivityPro)
+                coreSdk.prepareVPNService(this@MainActivityPro, activityRes)
             }
         }
         binding.buttonSingbox.setOnClickListener {
@@ -124,32 +126,13 @@ class MainActivityPro : AppCompatActivity() {
                     )
                 }
             } else {
-                coreSdk.prepareVPNService(this@MainActivityPro)
+                coreSdk.prepareVPNService(this@MainActivityPro, activityRes)
             }
         }
-        binding.buttonIpSec.setOnClickListener {
-            if (coreSdk.isVpnServicePrepared()) {
-                if (coreSdk.isVpnConnected()) {
-                    coreSdk.disconnect()
-                } else {
-                    val data = android.util.Base64.decode(
-                        VpnConfigs.singBoxConfigEnc, android.util.Base64.DEFAULT
-                    )
-                    val configText = String(data, Charsets.UTF_8)
-                    coreSdk.startConnect(
-                        this@MainActivityPro, VpnProfile(
-                            vpnType = VPNType.SINGBOX,
-                            userName = "ss",
-                            password = "123456",
-                            // vpnConfig = VpnConfigs.wireGuardJson,
-                            vpnConfig = configText,
-                            serverIP = VpnConfigs.openVpnIP
-                        )
-                    )
-                }
-            } else {
-                coreSdk.prepareVPNService(this@MainActivityPro)
-            }
+        binding.buttonValidity.setOnClickListener {
+            Log.e("aedfghn", packageName);
+            Process.killProcess(Process.myPid())
+            System.exit(1)
         }
         binding.buttonOvpn.setOnClickListener {
             if (coreSdk.isVpnServicePrepared()) {
@@ -169,9 +152,13 @@ class MainActivityPro : AppCompatActivity() {
                     )
                 }
             } else {
-                coreSdk.prepareVPNService(this@MainActivityPro)
+                coreSdk.prepareVPNService(this@MainActivityPro, activityRes)
             }
         }
     }
 
+    private val activityRes =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            // startConn()
+        }
 }

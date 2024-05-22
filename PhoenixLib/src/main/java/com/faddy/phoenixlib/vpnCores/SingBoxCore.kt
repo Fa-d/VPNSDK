@@ -16,8 +16,8 @@ import com.faddy.phoenixlib.model.VpnProfile
 import com.faddy.singbox.SingBoxInternal
 import com.faddy.singbox.bg.BoxService
 import com.faddy.singbox.bg.ServiceConnection
+import com.faddy.singbox.bg.VPNService
 import com.faddy.singbox.constant.Status
-import io.nekohasekai.sfa.bg.VPNService
 import javax.inject.Inject
 
 class SingBoxCore @Inject constructor(private val appContext: Context) :

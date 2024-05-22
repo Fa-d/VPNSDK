@@ -39,7 +39,7 @@ publishing {
         register<MavenPublication>("bar") {
             groupId = "com.pheonixLib.phoenixlib"
             artifactId = "phoenixlib"
-            version = "0.0.1"
+            version = "0.0.2"
             artifact("$buildDir/outputs/aar/PhoenixLib-release.aar")
         }
     }

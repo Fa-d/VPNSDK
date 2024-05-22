@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.VpnService
+import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -110,10 +111,11 @@ class PhoenixVPN @Inject constructor(
         return VpnService.prepare(phoenixContext) == null
     }
 
-    override fun prepareVPNService(context: Activity) {
+    override fun prepareVPNService(context: Activity, activityResLun: ActivityResultLauncher<Intent>) {
         val vpnIntent = VpnService.prepare(context)
         if (vpnIntent != null) {
-            context.startActivityForResult(vpnIntent, 1000)
+            activityResLun.launch(vpnIntent)
+            //context.startActivityForResult(vpnIntent, 1000)
         }
     }
 

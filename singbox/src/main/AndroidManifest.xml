@@ -30,7 +30,7 @@
         tools:targetApi="34">
 
         <service
-            android:name="io.nekohasekai.sfa.bg.VPNService"
+            android:name="com.faddy.singbox.bg.VPNService"
             android:exported="false"
             android:foregroundServiceType="specialUse"
             android:permission="android.permission.BIND_VPN_SERVICE">
