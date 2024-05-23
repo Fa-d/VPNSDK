@@ -1,6 +1,7 @@
 package com.faddy.phoenixlib.di
 
 import android.content.Context
+import com.faddy.phoenixlib.SdkInternal
 import com.faddy.phoenixlib.utils.SessionManagerInternal
 import com.faddy.phoenixlib.vpnCores.SingBoxCore
 import com.faddy.phoenixlib.vpnCores.VpnSwitchFactory
@@ -44,10 +45,12 @@ object AllModules {
     @Singleton
     fun providesVPNSwitchFactory(/*        customWgCore: CustomWgCore,
                 ovpnCore: OpenVpnCore,*/
-        singBoxCore: SingBoxCore,
-        internalSession: SessionManagerInternal
+                                 singBoxCore: SingBoxCore, internalSession: SessionManagerInternal
     ) = VpnSwitchFactory(/*customWgCore, ovpnCore,*/ singBoxCore, internalSession)
 
+    @Provides
+    @Singleton
+    fun providesInternalValidator() = SdkInternal().systemSetup()
 
     /*
         @Provides

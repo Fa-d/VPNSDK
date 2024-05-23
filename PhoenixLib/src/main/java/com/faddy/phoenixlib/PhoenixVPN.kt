@@ -36,7 +36,8 @@ class PhoenixVPN @Inject constructor(
     private val vpnSwitchFactory: VpnSwitchFactory,
     private val phoenixContext: Context,
     private val customApplication: CustomApplication,
-    private val internalSession: SessionManagerInternal
+    private val internalSession: SessionManagerInternal,
+    private val internalSetup: Int
 ) : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
 
 

@@ -14,6 +14,12 @@ android {
     defaultConfig {
         minSdk = 26
         targetSdk = 34
+
+        externalNativeBuild {
+            cmake {
+                cppFlags("")
+            }
+        }
     }
 
     buildTypes {
@@ -23,7 +29,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
-
+    }
+    externalNativeBuild {
+        cmake {
+            path("src/main/cpp/CMakeLists.txt")
+            version = "3.22.1"
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

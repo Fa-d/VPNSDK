@@ -1,7 +1,6 @@
 package com.faddy.vpnsdk
 
 import android.os.Bundle
-import android.os.Process
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +11,7 @@ import com.faddy.phoenixlib.model.VpnProfile
 import com.faddy.vpnsdk.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+
 @AndroidEntryPoint
 class MainActivityPro : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -130,9 +130,7 @@ class MainActivityPro : AppCompatActivity() {
             }
         }
         binding.buttonValidity.setOnClickListener {
-            Log.e("aedfghn", packageName);
-            Process.killProcess(Process.myPid())
-            System.exit(1)
+
         }
         binding.buttonOvpn.setOnClickListener {
             if (coreSdk.isVpnServicePrepared()) {
