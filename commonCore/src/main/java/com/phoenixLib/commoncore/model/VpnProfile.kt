@@ -1,4 +1,4 @@
-package com.faddy.phoenixlib.model
+package com.phoenixLib.commoncore.model
 
 data class VpnProfile(
     val vpnType: VPNType,

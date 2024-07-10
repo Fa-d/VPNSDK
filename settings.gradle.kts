@@ -28,3 +28,4 @@ include(":singbox")
 
 //include(":openconnectlib")
 //include(":strongswan")
+include(":commonCore")

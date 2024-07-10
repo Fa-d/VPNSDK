@@ -77,8 +77,16 @@ publishing {
 }
 
 dependencies {
+    implementation(project(":commonCore"))
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+    // hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+
+    // lifecycle
+    implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.process)
+    implementation(libs.androidx.lifecycle.service)
 
 }

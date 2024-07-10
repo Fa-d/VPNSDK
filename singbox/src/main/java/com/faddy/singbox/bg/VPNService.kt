@@ -152,6 +152,8 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
         service.fileDescriptor = pfd
         return pfd.fd
     }
+    override fun packageNameByUid(uid: Int) = ""
+    override fun uidByPackageName(packageName: String?) = 0
 
     override fun writeLog(message: String) = service.writeLog(message)
 

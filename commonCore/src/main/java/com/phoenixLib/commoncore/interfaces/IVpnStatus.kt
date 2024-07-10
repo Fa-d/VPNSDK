@@ -1,14 +1,15 @@
-package com.faddy.phoenixlib.interfaces
+package com.phoenixLib.commoncore.interfaces
 
 import android.app.Activity
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.LiveData
-import com.faddy.phoenixlib.model.VPNStatus
+import com.phoenixLib.commoncore.model.VPNStatus
+import kotlinx.coroutines.flow.Flow
 
 interface IVpnStatus {
     fun getVpnConnectedStatus(): LiveData<VPNStatus>
-    fun getConnectedTime(): LiveData<String>
+    fun getConnectedTime(): Flow<String>
     fun isVpnConnected(): Boolean
     fun isVpnServicePrepared(): Boolean
     fun prepareVPNService(context: Activity, activityResLun: ActivityResultLauncher<Intent>)

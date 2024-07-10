@@ -1,7 +1,5 @@
 package com.faddy.singbox.bg
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.BroadcastReceiver
@@ -13,7 +11,6 @@ import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import androidx.lifecycle.MutableLiveData
-import com.faddy.singbox.CustomApplication
 import com.faddy.singbox.R
 import com.faddy.singbox.constant.Action
 import com.faddy.singbox.constant.Status
@@ -37,7 +34,7 @@ class ServiceNotification(
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
                 return true
             }
-            return CustomApplication.notification.areNotificationsEnabled()
+            return true//CustomApplication.notification.areNotificationsEnabled()
         }
     }
 
@@ -69,12 +66,11 @@ class ServiceNotification(
     }
 
     fun show(lastProfileName: String, @StringRes contentTextId: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CustomApplication.notification.createNotificationChannel(
-                NotificationChannel(
-                    notificationChannel, "sing-box service", NotificationManager.IMPORTANCE_LOW
-                )
-            )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {/*   CustomApplication.notification.createNotificationChannel(
+                   NotificationChannel(
+                       notificationChannel, "sing-box service", NotificationManager.IMPORTANCE_LOW
+                   )
+               )*/
         }
         service.startForeground(notificationId,
             notificationBuilder.setContentTitle(lastProfileName.takeIf { it.isNotBlank() }
@@ -100,10 +96,9 @@ class ServiceNotification(
 
     override fun updateStatus(status: StatusMessage) {
         val content =
-            Libbox.formatBytes(status.uplink) + "/s ↑\t" + Libbox.formatBytes(status.downlink) + "/s ↓"
-        CustomApplication.notificationManager.notify(
+            Libbox.formatBytes(status.uplink) + "/s ↑\t" + Libbox.formatBytes(status.downlink) + "/s ↓"/*CustomApplication.notificationManager.notify(
             notificationId, notificationBuilder.setContentText(content).build()
-        )
+        )*/
     }
 
     override fun onReceive(context: Context, intent: Intent) {

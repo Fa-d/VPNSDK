@@ -67,11 +67,18 @@ publishing {
 }
 
 dependencies {
+    implementation(project(":commonCore"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.preference.ktx)
     // hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+
+    // lifecycle
+    implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.process)
+    implementation(libs.androidx.lifecycle.service)
 
     implementation(libs.androidx.multidex)
 

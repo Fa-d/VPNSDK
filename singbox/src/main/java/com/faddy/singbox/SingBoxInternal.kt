@@ -1,15 +1,15 @@
 package com.faddy.singbox
 
-import androidx.lifecycle.MutableLiveData
 import com.faddy.singbox.utils.CommandClient
 import io.nekohasekai.libbox.StatusMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class SingBoxInternal {
-    val uploadDiff = MutableLiveData(0L)
-    val downloadDiff = MutableLiveData(0L)
+    val uploadDiff = MutableStateFlow(0L)
+    val downloadDiff = MutableStateFlow(0L)
     val statusClient = CommandClient(
         CoroutineScope(Dispatchers.IO), CommandClient.ConnectionType.Status, StatusClient()
     )
@@ -35,8 +35,8 @@ class SingBoxInternal {
                 if (trafficAvailable) {
                     status.connectionsIn.toString()
                     status.connectionsOut.toString()
-                    uploadDiff.postValue(status.uplink)
-                    downloadDiff.postValue(status.downlink)
+                    uploadDiff.emit(status.uplink)
+                    downloadDiff.emit(status.downlink)
                     status.uplinkTotal
                     status.downlinkTotal
                 }

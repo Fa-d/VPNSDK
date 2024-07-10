@@ -63,7 +63,7 @@ class CountdownTimerService : Service() {
         timer.cancel()
         super.onDestroy()
         val timerInfoIntent = Intent(TIME_INFO)
-        timerInfoIntent.putExtra("VALUE", "Stopped")
+        timerInfoIntent.putExtra("myIpTimerReciever", "Stopped")
         LocalBroadcastManager.getInstance(this@CountdownTimerService).sendBroadcast(timerInfoIntent)
         isServiceStarted = false
     }

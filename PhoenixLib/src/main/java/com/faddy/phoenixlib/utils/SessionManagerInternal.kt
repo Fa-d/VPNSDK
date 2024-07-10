@@ -4,7 +4,7 @@ import android.content.SharedPreferences;
 
 import javax.inject.Inject;
 
-class SessionManagerInternal @Inject constructor(private val preferences: SharedPreferences) {
+class  SessionManagerInternal @Inject constructor(private val preferences: SharedPreferences) {
 
     fun getUserName() = preferences.getString("username", "")
 
@@ -26,7 +26,7 @@ class SessionManagerInternal @Inject constructor(private val preferences: Shared
         preferences.edit().putLong("lastConnStartTime", value).apply()
     }
 
-    fun getLastConnServerIP() = preferences.getString("lastConnServerIP", "0.0.0.0")
+    fun getLastConnServerIP() = preferences.getString("lastConnServerIP", "0.0.0.0") ?: ""
     fun setLastConnServerIP(value: String) {
         preferences.edit().putString("lastConnServerIP", value).apply()
     }

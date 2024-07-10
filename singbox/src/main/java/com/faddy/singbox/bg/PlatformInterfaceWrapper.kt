@@ -1,10 +1,7 @@
 package com.faddy.singbox.bg
 
-import android.content.pm.PackageManager
 import android.os.Build
-import android.os.Process
 import androidx.annotation.RequiresApi
-import com.faddy.singbox.CustomApplication
 import io.nekohasekai.libbox.InterfaceUpdateListener
 import io.nekohasekai.libbox.NetworkInterfaceIterator
 import io.nekohasekai.libbox.PlatformInterface
@@ -12,7 +9,6 @@ import io.nekohasekai.libbox.StringIterator
 import io.nekohasekai.libbox.TunOptions
 import io.nekohasekai.libbox.WIFIState
 import java.net.Inet6Address
-import java.net.InetSocketAddress
 import java.net.InterfaceAddress
 import java.net.NetworkInterface
 import java.util.Enumeration
@@ -43,36 +39,7 @@ interface PlatformInterfaceWrapper : PlatformInterface {
         destinationAddress: String,
         destinationPort: Int
     ): Int {
-        val uid = CustomApplication.connectivity.getConnectionOwnerUid(
-            ipProtocol,
-            InetSocketAddress(sourceAddress, sourcePort),
-            InetSocketAddress(destinationAddress, destinationPort)
-        )
-        if (uid == Process.INVALID_UID) error("android: connection owner not found")
-        return uid
-    }
-
-    override fun packageNameByUid(uid: Int): String {
-        val packages = CustomApplication.packageManager!!.getPackagesForUid(uid)
-        if (packages.isNullOrEmpty()) error("android: package not found")
-        return packages[0]
-    }
-
-    @Suppress("DEPRECATION")
-    override fun uidByPackageName(packageName: String): Int {
-        return try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                CustomApplication.packageManager!!.getPackageUid(
-                    packageName, PackageManager.PackageInfoFlags.of(0)
-                )
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                CustomApplication.packageManager!!.getPackageUid(packageName, 0)
-            } else {
-                CustomApplication.packageManager!!.getApplicationInfo(packageName, 0).uid
-            }
-        } catch (e: PackageManager.NameNotFoundException) {
-            error("android: package not found")
-        }
+        return 0
     }
 
     override fun usePlatformDefaultInterfaceMonitor(): Boolean {
@@ -103,12 +70,12 @@ interface PlatformInterfaceWrapper : PlatformInterface {
     }
 
     override fun readWIFIState(): WIFIState? {
-        val wifiInfo = CustomApplication.wifiManager.connectionInfo ?: return null
-        var ssid = wifiInfo.ssid
-        if (ssid.startsWith("\"") && ssid.endsWith("\"")) {
-            ssid = ssid.substring(1, ssid.length - 1)
-        }
-        return WIFIState(ssid, wifiInfo.bssid)
+        return null/*        val wifiInfo = CustomApplication.wifiManager.connectionInfo ?: return null
+                var ssid = wifiInfo.ssid
+                if (ssid.startsWith("\"") && ssid.endsWith("\"")) {
+                    ssid = ssid.substring(1, ssid.length - 1)
+                }
+                return WIFIState(ssid, wifiInfo.bssid)*/
     }
 
     private class InterfaceArray(private val iterator: Enumeration<NetworkInterface>) :

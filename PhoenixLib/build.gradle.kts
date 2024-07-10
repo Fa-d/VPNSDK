@@ -68,19 +68,11 @@ publishing {
 }
 
 dependencies {
-    implementation(project(":openvpnlib"))
-    implementation(project(":wgtunlib"))
-    implementation(project(":singbox"))
-    //implementation(project(":openconnectlib"))
-    //implementation(project(":strongswan"))
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
-
-    //wg
-    implementation(libs.androidx.lifecycle.service)
-
+    implementation(project(":commonCore"))
 
     // hilt
     implementation(libs.hilt.android)
@@ -90,11 +82,9 @@ dependencies {
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.process)
-
+    implementation(libs.androidx.lifecycle.service)
 
     // serialization
     implementation(libs.kotlinx.serialization.json)
-
-    implementation(libs.androidx.lifecycle.service)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

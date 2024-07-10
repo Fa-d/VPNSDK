@@ -1,4 +1,4 @@
-package com.faddy.vpnsdk
+package de.blinkt
 
 import com.phoenixLib.commoncore.model.VPNType
 import com.phoenixLib.commoncore.model.VpnProfile

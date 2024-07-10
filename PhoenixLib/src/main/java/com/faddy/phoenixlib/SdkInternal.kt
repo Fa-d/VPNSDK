@@ -1,7 +1,7 @@
 package com.faddy.phoenixlib
 
-class SdkInternal {
-    constructor() {
+class SdkInternal() {
+    init {
         System.loadLibrary("validator")
     }
 
