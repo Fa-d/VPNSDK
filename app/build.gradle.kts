@@ -8,13 +8,13 @@ plugins {
 
 android {
     namespace = "com.faddy.vpnsdk"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.faddy.vpnsdk"
         multiDexEnabled = true
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
     }
@@ -76,18 +76,19 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core)
     implementation(libs.androidx.appcompat)
-    implementation("com.google.android.material:material:1.11.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.multidex:multidex:2.0.1")
+    implementation(libs.material)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.multidex)
 
     // hilt
     implementation(libs.hilt.android)
-    implementation(project(":PhoenixLib"))
-
     ksp(libs.hilt.android.compiler)
 
     //lifecycle
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.service)
     implementation(libs.androidx.lifecycle.process)
+
+
+    implementation(project(":PhoenixLib"))
 }

@@ -13,12 +13,16 @@ android {
 
     defaultConfig {
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
 
         externalNativeBuild {
             cmake {
                 cppFlags("")
             }
+        }
+        ndk {
+            abiFilters.add("armeabi-v7a")
+            abiFilters.add("arm64-v8a")
         }
     }
 
@@ -68,10 +72,9 @@ publishing {
 }
 
 dependencies {
-    implementation(project(":openvpnlib"))
-    implementation(project(":wgtunlib"))
-    implementation(project(":singbox"))
-    //implementation(project(":openconnectlib"))
+    implementation(project(":protocol:openvpnlib"))
+    implementation(project(":protocol:wgtunlib"))
+    implementation(project(":protocol:SingBox"))
     //implementation(project(":strongswan"))
 
     implementation("androidx.core:core-ktx:1.12.0")

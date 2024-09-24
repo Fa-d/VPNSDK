@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.VpnService
 import androidx.activity.result.ActivityResultLauncher
+import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -38,7 +39,7 @@ class PhoenixVPN @Inject constructor(
     private val customApplication: CustomApplication,
     private val internalSession: SessionManagerInternal,
     private val internalSetup: Int
-) : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
+) : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP , LifecycleObserver {
 
 
     var connectedVpnTime = MutableLiveData("00:00:00")

@@ -22,9 +22,8 @@ dependencyResolutionManagement {
 rootProject.name = "VPNSDK"
 include(":app")
 include(":PhoenixLib")
-include(":openvpnlib")
-include(":wgtunlib")
-include(":singbox")
+include(":protocol:openvpnlib")
+include(":protocol:wgtunlib")
+include(":protocol:SingBox")
 
-//include(":openconnectlib")
-//include(":strongswan")
+//include(":protocol:strongswan")

@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.VPNSDK"
-        tools:targetApi="34">
+>
         <activity
             android:name=".MainActivityPro"
             android:exported="true"
