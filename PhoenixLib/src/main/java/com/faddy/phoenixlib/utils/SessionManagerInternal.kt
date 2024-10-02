@@ -30,5 +30,8 @@ class SessionManagerInternal @Inject constructor(private val preferences: Shared
     fun setLastConnServerIP(value: String) {
         preferences.edit().putString("lastConnServerIP", value).apply()
     }
+    fun setDisAllowedAppList(value: String) {
+        preferences.edit().putString("disAllowedAppList", value).apply()
+    }
 
 }

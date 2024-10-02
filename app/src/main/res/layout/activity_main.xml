@@ -4,140 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivityPro">
+    tools:context=".ui.MainActivityPro">
 
-    <TextView
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:id="@+id/uploadText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="upload"
-        app:layout_constraintBottom_toBottomOf="@+id/downloadText"
-        app:layout_constraintEnd_toStartOf="@+id/downloadText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/downloadText" />
-
-    <TextView
-        android:id="@+id/downloadText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="download"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/ipText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/uploadText"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/ipText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="8.8.8.8"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/timerText"
-        app:layout_constraintEnd_toStartOf="@+id/pingTv"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/downloadText" />
-
-    <TextView
-        android:id="@+id/pingTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:text="0"
-        app:layout_constraintBottom_toBottomOf="@+id/ipText"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/ipText"
-        app:layout_constraintTop_toTopOf="@+id/ipText" />
-
-
-    <TextView
-        android:id="@+id/timerText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="00:00:00"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/buttonWireguard"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pingTv" />
-    <Button
-        android:id="@+id/buttonWireguard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start Wuardireg"
-        app:layout_constraintBottom_toTopOf="@+id/buttonValidity"
-        app:layout_constraintEnd_toStartOf="@id/button2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timerText" />
-
-    <Button
-        android:id="@+id/buttonSingbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start Singbox"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonWireguard"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/buttonWireguard"
-        app:layout_constraintTop_toTopOf="@+id/buttonWireguard" />
-
-    <Button
-        android:id="@+id/buttonValidity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Check Validity"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/connectionStatus"
-        app:layout_constraintEnd_toStartOf="@id/button2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonWireguard" />
-
-
-    <Button
-        android:id="@+id/buttonOvpn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start OVpn"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonValidity"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/buttonValidity"
-        app:layout_constraintTop_toBottomOf="@+id/buttonSingbox" />
-
-    <TextView
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:id="@+id/connectionStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="status"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonOvpn" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Stop"
-        android:visibility="gone"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/connectionStatus" />
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/main_nav" />
 </androidx.constraintlayout.widget.ConstraintLayout>

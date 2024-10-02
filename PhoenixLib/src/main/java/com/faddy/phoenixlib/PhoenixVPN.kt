@@ -69,6 +69,9 @@ class PhoenixVPN @Inject constructor(
         setVpnType(vpnProfile)
         getVpnConnectedStatus()
         if (!isVpnConnected()) {
+            SessionManagerInternal(
+                phoenixContext.getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE)
+            ).setDisAllowedAppList(vpnProfile.disAllowedAppsList);
             startTimerService(passedActivity)
             vpnSwitchFactory.startVpn(vpnProfile, passedActivity)
         } else {

@@ -88,7 +88,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.service)
     implementation(libs.androidx.lifecycle.process)
-
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.navigation.fragment.ktx)
 
     implementation(project(":PhoenixLib"))
 }

@@ -56,8 +56,10 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.Vector;
@@ -846,6 +848,20 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         //Debug.startMethodTracing(getExternalFilesDir(null).toString() + "/opentun.trace", 40* 1024 * 1024);
 
         Builder builder = new Builder();
+
+        List<String> appList = List.of(getApplicationContext().getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE).getString("disAllowedAppList", "").split(","));
+        List<String> includedList = new ArrayList<>();
+        for (String item : appList) {
+            if (!item.contains(",") && !item.isEmpty()) {
+                includedList.add(item.replace(",", "").replace(" ", ""));
+            }
+        }
+        try {
+            for (int i = 0; i < includedList.size(); i++) {
+                builder.addDisallowedApplication(includedList.get(i));
+            }
+        } catch (Exception ignored) {
+        }
 
         VpnStatus.logInfo(R.string.last_openvpn_tun_config);
 
