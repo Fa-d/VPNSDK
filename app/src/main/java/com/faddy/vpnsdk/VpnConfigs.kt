@@ -10,7 +10,144 @@ object VpnConfigs {
         "ewogICAgImxvZyI6IHsKICAgICAgICAiZGlzYWJsZWQiOiBmYWxzZSwKICAgICAgICAibGV2ZWwiOiAid2FybiIsCiAgICAgICAgInRpbWVzdGFtcCI6IHRydWUKICAgIH0sCiAgICAiZG5zIjogewogICAgICAgICJzZXJ2ZXJzIjogWwogICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAidGFnIjogImRuc19ibG9jayIsCiAgICAgICAgICAgICAgICAiYWRkcmVzcyI6ICJyY29kZTovL3N1Y2Nlc3MiCiAgICAgICAgICAgIH0sCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJ0YWciOiAiZG5zX2Zha2VpcCIsCiAgICAgICAgICAgICAgICAiYWRkcmVzcyI6ICJmYWtlaXAiCiAgICAgICAgICAgIH0sCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJ0YWciOiAiZG5zX2xvY2FsIiwKICAgICAgICAgICAgICAgICJhZGRyZXNzIjogIjIyMy41LjUuNSIsCiAgICAgICAgICAgICAgICAiZGV0b3VyIjogImRpcmVjdCIKICAgICAgICAgICAgfQogICAgICAgIF0sCiAgICAgICAgInJ1bGVzIjogWwogICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAib3V0Ym91bmQiOiAiYW55IiwKICAgICAgICAgICAgICAgICJzZXJ2ZXIiOiAiZG5zX2xvY2FsIgogICAgICAgICAgICB9LAogICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAiZ2Vvc2l0ZSI6IFsKICAgICAgICAgICAgICAgICAgICAiY2F0ZWdvcnktYWRzLWFsbCIKICAgICAgICAgICAgICAgIF0sCiAgICAgICAgICAgICAgICAic2VydmVyIjogImRuc19ibG9jayIsCiAgICAgICAgICAgICAgICAiZGlzYWJsZV9jYWNoZSI6IHRydWUKICAgICAgICAgICAgfSwKICAgICAgICAgICAgewogICAgICAgICAgICAgICAgInF1ZXJ5X3R5cGUiOiBbCiAgICAgICAgICAgICAgICAgICAgIkEiLAogICAgICAgICAgICAgICAgICAgICJBQUFBIgogICAgICAgICAgICAgICAgXSwKICAgICAgICAgICAgICAgICJzZXJ2ZXIiOiAiZG5zX2Zha2VpcCIKICAgICAgICAgICAgfQogICAgICAgIF0sCiAgICAgICAgInN0cmF0ZWd5IjogImlwdjRfb25seSIsCiAgICAgICAgImluZGVwZW5kZW50X2NhY2hlIjogdHJ1ZSwKICAgICAgICAiZmFrZWlwIjogewogICAgICAgICAgICAiZW5hYmxlZCI6IHRydWUsCiAgICAgICAgICAgICJpbmV0NF9yYW5nZSI6ICIxOTguMTguMC4wLzE1IiwKICAgICAgICAgICAgImluZXQ2X3JhbmdlIjogImZjMDA6Oi8xOCIKICAgICAgICB9CiAgICB9LAogICAgInJvdXRlIjogewogICAgICAgICJydWxlcyI6IFsKICAgICAgICAgICAgewogICAgICAgICAgICAgICAgInByb3RvY29sIjogImRucyIsCiAgICAgICAgICAgICAgICAib3V0Ym91bmQiOiAiZG5zLW91dCIKICAgICAgICAgICAgfSwKICAgICAgICAgICAgewogICAgICAgICAgICAgICAgImdlb2lwIjogInByaXZhdGUiLAogICAgICAgICAgICAgICAgIm91dGJvdW5kIjogImRpcmVjdCIKICAgICAgICAgICAgfSwKICAgICAgICAgICAgewogICAgICAgICAgICAgICAgImNsYXNoX21vZGUiOiAiRGlyZWN0IiwKICAgICAgICAgICAgICAgICJvdXRib3VuZCI6ICJkaXJlY3QiCiAgICAgICAgICAgIH0sCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJjbGFzaF9tb2RlIjogIkdsb2JhbCIsCiAgICAgICAgICAgICAgICAib3V0Ym91bmQiOiAic2VsZWN0IgogICAgICAgICAgICB9CiAgICAgICAgXSwKICAgICAgICAiZmluYWwiOiAic2VsZWN0IiwKICAgICAgICAiYXV0b19kZXRlY3RfaW50ZXJmYWNlIjogdHJ1ZQogICAgfSwKICAgICJpbmJvdW5kcyI6IFsKICAgICAgICB7CiAgICAgICAgICAgICJ0eXBlIjogInR1biIsCiAgICAgICAgICAgICJ0YWciOiAidHVuLWluIiwKICAgICAgICAgICAgImluZXQ0X2FkZHJlc3MiOiAiMTcyLjE5LjAuMS8zMCIsCiAgICAgICAgICAgICJpbmV0Nl9hZGRyZXNzIjogImZkZmU6ZGNiYTo5ODc2OjoxLzEyNiIsCiAgICAgICAgICAgICJhdXRvX3JvdXRlIjogdHJ1ZSwKICAgICAgICAgICAgInN0cmljdF9yb3V0ZSI6IHRydWUsCiAgICAgICAgICAgICJzdGFjayI6ICJtaXhlZCIsCiAgICAgICAgICAgICJzbmlmZiI6IHRydWUsCiAgICAgICAgICAgICJzbmlmZl9vdmVycmlkZV9kZXN0aW5hdGlvbiI6IGZhbHNlCiAgICAgICAgfQogICAgXSwKICAgICJvdXRib3VuZHMiOiBbCiAgICAgICAgewogICAgICAgICAgICAidHlwZSI6ICJzaGFkb3dzb2NrcyIsCiAgICAgICAgICAgICJ0YWciOiAic3MtdnBzIiwKICAgICAgICAgICAgInNlcnZlciI6ICI0NS4xMzcuMTUwLjIxNCIsCiAgICAgICAgICAgICJzZXJ2ZXJfcG9ydCI6IDY2NjYsCiAgICAgICAgICAgICJtZXRob2QiOiAiY2hhY2hhMjAtaWV0Zi1wb2x5MTMwNSIsCiAgICAgICAgICAgICJwYXNzd29yZCI6ICJMVFJ4V3R5emdlV2tLZC8vUWNUZVlBPT0iLAogICAgICAgICAgICAibXVsdGlwbGV4IjogewogICAgICAgICAgICAgICAgImVuYWJsZWQiOiB0cnVlLAogICAgICAgICAgICAgICAgInByb3RvY29sIjogImgybXV4IiwKICAgICAgICAgICAgICAgICJtYXhfY29ubmVjdGlvbnMiOiAxLAogICAgICAgICAgICAgICAgIm1pbl9zdHJlYW1zIjogNCwKICAgICAgICAgICAgICAgICJwYWRkaW5nIjogZmFsc2UKICAgICAgICAgICAgfQogICAgICAgIH0sCiAgICAgICAgewogICAgICAgICAgICAidHlwZSI6ICJzZWxlY3RvciIsCiAgICAgICAgICAgICJ0YWciOiAic2VsZWN0IiwKICAgICAgICAgICAgIm91dGJvdW5kcyI6IFsKICAgICAgICAgICAgICAgICJzcy12cHMiCiAgICAgICAgICAgIF0sCiAgICAgICAgICAgICJkZWZhdWx0IjogInNzLXZwcyIsCiAgICAgICAgICAgICJpbnRlcnJ1cHRfZXhpc3RfY29ubmVjdGlvbnMiOiBmYWxzZQogICAgICAgIH0sCiAgICAgICAgewogICAgICAgICAgICAidHlwZSI6ICJkaXJlY3QiLAogICAgICAgICAgICAidGFnIjogImRpcmVjdCIKICAgICAgICB9LAogICAgICAgIHsKICAgICAgICAgICAgInR5cGUiOiAiYmxvY2siLAogICAgICAgICAgICAidGFnIjogImJsb2NrIgogICAgICAgIH0sCiAgICAgICAgewogICAgICAgICAgICAidHlwZSI6ICJkbnMiLAogICAgICAgICAgICAidGFnIjogImRucy1vdXQiCiAgICAgICAgfQogICAgXSwKICAgICJleHBlcmltZW50YWwiOiB7CiAgICAgICAgImNhY2hlX2ZpbGUiOiB7CiAgICAgICAgICAgICJlbmFibGVkIjogdHJ1ZQogICAgICAgIH0KICAgIH0sCiAgICAibnRwIjogewogICAgICAgICJlbmFibGVkIjogdHJ1ZSwKICAgICAgICAic2VydmVyIjogInRpbWUuYXBwbGUuY29tIiwKICAgICAgICAic2VydmVyX3BvcnQiOiAxMjMsCiAgICAgICAgImludGVydmFsIjogIjMwbSIsCiAgICAgICAgImRldG91ciI6ICJkaXJlY3QiCiAgICB9Cn0="
     val wgTunConf2 =
         "[Interface]\n" + "Address = 192.168.1.200/24\n" + "PrivateKey = oD1vB2Esia0akOrnwxCxgB7jOwKs83QFmD6kApbm+1I=\n" + "DNS = 8.8.8.8\n" + "\n" + "[Peer]\n" + "PublicKey = 4YVOLdZ9aCxI/Gp/P1oszjrVSqDl+WVUoaugfIwZMlw=\n" + "Endpoint = 51.68.220.168:51820\n" + "AllowedIPs = 0.0.0.0/0\n" + "PersistentKeepalive = 25\n"
-
+    val japanV2 = """{
+    "log": {
+        "disabled": false,
+        "level": "warn",
+        "timestamp": true
+    },
+    "dns": {
+        "servers": [
+            {
+                "tag": "dns_block",
+                "address": "rcode://success"
+            },
+            {
+                "tag": "dns_fakeip",
+                "address": "fakeip"
+            },
+            {
+                "tag": "dns_local",
+                "address": "223.5.5.5",
+                "detour": "direct"
+            }
+        ],
+        "rules": [
+            {
+                "outbound": "any",
+                "server": "dns_local"
+            },
+            {
+                "geosite": [
+                    "category-ads-all"
+                ],
+                "server": "dns_block",
+                "disable_cache": true
+            },
+            {
+                "query_type": [
+                    "A",
+                    "AAAA"
+                ],
+                "server": "dns_fakeip"
+            }
+        ],
+        "strategy": "ipv4_only",
+        "independent_cache": true,
+        "fakeip": {
+            "enabled": true,
+            "inet4_range": "198.18.0.0/15",
+            "inet6_range": "fc00::/18"
+        }
+    },
+    "route": {
+        "rules": [
+            {
+                "protocol": "dns",
+                "outbound": "dns-out"
+            },
+            {
+                "geoip": "private",
+                "outbound": "direct"
+            },
+            {
+                "clash_mode": "Direct",
+                "outbound": "direct"
+            },
+            {
+                "clash_mode": "Global",
+                "outbound": "select"
+            }
+        ],
+        "final": "select",
+        "auto_detect_interface": true
+    },
+    "inbounds": [
+        {
+            "type": "tun",
+            "tag": "tun-in",
+            "inet4_address": "172.19.0.1/30",
+            "inet6_address": "fdfe:dcba:9876::1/126",
+            "auto_route": true,
+            "strict_route": true,
+            "stack": "mixed",
+            "sniff": true,
+            "sniff_override_destination": false
+        }
+    ],
+    "outbounds": [
+        {
+            "type": "vmess",
+            "tag": "vmess-vps",
+            "server": "64.176.34.43",
+            "server_port": 2025,
+            "uuid": "41cd99bf-c634-46a4-907e-586117cac585",
+            "security": "auto",
+            "alter_id": 0,
+            "packet_encoding": "xudp",
+            "multiplex": {
+                "enabled": true,
+                "protocol": "h2mux",
+                "max_connections": 1,
+                "min_streams": 4,
+                "padding": false
+            }
+        },
+        {
+            "type": "selector",
+            "tag": "select",
+            "outbounds": [
+                "vmess-vps"
+            ],
+            "default": "vmess-vps",
+            "interrupt_exist_connections": false
+        },
+        {
+            "type": "direct",
+            "tag": "direct"
+        },
+        {
+            "type": "block",
+            "tag": "block"
+        },
+        {
+            "type": "dns",
+            "tag": "dns-out"
+        }
+    ],
+    "experimental": {
+        "cache_file": {
+            "enabled": true
+        }
+    },
+    "ntp": {
+        "enabled": true,
+        "server": "time.apple.com",
+        "server_port": 123,
+        "interval": "30m",
+        "detour": "direct"
+    }
+}"""
     val wireGuardJson = """{
     "log": {
         "level": "debug"

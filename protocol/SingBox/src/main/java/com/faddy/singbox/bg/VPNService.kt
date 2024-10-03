@@ -117,6 +117,25 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
                     }
                 }
             }
+            val pref =
+                applicationContext!!.getSharedPreferences("user_info_mother_lib", MODE_PRIVATE)
+            val appList =
+                pref.getString("disAllowedAppList", "")!!.split(",".toRegex())
+                    .dropLastWhile { it.isEmpty() }.toTypedArray()
+
+            val includedList: MutableList<String> = ArrayList()
+            for (item in appList) {
+                if (!item.contains(",") && !item.isEmpty()) {
+                    includedList.add(item.replace(",", "").replace(" ", ""))
+                }
+            }
+            try {
+                for (i in includedList.indices) {
+                    builder.addDisallowedApplication(includedList[i])
+                }
+            } catch (ignored: Exception) {
+            }
+
             //  builder.addAllowedApplication(packageName)
             /*  val includePackage = options.includePackage
                 if (includePackage.hasNext()) {

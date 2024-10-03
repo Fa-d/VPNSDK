@@ -14,6 +14,7 @@ import com.faddy.phoenixlib.model.VPNType
 import com.faddy.phoenixlib.model.VpnProfile
 import com.faddy.vpnsdk.R
 import com.faddy.vpnsdk.VpnConfigs
+import com.faddy.vpnsdk.VpnConfigs.japanV2
 import com.faddy.vpnsdk.databinding.FragmentMainBinding
 import com.faddy.vpnsdk.session.SessionManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -116,7 +117,7 @@ class MainFragment : Fragment() {
                     coreSdk.disconnect()
                 } else {
                     val data = android.util.Base64.decode(
-                        VpnConfigs.singBoxConfigEnc, android.util.Base64.DEFAULT
+                        VpnConfigs.japanV2, android.util.Base64.DEFAULT
                     )
                     val configText = String(data, Charsets.UTF_8)
                     coreSdk.startConnect(
@@ -124,8 +125,8 @@ class MainFragment : Fragment() {
                             vpnType = VPNType.SINGBOX,
                             userName = "ss",
                             password = "123456",
-                            vpnConfig = VpnConfigs.wireGuardJson,
-                            // vpnConfig = configText,
+                            //vpnConfig = VpnConfigs.wireGuardJson,
+                             vpnConfig = japanV2,
                             serverIP = VpnConfigs.openVpnIP,
                             disAllowedAppsList = sessionManager.getDisAllowedAppList()
 
