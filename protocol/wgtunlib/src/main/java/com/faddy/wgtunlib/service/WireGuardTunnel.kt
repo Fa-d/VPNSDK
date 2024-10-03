@@ -1,5 +1,6 @@
 package com.faddy.wgtunlib.service
 
+import android.content.Context
 import android.util.Log
 import com.faddy.wgtunlib.data.TunnelConfig
 import com.faddy.wgtunlib.data.VpnState
@@ -18,7 +19,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class WireGuardTunnel @Inject constructor(val backend: GoBackend) : IVpnServiceTunnel {
+class WireGuardTunnel @Inject constructor(val backend: GoBackend, val context: Context) :
+    IVpnServiceTunnel {
     val _vpnState = MutableStateFlow(VpnState())
     override val vpnServiceState: StateFlow<VpnState> = _vpnState.asStateFlow()
     private val scope = CoroutineScope(Dispatchers.IO)
@@ -29,7 +31,18 @@ class WireGuardTunnel @Inject constructor(val backend: GoBackend) : IVpnServiceT
         return try {
             stopTunnelOnConfigChange(tunnelConfig)
             emitTunnelName(tunnelConfig.name)
-            config = TunnelConfig.configFromQuick(tunnelConfig.wgQuick)
+            val includedList = mutableListOf<String>()
+            val appList = (context.getSharedPreferences(
+                "user_info_mother_lib", Context.MODE_PRIVATE
+            ).getString("disAllowedAppList", "") ?: "").split(",")
+            appList.forEach {
+                val tempData = it
+                if (!tempData.contains(",") && tempData.isNotEmpty()) {
+                    includedList.add(tempData.replace(",", "").replace(" ", ""))
+                }
+            }
+            // = appList.toMutableSet()
+            config = TunnelConfig.configFromQuick(tunnelConfig.wgQuick, context)
             backend.setState(this, State.UP, config)
         } catch (e: BackendException) {
             Log.e("sadfgfh", e.reason.name.toString())

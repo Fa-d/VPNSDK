@@ -7,10 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.faddy.phoenixlib.PhoenixVPN
 import com.faddy.phoenixlib.model.VPNStatus
 import com.faddy.phoenixlib.model.VPNType
 import com.faddy.phoenixlib.model.VpnProfile
+import com.faddy.vpnsdk.R
 import com.faddy.vpnsdk.VpnConfigs
 import com.faddy.vpnsdk.databinding.FragmentMainBinding
 import com.faddy.vpnsdk.session.SessionManager
@@ -134,8 +136,8 @@ class MainFragment : Fragment() {
                 coreSdk.prepareVPNService(requireActivity(), activityRes)
             }
         }
-        binding.buttonValidity.setOnClickListener {
-
+        binding.splitTunnel.setOnClickListener {
+            findNavController().navigate(R.id.splitTunnelFragment)
         }
         binding.buttonOvpn.setOnClickListener {
             if (coreSdk.isVpnServicePrepared()) {

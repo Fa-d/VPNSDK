@@ -80,7 +80,7 @@
         android:layout_height="wrap_content"
         android:text="Start Wuardireg"
         app:layout_constraintBottom_toTopOf="@+id/buttonValidity"
-        app:layout_constraintEnd_toStartOf="@id/button2"
+        app:layout_constraintEnd_toStartOf="@id/buttonSingbox"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/timerText" />
 
@@ -101,7 +101,7 @@
         android:text="Check Validity"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/connectionStatus"
-        app:layout_constraintEnd_toStartOf="@id/button2"
+        app:layout_constraintEnd_toStartOf="@id/buttonOvpn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonWireguard" />
 
@@ -114,7 +114,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/buttonValidity"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/buttonValidity"
-        app:layout_constraintTop_toBottomOf="@+id/buttonSingbox" />
+        app:layout_constraintTop_toTopOf="@+id/buttonValidity" />
 
     <TextView
         android:textColor="@color/black"
@@ -124,17 +124,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="status"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/splitTunnel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonOvpn" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/splitTunnel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Stop"
-        android:visibility="gone"
+        android:text="Split Tunnel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

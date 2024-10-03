@@ -67,6 +67,6 @@ object AllModules {
 
     @Provides
     @Singleton
-    fun providesWireGuardTunnel(goBackend: GoBackend) = WireGuardTunnel(goBackend)
+    fun providesWireGuardTunnel(goBackend: GoBackend, @ApplicationContext context: Context) = WireGuardTunnel(goBackend, context)
 
 }
