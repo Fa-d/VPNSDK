@@ -4,6 +4,7 @@ import android.content.Context
 import com.faddy.phoenixlib.SdkInternal
 import com.faddy.phoenixlib.utils.SessionManagerInternal
 import com.faddy.phoenixlib.vpnCores.CustomWgCore
+import com.faddy.phoenixlib.vpnCores.OpenConnectCore
 import com.faddy.phoenixlib.vpnCores.OpenVpnCore
 import com.faddy.phoenixlib.vpnCores.SingBoxCore
 import com.faddy.phoenixlib.vpnCores.VpnSwitchFactory
@@ -45,10 +46,9 @@ object AllModules {
     @Singleton
     fun providesVPNSwitchFactory(
         customWgCore: CustomWgCore,
-        ovpnCore: OpenVpnCore,
-        singBoxCore: SingBoxCore,
+        ovpnCore: OpenVpnCore, singBoxCore: SingBoxCore, openConnectCore: OpenConnectCore,
         internalSession: SessionManagerInternal
-    ) = VpnSwitchFactory(customWgCore, ovpnCore, singBoxCore, internalSession)
+    ) = VpnSwitchFactory(customWgCore, ovpnCore, singBoxCore, openConnectCore, internalSession)
 
     @Provides
     @Singleton
@@ -57,6 +57,10 @@ object AllModules {
     @Provides
     @Singleton
     fun providesWGCore(wgTun: WireGuardTunnel) = CustomWgCore(wgTun)
+
+    @Provides
+    @Singleton
+    fun providesOpenConnectCore(@ApplicationContext context: Context) = OpenConnectCore(context)
 
     @Provides
     @Singleton

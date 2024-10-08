@@ -27,3 +27,4 @@ include(":protocol:wgtunlib")
 include(":protocol:SingBox")
 
 //include(":protocol:strongswan")
+include(":protocol:openconnect")

@@ -15,6 +15,7 @@ import javax.inject.Inject
 class VpnSwitchFactory @Inject constructor(
     private val wireGuardCoreConcrete: CustomWgCore, private val openVpnCoreConcrete: OpenVpnCore,
     private val singBoxCoreConcrete: SingBoxCore,
+    private val openConnectCoreConcrete: OpenConnectCore,
     private val internalSession: SessionManagerInternal
 ) : IVpnLifecycle, IStartStop, IVpnSpeedIP {
 
@@ -31,7 +32,7 @@ class VpnSwitchFactory @Inject constructor(
         return when (providesLastSelectedVpnType()) {
             VPNType.NONE -> liveData {  }
             VPNType.OPENVPN -> openVpnCoreConcrete.currentVpnState
-            VPNType.OPENCONNECT -> return liveData { }
+            VPNType.OPENCONNECT -> openConnectCoreConcrete.currentVpnState
             VPNType.WIREGUARD -> wireGuardCoreConcrete.currentVpnState
             VPNType.IPSECIKEV2 -> return liveData { }
             VPNType.SINGBOX -> return singBoxCoreConcrete.currentVpnState
@@ -45,7 +46,9 @@ class VpnSwitchFactory @Inject constructor(
                 openVpnCoreConcrete.onVPNStart()
             }
 
-            VPNType.OPENCONNECT -> {}
+            VPNType.OPENCONNECT -> {
+                openConnectCoreConcrete.onVPNStart()
+            }
             VPNType.WIREGUARD -> {
                 wireGuardCoreConcrete.onVPNStart()
             }
@@ -60,6 +63,7 @@ class VpnSwitchFactory @Inject constructor(
         openVpnCoreConcrete.onVpnCreate()
         wireGuardCoreConcrete.onVpnCreate()
         singBoxCoreConcrete.onVpnCreate()
+        openConnectCoreConcrete.onVpnCreate()
     }
 
     override fun onVPNResume() {
@@ -69,7 +73,9 @@ class VpnSwitchFactory @Inject constructor(
                 openVpnCoreConcrete.onVPNResume()
             }
 
-            VPNType.OPENCONNECT -> {}
+            VPNType.OPENCONNECT -> {
+                openConnectCoreConcrete.onVPNResume()
+            }
             VPNType.WIREGUARD -> {
                 wireGuardCoreConcrete.onVpnResume()
             }
@@ -88,7 +94,9 @@ class VpnSwitchFactory @Inject constructor(
                 openVpnCoreConcrete.onVPNDestroy()
             }
 
-            VPNType.OPENCONNECT -> {}
+            VPNType.OPENCONNECT -> {
+                openConnectCoreConcrete.onVPNDestroy()
+            }
             VPNType.WIREGUARD -> {
                 wireGuardCoreConcrete.onVPNDestroy()
             }
@@ -106,7 +114,9 @@ class VpnSwitchFactory @Inject constructor(
                 openVpnCoreConcrete.onVPNPause()
             }
 
-            VPNType.OPENCONNECT -> {}
+            VPNType.OPENCONNECT -> {
+                openConnectCoreConcrete.onVPNPause()
+            }
             VPNType.WIREGUARD -> {
                 wireGuardCoreConcrete.onVPNPause()
             }
@@ -124,7 +134,9 @@ class VpnSwitchFactory @Inject constructor(
                 openVpnCoreConcrete.startVpn(vpnProfile, passedActivity)
             }
 
-            VPNType.OPENCONNECT -> {}
+            VPNType.OPENCONNECT -> {
+                openConnectCoreConcrete.startVpn(vpnProfile, passedActivity)
+            }
             VPNType.WIREGUARD -> {
                 wireGuardCoreConcrete.startVpn(vpnProfile, passedActivity)
             }
@@ -142,7 +154,9 @@ class VpnSwitchFactory @Inject constructor(
                 openVpnCoreConcrete.stopVpn()
             }
 
-            VPNType.OPENCONNECT -> {}
+            VPNType.OPENCONNECT -> {
+                openConnectCoreConcrete.stopVpn()
+            }
             VPNType.WIREGUARD -> {
                 wireGuardCoreConcrete.stopVpn()
             }
@@ -164,7 +178,7 @@ class VpnSwitchFactory @Inject constructor(
             }
 
             VPNType.OPENCONNECT -> {
-                return liveData { 0L }
+                return openConnectCoreConcrete.getUploadSpeed()
             }
 
             VPNType.WIREGUARD -> {
@@ -192,7 +206,7 @@ class VpnSwitchFactory @Inject constructor(
             }
 
             VPNType.OPENCONNECT -> {
-                return liveData { 0L }
+                return openConnectCoreConcrete.getDownloadSpeed()
             }
 
             VPNType.WIREGUARD -> {
@@ -222,7 +236,7 @@ class VpnSwitchFactory @Inject constructor(
             }
 
             VPNType.OPENCONNECT -> {
-                return liveData { 0L }
+                return openConnectCoreConcrete.getCurrentIp()
             }
 
             VPNType.WIREGUARD -> {

@@ -116,6 +116,16 @@
         app:layout_constraintStart_toEndOf="@+id/buttonValidity"
         app:layout_constraintTop_toTopOf="@+id/buttonValidity" />
 
+    <Button
+        android:id="@+id/buttonOpenConnect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start openconnect"
+        app:layout_constraintBottom_toTopOf="@+id/connectionStatus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonValidity"
+        app:layout_constraintTop_toBottomOf="@+id/buttonOvpn" />
+
     <TextView
         android:textColor="@color/black"
         android:textSize="18sp"

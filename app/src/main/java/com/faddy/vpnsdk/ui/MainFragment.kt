@@ -165,6 +165,27 @@ class MainFragment : Fragment() {
                 coreSdk.prepareVPNService(requireActivity(), activityRes)
             }
         }
+
+        binding.buttonOpenConnect.setOnClickListener {
+            if (coreSdk.isVpnServicePrepared()) {
+                if (coreSdk.isVpnConnected()) {
+                    coreSdk.disconnect()
+                } else {
+                    coreSdk.startConnect(
+                        requireActivity(), VpnProfile(
+                            vpnType = VPNType.OPENCONNECT,
+                            userName = "fahad1yr",
+                            password = "123456",
+                            vpnConfig = "",
+                            serverIP = "154.49.100.12:4439",
+                            disAllowedAppsList = sessionManager.getDisAllowedAppList()
+                        )
+                    )
+                }
+            } else {
+                coreSdk.prepareVPNService(requireActivity(), activityRes)
+            }
+        }
     }
 
     private val activityRes =
