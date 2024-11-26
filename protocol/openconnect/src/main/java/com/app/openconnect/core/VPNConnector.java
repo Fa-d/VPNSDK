@@ -78,7 +78,7 @@ public abstract class VPNConnector {
             }
         };
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mContext.registerReceiver(mReceiver, new IntentFilter(OpenVpnService.ACTION_VPN_STATUS), Context.RECEIVER_NOT_EXPORTED);
+            mContext.registerReceiver(mReceiver, new IntentFilter(OpenVpnService.ACTION_VPN_STATUS), Context.RECEIVER_EXPORTED);
         } else {
             mContext.registerReceiver(mReceiver, new IntentFilter(OpenVpnService.ACTION_VPN_STATUS));
 

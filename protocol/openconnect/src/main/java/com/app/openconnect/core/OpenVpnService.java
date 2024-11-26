@@ -61,7 +61,6 @@ public class OpenVpnService extends VpnService {
 
     public static final String START_SERVICE = "app.openconnect.START_SERVICE";
     public static final String START_SERVICE_STICKY = "app.openconnect.START_SERVICE_STICKY";
-    public static final String ALWAYS_SHOW_NOTIFICATION = "app.openconnect.NOTIFICATION_ALWAYS_VISIBLE";
 
     public static final String ACTION_VPN_STATUS = "app.openconnect.VPN_STATUS";
     public static final String EXTRA_CONNECTION_STATE = "app.openconnect.connectionState";
@@ -110,8 +109,10 @@ public class OpenVpnService extends VpnService {
     @Override
     public IBinder onBind(Intent intent) {
         String action = intent.getAction();
-        if (action != null && action.equals(START_SERVICE)) return mBinder;
-        else return super.onBind(intent);
+        if (action != null && action.equals(START_SERVICE))
+            return mBinder;
+        else
+            return super.onBind(intent);
     }
 
     @Override
@@ -165,7 +166,12 @@ public class OpenVpnService extends VpnService {
         intent.setAction(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-        PendingIntent startLW = PendingIntent.getActivity(this, 0, intent, 0);
+        PendingIntent startLW = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            startLW = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        } else {
+            startLW = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
         return startLW;
     }
 

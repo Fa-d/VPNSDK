@@ -3,6 +3,7 @@ package com.faddy.phoenixlib.vpnCores
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
@@ -16,6 +17,9 @@ import com.faddy.phoenixlib.interfaces.IVpnLifecycle
 import com.faddy.phoenixlib.interfaces.IVpnSpeedIP
 import com.faddy.phoenixlib.model.VPNStatus
 import com.faddy.phoenixlib.model.VpnProfile
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class OpenConnectCore @Inject constructor(val context: Context) : IVpnSpeedIP, IVpnLifecycle,
@@ -50,13 +54,16 @@ class OpenConnectCore @Inject constructor(val context: Context) : IVpnSpeedIP, I
     override fun onVPNResume() {
         mConn = object : VPNConnector(context, false) {
             override fun onUpdate(service: OpenVpnService?) {
-                val state = service?.connectionState
-                if (state == OpenConnectManagementThread.STATE_CONNECTED) {
-                    currentVpnState.value = VPNStatus.CONNECTED
-                } else if (state == OpenConnectManagementThread.STATE_DISCONNECTED) {
-                    currentVpnState.value = VPNStatus.DISCONNECTED
-                } else if (state == OpenConnectManagementThread.STATE_DISCONNECTED) {
-                    currentVpnState.value = VPNStatus.CONNECTING
+
+                CoroutineScope(Dispatchers.Main).launch {
+                    val state = service?.connectionState
+                    if (state == OpenConnectManagementThread.STATE_CONNECTED) {
+                        currentVpnState.value = VPNStatus.CONNECTED
+                    } else if (state == OpenConnectManagementThread.STATE_DISCONNECTED) {
+                        currentVpnState.value = VPNStatus.DISCONNECTED
+                    } else if (state == OpenConnectManagementThread.STATE_DISCONNECTED) {
+                        currentVpnState.value = VPNStatus.CONNECTING
+                    }
                 }
             }
         }
@@ -67,7 +74,8 @@ class OpenConnectCore @Inject constructor(val context: Context) : IVpnSpeedIP, I
     }
 
     override fun onVPNPause() {
-
+        mConn?.stopActiveDialog()
+        mConn?.unbind()
     }
 
     override fun startVpn(vpnProfile: VpnProfile, passedContext: Activity) {

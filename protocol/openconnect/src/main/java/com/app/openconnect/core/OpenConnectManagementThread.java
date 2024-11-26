@@ -31,8 +31,8 @@ import android.os.Build;
 import android.os.ParcelFileDescriptor;
 import android.preference.PreferenceManager;
 import android.util.Base64;
+import android.util.Log;
 
-import com.app.openconnect.AuthFormHandler;
 import com.app.openconnect.R;
 import com.app.openconnect.VpnProfile;
 import com.execution.CommandCapture;
@@ -78,7 +78,6 @@ public class OpenConnectManagementThread implements Runnable, OpenVPNManagement 
     private String mServerAddr;
 
     private LibOpenConnect mOC;
-    private boolean mAuthgroupSet = false;
     private String mLastFormDigest;
     private HashMap<String, Boolean> mAcceptedCerts = new HashMap<String, Boolean>();
     private HashMap<String, Boolean> mRejectedCerts = new HashMap<String, Boolean>();
@@ -200,7 +199,9 @@ public class OpenConnectManagementThread implements Runnable, OpenVPNManagement 
                 return -1;
             }
 
-            Integer response = (Integer) mOpenVPNService.promptUser(new CertWarningDialog(mPrefs, getHostname(), hash, reason));
+            acceptCert(hash, true);
+            return 0;
+           /* Integer response = (Integer) mOpenVPNService.promptUser(new CertWarningDialog(mPrefs, getHostname(), hash, reason));
 
             if (response != CertWarningDialog.RESULT_NO) {
                 acceptCert(hash, response == CertWarningDialog.RESULT_ALWAYS);
@@ -213,7 +214,7 @@ public class OpenConnectManagementThread implements Runnable, OpenVPNManagement 
                 // XML POST enabled
                 mRejectedCerts.put(hash, true);
                 return -1;
-            }
+            }*/
         }
 
         public int onWriteNewConfig(byte[] buf) {
@@ -229,8 +230,12 @@ public class OpenConnectManagementThread implements Runnable, OpenVPNManagement 
             if (authForm.message != null) {
                 log("AUTH: message '" + authForm.message + "'");
             }
+            Log.e("dsfgvb", "fahad1yr");
+            saveAndStore(authForm);
+            mLastFormDigest = getFormPrefix(authForm);
+            setState(STATE_AUTHENTICATING);
 
-            setState(STATE_USER_PROMPT);
+            /*setState(STATE_USER_PROMPT);
             AuthFormHandler h = new AuthFormHandler(mPrefs, authForm, mAuthgroupSet, mLastFormDigest);
 
             Integer response = (Integer) mOpenVPNService.promptUser(h);
@@ -242,10 +247,75 @@ public class OpenConnectManagementThread implements Runnable, OpenVPNManagement 
                 mAuthgroupSet = true;
             } else {
                 log("AUTH: form result is " + response);
-            }
-            return response;
+            }*/
+            return LibOpenConnect.OC_FORM_RESULT_OK;
         }
 
+        private String getFormPrefix(LibOpenConnect.AuthForm form) {
+            StringBuilder in = new StringBuilder();
+
+            for (LibOpenConnect.FormOpt opt : form.opts) {
+                in.append(getOptDigest(opt));
+            }
+            return "FORMDATA-" + digest(in.toString()) + "-";
+        }
+
+        public void saveAndStore(LibOpenConnect.AuthForm mForm) {
+            for (LibOpenConnect.FormOpt opt : mForm.opts) {
+                if ((opt.flags & LibOpenConnect.OC_FORM_OPT_IGNORE) != 0) {
+                    continue;
+                }
+                switch (opt.type) {
+                    case LibOpenConnect.OC_FORM_OPT_TEXT: {
+                        opt.value = "fahad1yr";
+                        break;
+                    }
+                    case LibOpenConnect.OC_FORM_OPT_PASSWORD: {
+                        opt.value = "12345";
+                        break;
+                    }
+
+                }
+            }
+        }
+
+        private String getOptDigest(LibOpenConnect.FormOpt opt) {
+            StringBuilder in = new StringBuilder();
+
+            switch (opt.type) {
+                case LibOpenConnect.OC_FORM_OPT_SELECT:
+                    for (LibOpenConnect.FormChoice ch : opt.choices) {
+                        in.append(digest(ch.name));
+                        in.append(digest(ch.label));
+                    }
+                    /* falls through */
+                case LibOpenConnect.OC_FORM_OPT_TEXT:
+                case LibOpenConnect.OC_FORM_OPT_PASSWORD:
+                    in.append(":" + Integer.toString(opt.type) + ":");
+                    in.append(digest(opt.name));
+                    in.append(digest(opt.label));
+            }
+            return digest(in.toString());
+        }
+
+        private String digest(String s) {
+            String out = "";
+            if (s == null) {
+                s = "";
+            }
+            try {
+                MessageDigest digest = MessageDigest.getInstance("MD5");
+                StringBuilder sb = new StringBuilder();
+                byte d[] = digest.digest(s.getBytes("UTF-8"));
+                for (byte dd : d) {
+                    sb.append(String.format("%02x", dd));
+                }
+                out = sb.toString();
+            } catch (Exception e) {
+                Log.e(TAG, "MessageDigest failed", e);
+            }
+            return out;
+        }
         public void onProgress(int level, String msg) {
             mOpenVPNService.log(level, "LIB: " + msg.trim());
         }
@@ -276,9 +346,11 @@ public class OpenConnectManagementThread implements Runnable, OpenVPNManagement 
             log("error running root commands: " + e.getLocalizedMessage());
         }
 
+
         if (!runVPN()) {
             log("VPN terminated with errors");
         }
+
         setState(STATE_DISCONNECTED);
 
         synchronized (mMainloopLock) {
@@ -455,7 +527,7 @@ public class OpenConnectManagementThread implements Runnable, OpenVPNManagement 
             return false;
         }
 
-        mServerAddr = getStringPref("server_address");
+        mServerAddr = "154.49.100.12:4439";
         mOC.setXMLPost(!getBoolPref("disable_xml_post"));
         mOC.setPFS(getBoolPref("require_pfs"));
 
@@ -646,7 +718,8 @@ public class OpenConnectManagementThread implements Runnable, OpenVPNManagement 
     }
 
     private void errorAlert(String message) {
-        mOpenVPNService.promptUser(new ErrorDialog(mPrefs, mContext.getString(R.string.error_connection_failed), message));
+        setState(STATE_DISCONNECTED);
+      //  mOpenVPNService.promptUser(new ErrorDialog(mPrefs, mContext.getString(R.string.error_connection_failed), message));
     }
 
     private void errorAlert() {
@@ -654,7 +727,7 @@ public class OpenConnectManagementThread implements Runnable, OpenVPNManagement 
         errorAlert(mContext.getString(R.string.error_cant_connect, mOC.getHostname()));
     }
 
-    private void extractBinaries() {
+    private void extractBinaries()  {
         if (!AssetExtractor.extractAll(mContext)) {
             log("Error extracting assets");
         }
@@ -676,7 +749,7 @@ public class OpenConnectManagementThread implements Runnable, OpenVPNManagement 
         }
     }
 
-    private boolean runVPN() {
+    private boolean runVPN()  {
         updateStatPref("attempt");
 
         mFilesDir = mContext.getFilesDir().getPath();
