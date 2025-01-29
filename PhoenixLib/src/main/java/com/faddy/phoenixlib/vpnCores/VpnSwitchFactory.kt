@@ -13,17 +13,19 @@ import com.faddy.phoenixlib.utils.SessionManagerInternal
 import javax.inject.Inject
 
 class VpnSwitchFactory @Inject constructor(
-    private val wireGuardCoreConcrete: CustomWgCore, private val openVpnCoreConcrete: OpenVpnCore,
-    private val singBoxCoreConcrete: SingBoxCore,
-    private val internalSession: SessionManagerInternal
+    private val wireGuardCoreConcrete: CustomWgCore,
+    private val openVpnCoreConcrete: OpenVpnCore,
+    //private val singBoxCoreConcrete: SingBoxCore,
+    private val internalSession: SessionManagerInternal,
 ) : IVpnLifecycle, IStartStop, IVpnSpeedIP {
 
     private fun providesLastSelectedVpnType() = when (internalSession.getLastConnVpnType()) {
+
+        //"OPENCONNECT" -> VPNType.OPENCONNECT
         "OPENVPN" -> VPNType.OPENVPN
-        "OPENCONNECT" -> VPNType.OPENCONNECT
         "WIREGUARD" -> VPNType.WIREGUARD
-        "IPSECIKEV2" -> VPNType.IPSECIKEV2
-        "SINGBOX" -> VPNType.SINGBOX
+        //"IPSECIKEV2" -> VPNType.IPSECIKEV2
+        //"SINGBOX" -> VPNType.SINGBOX
         else -> VPNType.NONE
     }
 
@@ -31,10 +33,10 @@ class VpnSwitchFactory @Inject constructor(
         return when (providesLastSelectedVpnType()) {
             VPNType.NONE -> liveData {  }
             VPNType.OPENVPN -> openVpnCoreConcrete.currentVpnState
-            VPNType.OPENCONNECT -> return liveData { }
             VPNType.WIREGUARD -> wireGuardCoreConcrete.currentVpnState
-            VPNType.IPSECIKEV2 -> return liveData { }
-            VPNType.SINGBOX -> return singBoxCoreConcrete.currentVpnState
+            //VPNType.OPENCONNECT -> return liveData { }
+            //VPNType.IPSECIKEV2 -> return liveData { }
+            // VPNType.SINGBOX -> return singBoxCoreConcrete.currentVpnState
         }
     }
 
@@ -44,22 +46,20 @@ class VpnSwitchFactory @Inject constructor(
             VPNType.OPENVPN -> {
                 openVpnCoreConcrete.onVPNStart()
             }
-
-            VPNType.OPENCONNECT -> {}
             VPNType.WIREGUARD -> {
                 wireGuardCoreConcrete.onVPNStart()
             }
-            VPNType.IPSECIKEV2 -> {}
-            VPNType.SINGBOX -> {
-                singBoxCoreConcrete.onVPNStart()
-            }
+            //   VPNType.OPENCONNECT -> {}
+
+            //  VPNType.IPSECIKEV2 -> {}
+            //  VPNType.SINGBOX -> { singBoxCoreConcrete.onVPNStart() }
         }
     }
 
     override fun onVpnCreate() {
-        openVpnCoreConcrete.onVpnCreate()
+        // openVpnCoreConcrete.onVpnCreate()
         wireGuardCoreConcrete.onVpnCreate()
-        singBoxCoreConcrete.onVpnCreate()
+        //singBoxCoreConcrete.onVpnCreate()
     }
 
     override fun onVPNResume() {
@@ -69,14 +69,12 @@ class VpnSwitchFactory @Inject constructor(
                 openVpnCoreConcrete.onVPNResume()
             }
 
-            VPNType.OPENCONNECT -> {}
+            //VPNType.OPENCONNECT -> {}
             VPNType.WIREGUARD -> {
                 wireGuardCoreConcrete.onVpnResume()
             }
-            VPNType.IPSECIKEV2 -> {}
-            VPNType.SINGBOX -> {
-                singBoxCoreConcrete.onVPNResume()
-            }
+            // VPNType.IPSECIKEV2 -> {}
+            //VPNType.SINGBOX -> { singBoxCoreConcrete.onVPNResume() \}
         }
     }
 
@@ -88,14 +86,12 @@ class VpnSwitchFactory @Inject constructor(
                 openVpnCoreConcrete.onVPNDestroy()
             }
 
-            VPNType.OPENCONNECT -> {}
+            //VPNType.OPENCONNECT -> {}
             VPNType.WIREGUARD -> {
                 wireGuardCoreConcrete.onVPNDestroy()
             }
-            VPNType.IPSECIKEV2 -> {}
-            VPNType.SINGBOX -> {
-                singBoxCoreConcrete.onVPNDestroy()
-            }
+            // VPNType.IPSECIKEV2 -> {}
+            // VPNType.SINGBOX -> { singBoxCoreConcrete.onVPNDestroy() }
         }
     }
 
@@ -106,14 +102,12 @@ class VpnSwitchFactory @Inject constructor(
                 openVpnCoreConcrete.onVPNPause()
             }
 
-            VPNType.OPENCONNECT -> {}
+            //VPNType.OPENCONNECT -> {}
             VPNType.WIREGUARD -> {
                 wireGuardCoreConcrete.onVPNPause()
             }
-            VPNType.IPSECIKEV2 -> {}
-            VPNType.SINGBOX -> {
-                wireGuardCoreConcrete.onVPNPause()
-            }
+            //VPNType.IPSECIKEV2 -> {}
+            //VPNType.SINGBOX -> { singBoxCoreConcrete.onVPNPause() }
         }
     }
 
@@ -124,14 +118,12 @@ class VpnSwitchFactory @Inject constructor(
                 openVpnCoreConcrete.startVpn(vpnProfile, passedActivity)
             }
 
-            VPNType.OPENCONNECT -> {}
+            //  VPNType.OPENCONNECT -> {}
             VPNType.WIREGUARD -> {
                 wireGuardCoreConcrete.startVpn(vpnProfile, passedActivity)
             }
-            VPNType.IPSECIKEV2 -> {}
-            VPNType.SINGBOX -> {
-                singBoxCoreConcrete.startVpn(vpnProfile, passedActivity)
-            }
+            //VPNType.IPSECIKEV2 -> {}
+            // VPNType.SINGBOX -> { singBoxCoreConcrete.startVpn(vpnProfile, passedActivity) }
         }
     }
 
@@ -142,70 +134,56 @@ class VpnSwitchFactory @Inject constructor(
                 openVpnCoreConcrete.stopVpn()
             }
 
-            VPNType.OPENCONNECT -> {}
+            //VPNType.OPENCONNECT -> {}
             VPNType.WIREGUARD -> {
                 wireGuardCoreConcrete.stopVpn()
             }
-            VPNType.IPSECIKEV2 -> {}
-            VPNType.SINGBOX -> {
-                singBoxCoreConcrete.stopVpn()
-            }
+            //VPNType.IPSECIKEV2 -> {}
+            //VPNType.SINGBOX -> { singBoxCoreConcrete.stopVpn() }
         }
     }
 
-    override fun getUploadSpeed(): LiveData<Long> {
+    override fun getUploadSpeed(): LiveData<String> {
         when (providesLastSelectedVpnType()) {
             VPNType.NONE -> {
                 return liveData { 0L }
             }
 
             VPNType.OPENVPN -> {
-                return liveData {  }
+                return openVpnCoreConcrete.currentUploadSpeed
             }
 
-            VPNType.OPENCONNECT -> {
-                return liveData { 0L }
-            }
+            //  VPNType.OPENCONNECT -> { return liveData { 0L } }
 
             VPNType.WIREGUARD -> {
-                return liveData {  }
+                return wireGuardCoreConcrete.currentTxSpeed
             }
 
-            VPNType.IPSECIKEV2 -> {
-                return liveData { 0L }
-            }
+            // VPNType.IPSECIKEV2 -> { return liveData { 0L } }
 
-            VPNType.SINGBOX -> {
-                return singBoxCoreConcrete.getUploadSpeed()
-            }
+            //  VPNType.SINGBOX -> { return singBoxCoreConcrete.getUploadSpeed() }
         }
     }
 
-    override fun getDownloadSpeed(): LiveData<Long> {
+    override fun getDownloadSpeed(): LiveData<String> {
         when (providesLastSelectedVpnType()) {
             VPNType.NONE -> {
                 return liveData { 0L }
             }
 
             VPNType.OPENVPN -> {
-                return liveData {  }
+                return openVpnCoreConcrete.currentDownloadSpeed
             }
 
-            VPNType.OPENCONNECT -> {
-                return liveData { 0L }
-            }
+            //VPNType.OPENCONNECT -> { return liveData { 0L } }
 
             VPNType.WIREGUARD -> {
-                return liveData {  }
+                return wireGuardCoreConcrete.currentRxSpeed
             }
 
-            VPNType.IPSECIKEV2 -> {
-                return liveData { 0L }
-            }
+            // VPNType.IPSECIKEV2 -> { return liveData { 0L } }
 
-            VPNType.SINGBOX -> {
-                return singBoxCoreConcrete.getDownloadSpeed()
-            }
+            // VPNType.SINGBOX -> { return singBoxCoreConcrete.getDownloadSpeed() }
         }
     }
 
@@ -221,21 +199,15 @@ class VpnSwitchFactory @Inject constructor(
                 return liveData { "" }
             }
 
-            VPNType.OPENCONNECT -> {
-                return liveData { 0L }
-            }
+            // VPNType.OPENCONNECT -> { return liveData { 0L } }
 
             VPNType.WIREGUARD -> {
                 return liveData { 0L }
             }
 
-            VPNType.IPSECIKEV2 -> {
-                return liveData { 0L }
-            }
+            // VPNType.IPSECIKEV2 -> { return liveData { 0L } }
 
-            VPNType.SINGBOX -> {
-                return liveData { 0L }
-            }
+            //VPNType.SINGBOX -> { return liveData { 0L } }
         }
     }
 }

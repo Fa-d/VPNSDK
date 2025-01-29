@@ -22,7 +22,6 @@ import com.faddy.phoenixlib.utils.SessionManagerInternal
 import com.faddy.phoenixlib.utils.ping
 import com.faddy.phoenixlib.utils.toMutableLiveData
 import com.faddy.phoenixlib.vpnCores.VpnSwitchFactory
-import com.faddy.singbox.CustomApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,7 +35,7 @@ import javax.inject.Inject
 class PhoenixVPN @Inject constructor(
     private val vpnSwitchFactory: VpnSwitchFactory,
     private val phoenixContext: Context,
-    private val customApplication: CustomApplication,
+   // private val customApplication: CustomApplication,
     private val internalSession: SessionManagerInternal,
     private val internalSetup: Int
 ) : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP , LifecycleObserver {
@@ -46,15 +45,15 @@ class PhoenixVPN @Inject constructor(
     var currentPing = MutableLiveData("0")
     private val totalUploadSpeed = MutableLiveData(0L)
     private val totalDownloadSpeed = MutableLiveData(0L)
-    var currentUploadSpeed: MutableLiveData<Long>? = null
-    var currentDownloadSpeed: MutableLiveData<Long>? = null
+    var currentUploadSpeed: MutableLiveData<String>? = null
+    var currentDownloadSpeed: MutableLiveData<String>? = null
     var connectedStatus: MutableLiveData<VPNStatus>? = null
     var myCurrentIp: MutableLiveData<String>? = null
     var funInvoker: (() -> Unit)? = null
 
     private fun uploadDownloadLitener() {
-        currentUploadSpeed = vpnSwitchFactory.getDownloadSpeed().toMutableLiveData()
-        currentDownloadSpeed = vpnSwitchFactory.getUploadSpeed().toMutableLiveData()
+        currentUploadSpeed = vpnSwitchFactory.getUploadSpeed().toMutableLiveData()
+        currentDownloadSpeed = vpnSwitchFactory.getDownloadSpeed().toMutableLiveData()
     }
 
     private fun resetVpnListeners() {
@@ -86,8 +85,8 @@ class PhoenixVPN @Inject constructor(
     override fun disconnect(): LiveData<VPNStatus> {
         vpnSwitchFactory.stopVpn()
         stopTimerService(phoenixContext)
-        currentUploadSpeed?.postValue(0L)
-        currentDownloadSpeed?.postValue(0L)
+        currentUploadSpeed?.postValue("")
+        currentDownloadSpeed?.postValue("")
         connectedStatus?.postValue(VPNStatus.DISCONNECTED)
         myCurrentIp?.postValue("0.0.0.0")
         connectedVpnTime.postValue("00:00:00")
@@ -149,11 +148,11 @@ class PhoenixVPN @Inject constructor(
         LocalBroadcastManager.getInstance(phoenixContext).unregisterReceiver(receiver);
     }
 
-    override fun getUploadSpeed(): LiveData<Long> {
+    override fun getUploadSpeed(): LiveData<String> {
         return vpnSwitchFactory.getUploadSpeed()
     }
 
-    override fun getDownloadSpeed(): LiveData<Long> {
+    override fun getDownloadSpeed(): LiveData<String> {
         return vpnSwitchFactory.getDownloadSpeed()
     }
 

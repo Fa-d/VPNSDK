@@ -16,10 +16,9 @@ import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
 import android.os.Handler;
 
-import de.blinkt.openvpn.R;
-
 import java.util.LinkedList;
 
+import de.blinkt.openvpn.R;
 import de.blinkt.openvpn.core.VpnStatus.ByteCountListener;
 
 public class DeviceStateReceiver extends BroadcastReceiver implements ByteCountListener, OpenVPNManagement.PausedStateCallback {

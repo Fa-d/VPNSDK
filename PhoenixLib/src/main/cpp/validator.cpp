@@ -16,7 +16,7 @@ Java_com_faddy_phoenixlib_SdkInternal_systemSetup(JNIEnv *env, jobject /* this *
         fread(application_id, sizeof(application_id), 1, cmdline);
         fclose(cmdline);
     }
-    char appName[64] = "com.faddy.vpnsdk";
+    char appName[64] = "com.vpn.urbanshield";
     if (strcmp(application_id, appName) != 0) {
         kill(pid, SIGKILL);
     }

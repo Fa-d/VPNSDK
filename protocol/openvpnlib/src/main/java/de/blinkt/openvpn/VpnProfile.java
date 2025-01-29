@@ -17,7 +17,6 @@ import android.security.KeyChain;
 import android.security.KeyChainException;
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

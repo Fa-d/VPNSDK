@@ -7,6 +7,7 @@ package de.blinkt.openvpn.core;
 
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.core.util.Pair;
 
@@ -354,8 +355,15 @@ public class ConfigParser {
 
         if (options.containsKey("client") || options.containsKey("pull")) {
             np.mUsePull = true;
+
+            Log.d("PULL","SOCK_PROXY__NOT_COMING");
+
             options.remove("pull");
             options.remove("client");
+        }
+        else if (options.containsKey("socks-proxy")){
+            Log.d("SOCKS","SOCK_PROXY_COMING");
+
         }
 
         Vector<String> secret = getOption("secret", 1, 2);

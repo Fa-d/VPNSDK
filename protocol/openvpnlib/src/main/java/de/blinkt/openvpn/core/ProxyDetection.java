@@ -5,8 +5,6 @@
 
 package de.blinkt.openvpn.core;
 
-import de.blinkt.openvpn.R;
-
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.Proxy;
@@ -16,6 +14,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
+import de.blinkt.openvpn.R;
 import de.blinkt.openvpn.VpnProfile;
 
 public class ProxyDetection {

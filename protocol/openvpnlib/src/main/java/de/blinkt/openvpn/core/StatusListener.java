@@ -14,11 +14,11 @@ import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
 
-import de.blinkt.openvpn.BuildConfig;
-
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
+
+import de.blinkt.openvpn.BuildConfig;
 
 
 /**

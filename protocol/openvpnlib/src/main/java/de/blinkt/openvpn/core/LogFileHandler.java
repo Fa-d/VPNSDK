@@ -9,8 +9,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
-import de.blinkt.openvpn.R;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,6 +21,8 @@ import java.io.UnsupportedEncodingException;
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.util.Locale;
+
+import de.blinkt.openvpn.R;
 
 /**
  * Created by arne on 23.01.16.

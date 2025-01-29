@@ -10,8 +10,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.text.TextUtils;
 
-import de.blinkt.openvpn.R;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,6 +33,7 @@ import java.util.Vector;
 
 import javax.security.auth.x500.X500Principal;
 
+import de.blinkt.openvpn.R;
 import de.blinkt.openvpn.VpnProfile;
 import de.blinkt.util.io.pem.PemObject;
 import de.blinkt.util.io.pem.PemReader;

@@ -30,7 +30,6 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.net.VpnService;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.IBinder;
@@ -64,7 +63,6 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.Vector;
 
-import de.blinkt.openvpn.LaunchVPN;
 import de.blinkt.openvpn.R;
 import de.blinkt.openvpn.VpnProfile;
 import de.blinkt.openvpn.api.ExternalAppDatabase;
@@ -201,16 +199,16 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         startTime = (new Date().getTime() - startTime) / 1000;
         if (startTime >= 60 * 60 * 24) {
             // days
-            sb.append(String.format("%1$d:", startTime / (60 * 60 * 24)));
+            sb.append(String.format(Locale.ENGLISH, "%1$d:", startTime / (60 * 60 * 24)));
         }
         if (startTime >= 60 * 60) {
             // hours
             startTime %= 60 * 60 * 24;
-            sb.append(String.format("%1$02d:", startTime / (60 * 60)));
+            sb.append(String.format(Locale.ENGLISH,"%1$02d:", startTime / (60 * 60)));
             startTime %= 60 * 60;
         }
         // minutes:seconds
-        sb.append(String.format("%1$02d:%2$02d", startTime / 60, startTime % 60));
+        sb.append(String.format(Locale.ENGLISH,"%1$02d:%2$02d", startTime / 60, startTime % 60));
         return sb.toString();
     }
 
@@ -356,7 +354,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
             }
             nbuilder.setContentIntent(pIntent);
         } else {
-            //nbuilder.setContentIntent(getGraphPendingIntent());
+            nbuilder.setContentIntent(getGraphPendingIntent());
         }
 
         if (when != 0)
@@ -501,28 +499,12 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 //        }
     }
 
-    PendingIntent getUserInputIntent(String needed) {
-        Intent intent = new Intent(getApplicationContext(), LaunchVPN.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        intent.putExtra("need", needed);
-        Bundle b = new Bundle();
-        b.putString("need", needed);
-        //PendingIntent pIntent = PendingIntent.getActivity(this, 12, intent, PendingIntent.FLAG_IMMUTABLE);
-        PendingIntent pIntent = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            pIntent = PendingIntent.getActivity(this, 12, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
-        } else {
-            pIntent = PendingIntent.getActivity(this, 12, intent, PendingIntent.FLAG_IMMUTABLE | 0);
-        }
-        return pIntent;
-    }
-
     PendingIntent getGraphPendingIntent() {
         // Let the configure Button show the Log
 
 
         Intent intent = new Intent();
-        intent.setComponent(new ComponentName(this, "com.faddy.vpnsdk.MainActivity"));
+        intent.setComponent(new ComponentName(this, "com.pro.iplockvpn.MainActivity"));
 
         intent.putExtra("PAGE", "graph");
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -845,10 +827,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
     public ParcelFileDescriptor openTun() {
 
-        //Debug.startMethodTracing(getExternalFilesDir(null).toString() + "/opentun.trace", 40* 1024 * 1024);
-
         Builder builder = new Builder();
-
         List<String> appList = List.of(getApplicationContext().getSharedPreferences("user_info_mother_lib", Context.MODE_PRIVATE).getString("disAllowedAppList", "").split(","));
         List<String> includedList = new ArrayList<>();
         for (String item : appList) {
@@ -862,7 +841,6 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
             }
         } catch (Exception ignored) {
         }
-
         VpnStatus.logInfo(R.string.last_openvpn_tun_config);
 
         boolean allowUnsetAF = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !mProfile.mBlockUnusedAddressFamilies;
@@ -1035,7 +1013,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         mLocalIPv6 = null;
         mDomain = null;
 
-        //builder.setConfigureIntent(getGraphPendingIntent());
+        builder.setConfigureIntent(getGraphPendingIntent());
 
         try {
             //Debug.stopMethodTracing();

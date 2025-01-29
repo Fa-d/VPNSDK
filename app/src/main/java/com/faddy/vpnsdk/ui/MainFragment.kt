@@ -122,7 +122,7 @@ class MainFragment : Fragment() {
                     val configText = String(data, Charsets.UTF_8)
                     coreSdk.startConnect(
                         requireActivity(), VpnProfile(
-                            vpnType = VPNType.SINGBOX,
+                            vpnType = VPNType.NONE,
                             userName = "ss",
                             password = "123456",
                             //vpnConfig = VpnConfigs.wireGuardJson,
@@ -151,7 +151,7 @@ class MainFragment : Fragment() {
                     val configText = String(data, Charsets.UTF_8)
                     coreSdk.startConnect(
                         requireActivity(), VpnProfile(
-                            vpnType = VPNType.OPENVPN,
+                            vpnType = VPNType.NONE,
                             userName = "test1",
                             password = "1111112",
                             // vpnConfig = VpnConfigs.wireGuardJson,

@@ -19,8 +19,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-import de.blinkt.openvpn.R;
-
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,6 +32,7 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Vector;
 
+import de.blinkt.openvpn.R;
 import de.blinkt.openvpn.VpnProfile;
 
 public class OpenVpnManagementThread implements Runnable, OpenVPNManagement {

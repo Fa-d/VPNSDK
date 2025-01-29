@@ -11,14 +11,14 @@ import android.os.Build;
 import android.os.HandlerThread;
 import android.os.Message;
 
-import de.blinkt.openvpn.R;
-
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Vector;
+
+import de.blinkt.openvpn.R;
 
 
 public class VpnStatus {

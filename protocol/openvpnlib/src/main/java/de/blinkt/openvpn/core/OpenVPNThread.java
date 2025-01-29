@@ -8,8 +8,6 @@ package de.blinkt.openvpn.core;
 import android.annotation.SuppressLint;
 import android.util.Log;
 
-import de.blinkt.openvpn.R;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -23,6 +21,8 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import de.blinkt.openvpn.R;
 
 public class OpenVPNThread implements Runnable {
     public static final int M_FATAL = (1 << 4);

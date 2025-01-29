@@ -17,12 +17,12 @@ import com.faddy.phoenixlib.interfaces.IVpnLifecycle
 import com.faddy.phoenixlib.interfaces.IVpnSpeedIP
 import com.faddy.phoenixlib.model.VPNStatus
 import com.faddy.phoenixlib.model.VpnProfile
-import de.blinkt.openvpn.LaunchVPN
 import de.blinkt.openvpn.core.ConfigParser
 import de.blinkt.openvpn.core.ConnectionStatus
 import de.blinkt.openvpn.core.IOpenVPNServiceInternal
 import de.blinkt.openvpn.core.OpenVPNService
 import de.blinkt.openvpn.core.ProfileManager
+import de.blinkt.openvpn.core.VPNLaunchHelper
 import de.blinkt.openvpn.core.VpnStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,13 +31,17 @@ import java.io.BufferedReader
 import java.io.Reader
 import java.io.StringReader
 import javax.inject.Inject
+import kotlin.math.ln
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.pow
 
 class OpenVpnCore @Inject constructor(private val appContext: Context) :
     VpnStatus.StateListener, VpnStatus.ByteCountListener, IVpnSpeedIP, IVpnLifecycle, IStartStop {
     private val totalUploadSpeed = MutableLiveData(0L)
     private val totalDownloadSpeed = MutableLiveData(0L)
-    val currentUploadSpeed = MutableLiveData(0L)
-    val currentDownloadSpeed = MutableLiveData(0L)
+    val currentUploadSpeed = MutableLiveData("")
+    val currentDownloadSpeed = MutableLiveData("")
     val currentVpnState = MutableLiveData(VPNStatus.DISCONNECTED)
     private val currentIp = MutableLiveData("")
 
@@ -80,15 +84,15 @@ class OpenVpnCore @Inject constructor(private val appContext: Context) :
     override fun updateByteCount(totalIn: Long, totalOut: Long, diffIn: Long, diffOut: Long) {
         totalUploadSpeed.postValue(totalIn)
         totalDownloadSpeed.postValue(totalOut)
-        currentUploadSpeed.postValue(diffIn)
-        currentDownloadSpeed.postValue(diffOut)
+        currentUploadSpeed.postValue(humanReadableByteCount(diffIn, true))
+        currentDownloadSpeed.postValue(humanReadableByteCount(diffOut, true))
     }
 
-    override fun getUploadSpeed(): LiveData<Long> {
+    override fun getUploadSpeed(): LiveData<String> {
         return currentUploadSpeed
     }
 
-    override fun getDownloadSpeed(): LiveData<Long> {
+    override fun getDownloadSpeed(): LiveData<String> {
         return currentDownloadSpeed
     }
 
@@ -152,11 +156,8 @@ class OpenVpnCore @Inject constructor(private val appContext: Context) :
         vpl.addProfile(profile)
         vpl.saveProfile(passedContext, profile)
         vpl.saveProfileList(passedContext)
-
-        val intent = Intent(passedContext, LaunchVPN::class.java)
-        intent.putExtra(LaunchVPN.EXTRA_KEY, profile.uuid.toString())
-        intent.setAction(Intent.ACTION_MAIN)
-        passedContext.startActivity(intent)
+        ProfileManager.updateLRU(passedContext.applicationContext, profile);
+        VPNLaunchHelper.startOpenVpn(profile, passedContext.baseContext);
     }
 
     override fun stopVpn() {
@@ -173,5 +174,25 @@ class OpenVpnCore @Inject constructor(private val appContext: Context) :
                 }
             }
         }
+    }
+}
+
+fun humanReadableByteCount(passedBytes: Long, speed: Boolean): String {
+    var bytes = passedBytes
+    if (speed) bytes *= 8
+    val unit: Double = if (speed) 1000.0 else 1024.0
+    val exp = max(0.0, min((ln(bytes.toDouble()) / ln(unit)).toInt().toDouble(), 3.0)).toInt()
+    val bytesUnit: Float = (bytes / unit.pow(exp.toDouble())).toFloat()
+
+    return if (speed) when (exp) {
+        0 -> "$bytesUnit  bit/s"
+        1 -> "$bytesUnit  kbit/s"
+        2 -> "$bytesUnit  Mbit/s"
+        else -> "$bytesUnit  Gbit/s"
+    } else when (exp) {
+        0 -> "$bytesUnit  B"
+        1 -> "$bytesUnit  kB"
+        2 -> "$bytesUnit  MB"
+        else -> "$bytesUnit  GB"
     }
 }
