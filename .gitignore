@@ -1,2 +1,5 @@
 /.gradle/
 /.idea/
+*.DS_Store
+key/
+local.properties
