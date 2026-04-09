@@ -34,11 +34,11 @@ android {
 }
 
 dependencies {
-    implementation(project(":openvpnlib"))
-    implementation(project(":wgtunlib"))
-    implementation(project(":singbox"))
-    //implementation(project(":openconnectlib"))
-    //implementation(project(":strongswan"))
+    implementation(project(":protocols:openvpnlib"))
+    implementation(project(":protocols:wgtunlib"))
+    implementation(project(":protocols:singbox"))
+    implementation(project(":protocols:strongswan"))
+    //implementation(project(":protocols:openconnect")) // not yet imported
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

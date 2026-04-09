@@ -1,0 +1,12 @@
+[submodule "protocols/openvpnlib"]
+	path = protocols/openvpnlib
+	url = https://github.com/Fa-d/vpnsdk-openvpnlib.git
+[submodule "protocols/wgtunlib"]
+	path = protocols/wgtunlib
+	url = https://github.com/Fa-d/vpnsdk-wgtunlib.git
+[submodule "protocols/singbox"]
+	path = protocols/singbox
+	url = https://github.com/Fa-d/vpnsdk-singbox.git
+[submodule "protocols/strongswan"]
+	path = protocols/strongswan
+	url = https://github.com/Fa-d/vpnsdk-strongswan.git

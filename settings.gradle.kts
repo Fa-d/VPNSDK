@@ -22,9 +22,14 @@ dependencyResolutionManagement {
 rootProject.name = "VPNSDK"
 include(":app")
 include(":TunnelKitLib")
-include(":openvpnlib")
-include(":wgtunlib")
-include(":singbox")
 
-//include(":openconnectlib")
-//include(":strongswan")
+include(":protocols:openvpnlib")
+include(":protocols:wgtunlib")
+include(":protocols:singbox")
+include(":protocols:strongswan")
+project(":protocols:openvpnlib").projectDir = file("protocols/openvpnlib")
+project(":protocols:wgtunlib").projectDir = file("protocols/wgtunlib")
+project(":protocols:singbox").projectDir = file("protocols/singbox")
+project(":protocols:strongswan").projectDir = file("protocols/strongswan")
+
+//include(":protocols:openconnect") // not yet imported — see plan Phase 1 follow-ups
