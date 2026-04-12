@@ -86,7 +86,7 @@ dependencies {
 
     // hilt
     implementation(libs.hilt.android)
-    implementation(project(":TunnelKitLib"))
+    implementation(project(":vpnsdk-core"))
     ksp(libs.hilt.android.compiler)
 
     //lifecycle

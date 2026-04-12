@@ -3,19 +3,18 @@ package com.faddy.vpnsdk
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.faddy.tunnelkitlib.TunnelKit
-import com.faddy.tunnelkitlib.model.VPNStatus
-import com.faddy.tunnelkitlib.model.VPNType
-import com.faddy.tunnelkitlib.model.VpnProfile
+import com.faddy.vpnsdk.TunnelKit
+import com.faddy.vpnsdk.VpnSdk
+import com.faddy.vpnsdk.model.VPNStatus
+import com.faddy.vpnsdk.model.VPNType
+import com.faddy.vpnsdk.model.VpnProfile
 import com.faddy.vpnsdk.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+
 @AndroidEntryPoint
 class MainActivityPro : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
-    @Inject
-    lateinit var coreSdk: TunnelKit
+    private lateinit var coreSdk: TunnelKit
 
     override fun onPause() {
         super.onPause()
@@ -35,6 +34,8 @@ class MainActivityPro : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(ActivityMainBinding.inflate(layoutInflater).also { binding = it }.root)
+        VpnSdk.init(this, "") // license token will be required in Phase 3
+        coreSdk = VpnSdk.tunnelKit()
         coreSdk.onVpnCreate()
         initClickListener()
         initObserver()

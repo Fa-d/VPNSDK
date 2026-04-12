@@ -1,9 +1,9 @@
-package com.faddy.tunnelkitlib.interfaces
+package com.faddy.vpnsdk.interfaces
 
 import android.app.Activity
 import androidx.lifecycle.LiveData
-import com.faddy.tunnelkitlib.model.VPNStatus
-import com.faddy.tunnelkitlib.model.VpnProfile
+import com.faddy.vpnsdk.model.VPNStatus
+import com.faddy.vpnsdk.model.VpnProfile
 
 interface ICoreVpn {
     fun startConnect(passedActivity: Activity, vpnProfile: VpnProfile): LiveData<VPNStatus>

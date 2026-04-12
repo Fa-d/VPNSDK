@@ -1,4 +1,4 @@
-package com.faddy.tunnelkitlib
+package com.faddy.vpnsdk
 
 import android.app.Activity
 import android.content.BroadcastReceiver
@@ -9,18 +9,17 @@ import android.net.VpnService
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.faddy.tunnelkitlib.interfaces.ICoreVpn
-import com.faddy.tunnelkitlib.interfaces.IVpnLifecycle
-import com.faddy.tunnelkitlib.interfaces.IVpnSpeedIP
-import com.faddy.tunnelkitlib.interfaces.IVpnStatus
-import com.faddy.tunnelkitlib.model.VPNStatus
-import com.faddy.tunnelkitlib.model.VpnProfile
-import com.faddy.tunnelkitlib.utils.CountdownTimerService
-import com.faddy.tunnelkitlib.utils.SessionManagerInternal
-import com.faddy.tunnelkitlib.utils.ping
-import com.faddy.tunnelkitlib.utils.toMutableLiveData
-import com.faddy.tunnelkitlib.vpnCores.VpnSwitchFactory
-import com.faddy.singbox.CustomApplication
+import com.faddy.vpnsdk.interfaces.ICoreVpn
+import com.faddy.vpnsdk.interfaces.IVpnLifecycle
+import com.faddy.vpnsdk.interfaces.IVpnSpeedIP
+import com.faddy.vpnsdk.interfaces.IVpnStatus
+import com.faddy.vpnsdk.model.VPNStatus
+import com.faddy.vpnsdk.model.VpnProfile
+import com.faddy.vpnsdk.utils.CountdownTimerService
+import com.faddy.vpnsdk.utils.SessionManagerInternal
+import com.faddy.vpnsdk.utils.ping
+import com.faddy.vpnsdk.utils.toMutableLiveData
+import com.faddy.vpnsdk.vpnCores.VpnSwitchFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,7 +33,6 @@ import javax.inject.Inject
 class TunnelKit @Inject constructor(
     private val vpnSwitchFactory: VpnSwitchFactory,
     private val tunnelKitContext: Context,
-    private val customApplication: CustomApplication,
     private val internalSession: SessionManagerInternal
 ) : ICoreVpn, IVpnStatus, IVpnLifecycle, IVpnSpeedIP {
 

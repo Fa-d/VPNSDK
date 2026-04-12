@@ -1,4 +1,4 @@
-package com.faddy.tunnelkitlib.model
+package com.faddy.vpnsdk.model
 
 enum class VPNStatus {
     DISCONNECTING, CONNECTED, CONNECTING, DISCONNECTED

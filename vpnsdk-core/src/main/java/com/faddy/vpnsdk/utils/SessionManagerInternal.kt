@@ -1,4 +1,4 @@
-package com.faddy.tunnelkitlib.utils;
+package com.faddy.vpnsdk.utils;
 
 import android.content.SharedPreferences;
 

@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.faddy.tunnelkitlib"
+    namespace = "com.faddy.vpnsdk"
     compileSdk = 34
 
     defaultConfig {

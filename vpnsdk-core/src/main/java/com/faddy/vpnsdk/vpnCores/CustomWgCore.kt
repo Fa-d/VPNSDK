@@ -1,14 +1,14 @@
-package com.faddy.tunnelkitlib.vpnCores
+package com.faddy.vpnsdk.vpnCores
 
 import android.app.Activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
-import com.faddy.tunnelkitlib.interfaces.IStartStop
-import com.faddy.tunnelkitlib.interfaces.IVpnLifecycle
-import com.faddy.tunnelkitlib.interfaces.IVpnSpeedIP
-import com.faddy.tunnelkitlib.model.VPNStatus
-import com.faddy.tunnelkitlib.model.VpnProfile
+import com.faddy.vpnsdk.interfaces.IStartStop
+import com.faddy.vpnsdk.interfaces.IVpnLifecycle
+import com.faddy.vpnsdk.interfaces.IVpnSpeedIP
+import com.faddy.vpnsdk.model.VPNStatus
+import com.faddy.vpnsdk.model.VpnProfile
 import com.faddy.wgtunlib.data.TunnelConfig
 import com.faddy.wgtunlib.service.WireGuardTunnel
 import com.wireguard.android.backend.Tunnel

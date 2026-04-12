@@ -21,7 +21,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "VPNSDK"
 include(":app")
-include(":TunnelKitLib")
+include(":vpnsdk-core")
 
 include(":protocols:openvpnlib")
 include(":protocols:wgtunlib")

@@ -1,6 +1,6 @@
-package com.faddy.tunnelkitlib.interfaces
+package com.faddy.vpnsdk.interfaces
 
-import com.faddy.tunnelkitlib.model.VPNType
+import com.faddy.vpnsdk.model.VPNType
 
 interface IVpnLifecycle {
     fun onVPNStart()

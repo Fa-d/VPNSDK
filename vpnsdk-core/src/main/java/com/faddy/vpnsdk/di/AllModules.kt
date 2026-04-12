@@ -1,12 +1,12 @@
-package com.faddy.tunnelkitlib.di
+package com.faddy.vpnsdk.di
 
 import android.content.Context
-import com.faddy.tunnelkitlib.utils.SessionManagerInternal
-import com.faddy.tunnelkitlib.vpnCores.CustomWgCore
-import com.faddy.tunnelkitlib.vpnCores.OpenVpnCore
-import com.faddy.tunnelkitlib.vpnCores.SingBoxCore
-import com.faddy.tunnelkitlib.vpnCores.VpnSwitchFactory
-import com.faddy.singbox.CustomApplication
+import com.faddy.vpnsdk.utils.SessionManagerInternal
+import com.faddy.vpnsdk.vpnCores.CustomWgCore
+import com.faddy.vpnsdk.vpnCores.OpenVpnCore
+import com.faddy.vpnsdk.vpnCores.SingBoxCore
+import com.faddy.vpnsdk.vpnCores.StrongSwanCore
+import com.faddy.vpnsdk.vpnCores.VpnSwitchFactory
 import com.faddy.wgtunlib.service.WireGuardTunnel
 import com.wireguard.android.backend.GoBackend
 import dagger.Module
@@ -44,10 +44,13 @@ object AllModules {
     @Singleton
     fun providesOVpnCore(@ApplicationContext context: Context) = OpenVpnCore(context)
 
-
     @Provides
     @Singleton
     fun providesSingBoxCore(@ApplicationContext context: Context) = SingBoxCore(context)
+
+    @Provides
+    @Singleton
+    fun providesStrongSwanCore(@ApplicationContext context: Context) = StrongSwanCore(context)
 
     @Provides
     @Singleton
@@ -55,15 +58,12 @@ object AllModules {
         customWgCore: CustomWgCore,
         ovpnCore: OpenVpnCore,
         singBoxCore: SingBoxCore,
+        strongSwanCore: StrongSwanCore,
         internalSession: SessionManagerInternal
-    ) = VpnSwitchFactory(customWgCore, ovpnCore, singBoxCore, internalSession)
+    ) = VpnSwitchFactory(customWgCore, ovpnCore, singBoxCore, strongSwanCore, internalSession)
 
     @Provides
     @Singleton
     fun providesAppContext(@ApplicationContext context: Context) = context
-
-    @Provides
-    @Singleton
-    fun providesCustomApplication(@ApplicationContext context: Context) = CustomApplication(context)
 
 }

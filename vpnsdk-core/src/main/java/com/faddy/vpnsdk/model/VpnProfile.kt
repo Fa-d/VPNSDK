@@ -1,4 +1,4 @@
-package com.faddy.tunnelkitlib.model
+package com.faddy.vpnsdk.model
 
 data class VpnProfile(
     val vpnType: VPNType,

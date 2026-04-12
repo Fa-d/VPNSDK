@@ -1,7 +1,7 @@
 package com.faddy.vpnsdk
 
 import android.app.Application
-import com.faddy.tunnelkitlib.TunnelKit
+import com.faddy.vpnsdk.TunnelKit
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
